@@ -1,0 +1,37 @@
+﻿@model List<Pharmacy.Data.Category> 
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
+}
+
+<h2>Danh mục sản phẩm</h2>
+
+<p>
+    @Html.ActionLink("Thêm mới", "AddCategory")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            <span>Tên danh mục</span>
+            
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+            <td>
+                @*<a class="ToastrDanger" href="#">Sửa</a>*@
+                @Html.ActionLink("Sửa", "EditCategory", new { id = item.CategoryId }) |
+                <a onclick="confirmDelete('@item.CategoryId', '@item.CategoryName', '@Url.Action("Delete", "Category")','danh mục');">Xóa</a>
+            </td>
+        </tr>
+    }
+
+</table>
+<script src="~/Scripts/notify/NotifyAdmin.js"></script>

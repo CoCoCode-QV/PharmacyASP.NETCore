@@ -1,0 +1,223 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\Assets\js\flot-data.js" />
+    <Content Remove="wwwroot\Assets\js\metisMenu.min.js" />
+    <Content Remove="wwwroot\Assets\js\morris-data.js" />
+    <Content Remove="wwwroot\Assets\js\morris.min.js" />
+    <Content Remove="wwwroot\Assets\js\startmin.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\Assets\js\flot-data.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.22" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Data\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Assets\css\bootstrap-grid.css" />
+    <None Include="wwwroot\Assets\css\bootstrap-grid.min.css" />
+    <None Include="wwwroot\Assets\css\bootstrap-reboot.css" />
+    <None Include="wwwroot\Assets\css\bootstrap-reboot.min.css" />
+    <None Include="wwwroot\Assets\css\bootstrap-social.css" />
+    <None Include="wwwroot\Assets\css\bootstrap-theme.min.css" />
+    <None Include="wwwroot\Assets\css\bootstrap.css" />
+    <None Include="wwwroot\Assets\css\bootstrap.min.css" />
+    <None Include="wwwroot\Assets\css\metisMenu.min.css" />
+    <None Include="wwwroot\Assets\css\morris.css" />
+    <None Include="wwwroot\Assets\css\startmin.css" />
+    <None Include="wwwroot\Assets\css\style.css" />
+    <None Include="wwwroot\Assets\css\style.min.css" />
+    <None Include="wwwroot\Assets\css\styleL_R.css" />
+    <None Include="wwwroot\Assets\css\timeline.css" />
+    <None Include="wwwroot\Assets\favicon.ico" />
+    <None Include="wwwroot\Assets\img\carousel-1.jpg" />
+    <None Include="wwwroot\Assets\img\carousel-2.jpg" />
+    <None Include="wwwroot\Assets\img\carousel-3.jpg" />
+    <None Include="wwwroot\Assets\img\cat-1.jpg" />
+    <None Include="wwwroot\Assets\img\cat-2.jpg" />
+    <None Include="wwwroot\Assets\img\cat-3.jpg" />
+    <None Include="wwwroot\Assets\img\cat-4.jpg" />
+    <None Include="wwwroot\Assets\img\first-aid-kit.png" />
+    <None Include="wwwroot\Assets\img\google.png" />
+    <None Include="wwwroot\Assets\img\healthy-food.png" />
+    <None Include="wwwroot\Assets\img\heart-rate.png" />
+    <None Include="wwwroot\Assets\img\medicines.png" />
+    <None Include="wwwroot\Assets\img\offer-1.jpg" />
+    <None Include="wwwroot\Assets\img\offer-2.jpg" />
+    <None Include="wwwroot\Assets\img\offer1.png" />
+    <None Include="wwwroot\Assets\img\offer2.png" />
+    <None Include="wwwroot\Assets\img\payments.png" />
+    <None Include="wwwroot\Assets\img\product-1.png" />
+    <None Include="wwwroot\Assets\img\product-2.png" />
+    <None Include="wwwroot\Assets\img\product-3.jpg" />
+    <None Include="wwwroot\Assets\img\product-4.jpg" />
+    <None Include="wwwroot\Assets\img\product-5.jpg" />
+    <None Include="wwwroot\Assets\img\product-6.jpg" />
+    <None Include="wwwroot\Assets\img\product-7.jpg" />
+    <None Include="wwwroot\Assets\img\product-8.jpg" />
+    <None Include="wwwroot\Assets\img\product-9.jpg" />
+    <None Include="wwwroot\Assets\img\slide1.png" />
+    <None Include="wwwroot\Assets\img\slide2.jpg" />
+    <None Include="wwwroot\Assets\img\slide2.png" />
+    <None Include="wwwroot\Assets\img\slide3.png" />
+    <None Include="wwwroot\Assets\img\stomach.png" />
+    <None Include="wwwroot\Assets\img\user.jpg" />
+    <None Include="wwwroot\Assets\img\vendor-1.jpg" />
+    <None Include="wwwroot\Assets\img\vendor-2.jpg" />
+    <None Include="wwwroot\Assets\img\vendor-3.jpg" />
+    <None Include="wwwroot\Assets\img\vendor-4.jpg" />
+    <None Include="wwwroot\Assets\img\vendor-5.jpg" />
+    <None Include="wwwroot\Assets\img\vendor-6.jpg" />
+    <None Include="wwwroot\Assets\img\vendor-7.jpg" />
+    <None Include="wwwroot\Assets\img\vendor-8.jpg" />
+    <None Include="wwwroot\Assets\img\vitamin-e.png" />
+    <None Include="wwwroot\Assets\img\water-resistant.png" />
+    <None Include="wwwroot\Assets\js\flot-data.js" />
+    <None Include="wwwroot\Assets\js\main.js" />
+    <None Include="wwwroot\Assets\js\metisMenu.min.js" />
+    <None Include="wwwroot\Assets\js\morris-data.js" />
+    <None Include="wwwroot\Assets\js\morris.min.js" />
+    <None Include="wwwroot\Assets\js\script.js" />
+    <None Include="wwwroot\Assets\js\startmin.js" />
+    <None Include="wwwroot\Assets\lib\animate\animate.min.css" />
+    <None Include="wwwroot\Assets\lib\easing\easing.js" />
+    <None Include="wwwroot\Assets\lib\easing\easing.min.js" />
+    <None Include="wwwroot\Assets\lib\owlcarousel\assets\ajax-loader.gif" />
+    <None Include="wwwroot\Assets\lib\owlcarousel\assets\owl.carousel.css" />
+    <None Include="wwwroot\Assets\lib\owlcarousel\assets\owl.carousel.min.css" />
+    <None Include="wwwroot\Assets\lib\owlcarousel\assets\owl.theme.default.css" />
+    <None Include="wwwroot\Assets\lib\owlcarousel\assets\owl.theme.default.min.css" />
+    <None Include="wwwroot\Assets\lib\owlcarousel\assets\owl.theme.green.css" />
+    <None Include="wwwroot\Assets\lib\owlcarousel\assets\owl.theme.green.min.css" />
+    <None Include="wwwroot\Assets\lib\owlcarousel\assets\owl.video.play.png" />
+    <None Include="wwwroot\Assets\lib\owlcarousel\LICENSE" />
+    <None Include="wwwroot\Assets\lib\owlcarousel\owl.carousel.js" />
+    <None Include="wwwroot\Assets\lib\owlcarousel\owl.carousel.min.js" />
+    <None Include="wwwroot\Assets\mail\contact.js" />
+    <None Include="wwwroot\Assets\mail\contact.php" />
+    <None Include="wwwroot\Assets\mail\jqBootstrapValidation.min.js" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\bootstrap-grid.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\bootstrap-reboot.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\bootstrap.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_alert.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_background-variant.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_badge.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_border-radius.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_box-shadow.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_breakpoints.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_buttons.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_caret.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_clearfix.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_deprecate.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_float.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_forms.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_gradients.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_grid-framework.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_grid.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_hover.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_image.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_list-group.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_lists.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_nav-divider.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_pagination.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_reset-text.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_resize.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_screen-reader.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_size.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_table-row.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_text-emphasis.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_text-hide.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_text-truncate.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_transition.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\mixins\_visibility.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_align.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_background.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_borders.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_clearfix.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_display.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_embed.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_flex.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_float.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_interactions.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_overflow.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_position.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_screenreaders.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_shadows.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_sizing.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_spacing.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_stretched-link.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_text.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\utilities\_visibility.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\vendor\_rfs.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_alert.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_badge.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_breadcrumb.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_button-group.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_buttons.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_card.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_carousel.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_close.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_code.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_custom-forms.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_dropdown.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_forms.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_functions.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_grid.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_images.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_input-group.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_jumbotron.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_list-group.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_media.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_mixins.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_modal.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_nav.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_navbar.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_pagination.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_popover.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_print.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_progress.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_reboot.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_root.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_spinners.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_tables.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_toasts.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_tooltip.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_transitions.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_type.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_utilities.scss" />
+    <None Include="wwwroot\Assets\scss\bootstrap\scss\_variables.scss" />
+    <None Include="wwwroot\Assets\scss\style.scss" />
+    <None Include="wwwroot\content\toastr.css" />
+    <None Include="wwwroot\content\toastr.less" />
+    <None Include="wwwroot\content\toastr.min.css" />
+    <None Include="wwwroot\content\toastr.scss" />
+    <None Include="wwwroot\Scripts\jquery-1.6.3-vsdoc.js" />
+    <None Include="wwwroot\Scripts\jquery-1.6.3.js" />
+    <None Include="wwwroot\Scripts\jquery-1.6.3.min.js" />
+    <None Include="wwwroot\Scripts\notify\NotifyAdmin.js" />
+    <None Include="wwwroot\Scripts\toastr.js" />
+    <None Include="wwwroot\Scripts\toastr.min.js" />
+  </ItemGroup>
+
+</Project>
