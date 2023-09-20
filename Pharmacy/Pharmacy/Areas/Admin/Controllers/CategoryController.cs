@@ -29,20 +29,7 @@ namespace Pharmacy.Areas.Admin.Controllers
             if (currentPage > countPages) currentPage = countPages;
             if(currentPage < 1) currentPage = 1;
 
-            var paginModel = new PagingModel()
-            {
-                countPage = countPages,
-                currentPage = currentPage,
-                generateUrl = (pageNumber) => Url.Action("Index", new
-                {
-                    p = pageNumber,
-                    pagesize = pagesize
-                })
-            };
-
-            ViewBag.pagingModel = paginModel;  
-            ViewBag.totalItem = totalItem;
-
+        
             var categories = ListCategory.Skip((currentPage -1) *pagesize)
                                             .Take(pagesize)   
                                             .ToList();
