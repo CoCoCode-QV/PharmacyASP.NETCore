@@ -5,7 +5,19 @@
     Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
 }
 
-<h2>Danh mục sản phẩm</h2>
+<div class="main-container">
+    <div class="product-category">
+        <h2>Danh mục sản phẩm</h2>
+    </div>
+    <div class="input-group custom-search-form">
+        <input type="text" class="form-control" placeholder="Search...">
+        <span class="input-group-btn">
+            <button class="btn btn-primary" type="button">
+                <i class="fa fa-search"></i>
+            </button>
+        </span>
+    </div>
+</div>
 
 <p>
     @Html.ActionLink("Thêm mới", "Create")
