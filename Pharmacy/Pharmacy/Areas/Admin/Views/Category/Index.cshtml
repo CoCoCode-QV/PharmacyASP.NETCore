@@ -1,4 +1,4 @@
-﻿@model List<Pharmacy.Data.Category> 
+﻿@model IEnumerable<Pharmacy.Data.Category> 
 
 @{
     ViewBag.Title = "Index";
@@ -8,7 +8,7 @@
 <h2>Danh mục sản phẩm</h2>
 
 <p>
-    @Html.ActionLink("Thêm mới", "AddCategory")
+    @Html.ActionLink("Thêm mới", "Create")
 </p>
 <table class="table">
     <tr>
@@ -27,11 +27,13 @@
             </td>
             <td>
                 @*<a class="ToastrDanger" href="#">Sửa</a>*@
-                @Html.ActionLink("Sửa", "EditCategory", new { id = item.CategoryId }) |
-                <a onclick="confirmDelete('@item.CategoryId', '@item.CategoryName', '@Url.Action("Delete", "Category")','danh mục');">Xóa</a>
+                @Html.ActionLink("Sửa", "Edit", new { id = item.CategoryId }) |
+                <a onclick="confirmDelete('@item.CategoryId', '@item.CategoryName', '@Url.Action("Delete", "Category")','danh mục');" class="link-danger">Xóa</a>
             </td>
         </tr>
     }
 
 </table>
+
+<partial name="~/Views/Shared/_PagingXTL.cshtml" model="@ViewBag.pagingModel" />
 <script src="~/Scripts/notify/NotifyAdmin.js"></script>
