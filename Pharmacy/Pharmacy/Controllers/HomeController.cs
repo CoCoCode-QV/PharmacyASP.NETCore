@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Pharmacy.Data;
 using Pharmacy.Models;
 using System.Diagnostics;
 
 namespace Pharmacy.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -16,8 +18,9 @@ namespace Pharmacy.Controllers
 
         public IActionResult Index()
         {
-           
-            return View();
+           if(User.IsInRole("Admin"))
+                return RedirectToAction("Index", "HomeAdmin", new { Areas = "Admin" });
+           return View();
         }
 
         public IActionResult Privacy()

@@ -19,7 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.22" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.21" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.21" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.11">
@@ -27,6 +28,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
+    <PackageReference Include="MimeKit" Version="4.2.0" />
+    <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.7" />
   </ItemGroup>
 
   <ItemGroup>
@@ -101,20 +105,6 @@
     <None Include="wwwroot\Assets\js\morris.min.js" />
     <None Include="wwwroot\Assets\js\script.js" />
     <None Include="wwwroot\Assets\js\startmin.js" />
-    <None Include="wwwroot\Assets\lib\animate\animate.min.css" />
-    <None Include="wwwroot\Assets\lib\easing\easing.js" />
-    <None Include="wwwroot\Assets\lib\easing\easing.min.js" />
-    <None Include="wwwroot\Assets\lib\owlcarousel\assets\ajax-loader.gif" />
-    <None Include="wwwroot\Assets\lib\owlcarousel\assets\owl.carousel.css" />
-    <None Include="wwwroot\Assets\lib\owlcarousel\assets\owl.carousel.min.css" />
-    <None Include="wwwroot\Assets\lib\owlcarousel\assets\owl.theme.default.css" />
-    <None Include="wwwroot\Assets\lib\owlcarousel\assets\owl.theme.default.min.css" />
-    <None Include="wwwroot\Assets\lib\owlcarousel\assets\owl.theme.green.css" />
-    <None Include="wwwroot\Assets\lib\owlcarousel\assets\owl.theme.green.min.css" />
-    <None Include="wwwroot\Assets\lib\owlcarousel\assets\owl.video.play.png" />
-    <None Include="wwwroot\Assets\lib\owlcarousel\LICENSE" />
-    <None Include="wwwroot\Assets\lib\owlcarousel\owl.carousel.js" />
-    <None Include="wwwroot\Assets\lib\owlcarousel\owl.carousel.min.js" />
     <None Include="wwwroot\Assets\mail\contact.js" />
     <None Include="wwwroot\Assets\mail\contact.php" />
     <None Include="wwwroot\Assets\mail\jqBootstrapValidation.min.js" />

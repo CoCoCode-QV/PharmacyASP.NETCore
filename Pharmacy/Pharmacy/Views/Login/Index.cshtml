@@ -1,9 +1,15 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<IdentityUser> SignManager;
+@inject UserManager<IdentityUser> UserManager ;
+
+@model Pharmacy.ViewsModels.SignInViewModels;
+@{
     Layout = null;
+   
 }
 
 <!DOCTYPE html>
-<!-- Coding by CodingLab | www.codinglabweb.com-->
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -23,87 +29,46 @@
         <div class="form login active">
             <div class="form-content">
                 <header>Đăng nhập</header>
-                <form action="#">
+                 @using (Html.BeginForm("Index", "Login", FormMethod.Post))
+                {
                     <div class="field input-field">
-                        <input type="email" placeholder="Email" class="input">
+                        <input asp-for="userName" type="text" placeholder="Tên đăng nhập" class="input">
                     </div>
 
                     <div class="field input-field">
-                        <input type="password" placeholder="Mật khẩu" class="password">
+                        <input asp-for="Password" type="password" placeholder="Mật khẩu" class="password">
                         <i class='bx bx-hide eye-icon'></i>
                     </div>
 
+                    <div class="form-check">
+                        <input asp-for="RememberMe" class="form-check-input" type="checkbox" id="rememberMe"/>
+                        <label asp-for="RememberMe" class="form-check-label" for="rememberMe">Nhớ mật khẩu</label>
+                    </div>
                     <div class="form-link">
                         <a href="#" data-target="forgot-password" class="link forgot-pass">Quên mật khẩu?</a>
                     </div>
 
                     <div class="field button-field">
-                        <button>Đăng nhập</button>
+                        <button type="submit">Đăng nhập</button>
                     </div>
-                </form>
+                    <div asp-validation-summary="All" class="text-danger"> </div>
+                }
 
                 <div class="form-link">
-                    <span>Bạn chưa có tài khoản? <a href="#" data-target="signup" class="link signup-link">Đăng ký</a></span>
+                    <span>Bạn chưa có tài khoản? 
+                        @Html.ActionLink("Đăng ký", "CreateUser", "Login")
+                    </span>
+                </div>
+                <div class="form-link">
+                    <span>
+                      
+                        @Html.ActionLink("Trang chủ", "Index", "Home")
+                    </span>
                 </div>
             </div>
 
             <div class="line"></div>
 
-
-            <div class="media-options">
-                <a href="#" class="field google">
-                    <img src="~/Assets/img/google.png" alt="" class="google-img">
-                    <span>Tiếp tục với Google</span>
-                </a>
-            </div>
-
-        </div>
-
-        <!-- Signup Form -->
-
-        <div class="form signup">
-            <div class="form-content">
-                <header>Đăng ký</header>
-                <form action="#">
-                    <div class="field input-field">
-                        <input type="email" placeholder="Email" class="input">
-                    </div>
-
-                    <div class="field input-field">
-                        <input type="password" placeholder="Mật khẩu" class="password">
-                        <i class='bx bx-hide eye-icon'></i>
-                    </div>
-
-                    <div class="field input-field">
-                        <input type="password" placeholder="Nhập lại mật khẩu" class="password">
-                    </div>
-
-                    <div class="field input-field">
-                        <input type="text" placeholder="Họ và tên" class="input">
-                        <input type="text" placeholder="Số điện thoại" class="input">
-                    </div>
-                    <div class="field input-field">
-                        <input type="text" placeholder="Địa chỉ" class="input">
-                        <input type="date" class="input">
-                    </div>
-
-                    <div class="field input-field">
-                        <input type="text" placeholder="Giới tính" class="input">
-                        <input type="text" placeholder="Dị ứng (nếu có)" class="input">
-                    </div>
-
-
-                    <div class="field button-field">
-                        <button>Đăng ký</button>
-                    </div>
-                </form>
-
-                <div class="form-link">
-                    <span>Bạn đã có tài khoản? <a href="#" data-target="login" class="link login-link">Đăng nhập</a></span>
-                </div>
-            </div>
-
-            <div class="line"></div>
 
             <div class="media-options">
                 <a href="#" class="field google">

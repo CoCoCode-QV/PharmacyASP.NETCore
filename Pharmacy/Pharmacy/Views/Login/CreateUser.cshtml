@@ -1,0 +1,77 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<IdentityUser> SignManager;
+@inject UserManager<IdentityUser> UserManager ;
+@model Pharmacy.ViewsModels.CreateUserViewModel;
+@{
+    Layout = null;
+
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="~/Assets/css/styleL_R.css">
+
+    <!-- Boxicons CSS -->
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+
+</head>
+<body>
+    <section class="container forms">
+        <div class="form signup active">
+                <header>Đăng ký</header>
+                @using (Html.BeginForm("CreateUser", "Login", FormMethod.Post))
+                {
+                    <div class="field input-field ">
+                        <input asp-for="UserName" type="text" placeholder="Tên đăng nhập" class="input">
+                    </div>
+                    <div class="field input-field">
+                        <input asp-for="Email" type="email" placeholder="Email" class="input">
+                    </div>
+
+                    <div class="field input-field">
+                        <input asp-for="Password" type="password" placeholder="Mật khẩu" class="password">
+                        <i class='bx bx-hide eye-icon'></i>
+                    </div>
+
+                    <div class="field input-field">
+                        <input asp-for="confirmPassword" type="password" placeholder="Nhập lại mật khẩu" class="password">
+
+                    </div>
+
+                    
+                    @if (ViewBag.RegisteredResult == "Yes")
+                    {
+                        <div class="field  text-success mt-2 offset-3 col-6" role="alert">
+                            Tài khoản của bạn được đăng ký thành công, vui lòng xác nhận Email để đăng nhập
+                        </div>
+                    }
+                    @if (ViewBag.RegisteredResult == "No")
+                    {
+                        <div class="field  text-danger mt-2 offset-3 col-6" role="alert">
+                            Lỗi: Tài khoản của bạn không thể được tạo!
+                        </div>
+                    }
+                    <div class="field button-field">
+                        <button type="submit">Đăng ký</button>
+                    </div>
+                    <div class="form-link">
+                    <span>
+                        Quay lại trang 
+                        @Html.ActionLink("Đăng nhập", "Index", "Login")
+                    </span>
+                </div>
+                    <div asp-validation-summary="All" class="text-danger"> </div>
+                }
+        </div>
+    </section>
+    <script src="~/Assets/js/script.js"></script>
+</body>
+</html>

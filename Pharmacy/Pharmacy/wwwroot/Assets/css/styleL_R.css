@@ -50,6 +50,7 @@ header {
 
 .field input,
 .field button {
+
     height: 100%;
     width: 100%;
     border: none;
@@ -174,4 +175,13 @@ a.google {
     .form {
         padding: 20px 10px;
     }
+}
+span.text-success{
+   color: lawngreen !important;
+   display:block;
+}
+.text-danger {
+    color: red !important;
+    display: block;
+    
 }

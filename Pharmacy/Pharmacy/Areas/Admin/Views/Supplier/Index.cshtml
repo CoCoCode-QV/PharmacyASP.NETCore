@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Pharmacy.Data.Supplier>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
+    // <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+}
+<div class="main-container">
+    <h2 class="col">Nhà cung cấp</h2>
+    @using (Html.BeginForm("Index", "Supplier", FormMethod.Get))
+    {
+        <div class="input-group custom-search-form">
+            <input name="search" type="text" class="form-control" placeholder="Search...">
+            <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fa fa-search"></i>
+                </button>
+            </span>
+        </div>
+
+    }
+</div>
+<p>
+    @Html.ActionLink("Thêm mới", "AddSupplier")
+</p>
+<table class="table table-bordered">
+    <tr>
+        <th>
+            <span>Tên nhà cung cấp</span>
+
+        </th>
+        <th>
+            <span>Email</span>
+        </th>
+        <th>
+            <span>Số điện thoại</span>
+        </th>
+        <th>
+            <span>Địa chỉ</span>
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SupplierName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SupplierEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SupplierPhone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SupplierAddress)
+            </td>
+            <td>
+                @*<a class="ToastrDanger" href="#">Sửa</a>*@
+                @Html.ActionLink("Sửa", "Edit", new { id = item.SupplierId })|
+                <a onclick="confirmDelete('@item.SupplierId', '@item.SupplierName', '@Url.Action("Delete", "Supplier")','nhà cung cấp')">Xóa</a>
+            </td>
+        </tr>
+    }
+</table>
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("Index",new { page , search = Context.Request.Query["search"]}))
+
+<script src="~/Scripts/notify/NotifyAdmin.js"></script>

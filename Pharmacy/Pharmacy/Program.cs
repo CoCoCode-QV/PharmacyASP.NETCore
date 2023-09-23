@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc.Razor;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Pharmacy.Data;
+using Pharmacy.ViewsModels;
 using System.Configuration;
+using System.Data.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +15,48 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<Pharmacy.Models.CategoryModels>();
+builder.Services.AddScoped<Pharmacy.Models.SupplierModels>();
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<QlpharmacyContext>().AddDefaultTokenProviders(); 
+
+
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Tokens.EmailConfirmationTokenProvider = "Default"; // Xác định token provider cho xác nhận email
+                                                               // Cấu hình các tùy chọn khác ở đây
+});
+
+
+// Truy cập IdentityOptions
+builder.Services.Configure<IdentityOptions>(options => {
+    // Thiết lập về Password
+    options.Password.RequireDigit = false; // Không bắt phải có số
+    options.Password.RequireLowercase = false; // Không bắt phải có chữ thường
+    options.Password.RequireNonAlphanumeric = false; // Không bắt ký tự đặc biệt
+    options.Password.RequireUppercase = false; // Không bắt buộc chữ in
+    options.Password.RequiredLength = 6; // Số ký tự tối thiểu của password
+    options.Password.RequiredUniqueChars = 1; // Số ký tự riêng biệt
+
+    // Cấu hình Lockout - khóa user
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2); // Khóa 2 phút
+    options.Lockout.MaxFailedAccessAttempts = 5; // Thất bại 5 lần thì khóa
+    options.Lockout.AllowedForNewUsers = true;
+
+    // Cấu hình về User.
+    options.User.AllowedUserNameCharacters = // các ký tự đặt tên user
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.RequireUniqueEmail = true;  // Email là duy nhất
+
+    // Cấu hình đăng nhập.
+    options.SignIn.RequireConfirmedEmail = true;            // Cấu hình xác thực địa chỉ email (email phải tồn tại)
+    options.SignIn.RequireConfirmedPhoneNumber = false;     // Xác thực số điện thoại
+
+});
+
+builder.Services.AddTransient<ViewMailSettingcs>();
+
 builder.Services.AddDbContext<QlpharmacyContext>(options =>
     //options.UseSqlServer("Server=KIMTAI;Database=QLPharmacy;Trusted_Connection=True;TrustServerCertificate=True;"));
     options.UseSqlServer("Server=LAPTOP-Q21GJI2Q;Database=QLPharmacy;Trusted_Connection=True;TrustServerCertificate=True;"));
@@ -25,13 +71,13 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseStaticFiles();
 
-app.UseHttpsRedirection();
- 
+
+app.UseHttpsRedirection(); 
 
 app.UseRouting();
 
-app.UseAuthorization(); // xác thực quyền truy cập
 app.UseAuthentication();
+app.UseAuthorization(); // xác thực quyền truy cập
 
 app.UseEndpoints(endpoints =>
 {
@@ -48,5 +94,37 @@ app.UseEndpoints(endpoints =>
     endpoints.MapRazorPages();
 
 });
+
+using(var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var roles = new[] { "Admin", "Staff", "Member" };
+
+    foreach(var role in roles)
+    {
+        if(!await roleManager.RoleExistsAsync(role))
+            await roleManager.CreateAsync(new IdentityRole(role));
+    }
+}
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+    string email = "hovan12022002@gmail.com";
+    string password = "Admin123";
+
+    if (await userManager.FindByEmailAsync(email) == null)
+    {
+        var user = new IdentityUser();
+        user.UserName = email;
+        user.Email = email;
+        user.EmailConfirmed = true;
+
+        await userManager.CreateAsync(user,password);
+        await userManager.AddToRoleAsync(user, "Admin");
+
+    }
+}
+
 
 app.Run();

@@ -7045,6 +7045,6 @@ button.close {
 /* Phần ô tìm kiếm */
 .custom-search-form {
     display: flex;
-    align-items: center;
+    align-items: center !important;
     width: 70%;
 }

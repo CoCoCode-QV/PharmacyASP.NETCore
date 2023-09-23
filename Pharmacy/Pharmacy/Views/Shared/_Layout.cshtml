@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<IdentityUser> SignManager;
+@inject UserManager<IdentityUser> UserManager ;
+
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -82,13 +87,12 @@
             
             </div>
             <div class="d-inline-flex align-items-center">
-             @*     <div class="btn-group">
+                 <div class="btn-group">
                     @{
-                        var user = (Pharmacy.Data.Account)HttpContext.User.Session["user"];
                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
-                        @if (user != null)
+                        @if (SignManager.IsSignedIn(User))
                         {
-                        <span>@user.DisplayName</span>
+                        <span>@UserManager.GetUserName(User)</span>
 
                         }
                         else
@@ -99,19 +103,18 @@
 
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
-                        @if (user != null)
+                         @if (SignManager.IsSignedIn(User))
                         {
-                        <a href="~/Login" class="dropdown-item" type="button">Đăng xuất</a>
+                                <a href="~/Login/SignOut" class="dropdown-item" type="button">Đăng xuất</a>
                         }
                         else
                         {
-                        <a href="~/Login" class="dropdown-item" type="button">Đăng nhập</a>
-                        <a href="#" class="dropdown-item" type="button">Đăng ký</a>
-                    }
+                            <a href="~/Login" class="dropdown-item" type="button">Đăng nhập</a>
+                        }
                     </div>
                     }
-                </div> *@
-                <a href="~/Login" class="dropdown-item" type="button">Đăng nhập</a>
+                </div>
+             
             </div>
         </div>
     </div>

@@ -1,40 +1,42 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Pharmacy.Data;
-using Pharmacy.Pages;
+using Pharmacy.Models;
+using System.Security.Policy;
+using X.PagedList;
 
 namespace Pharmacy.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class CategoryController : Controller
     {
 
-        private readonly QlpharmacyContext _context;
+      
+        private readonly CategoryModels _categoryModels;
 
-        public CategoryController(QlpharmacyContext context)
+       
+
+        public CategoryController( CategoryModels categoryModels)
         {
-            _context = context;
+            _categoryModels = categoryModels;
+           
         }
 
-        public const int Items_Per_Page = 4;
-        public IActionResult Index([FromQuery(Name = "p")] int currentPage, int pagesize )
+        public const int Items_Per_Page = 10;
+        public IActionResult Index( string search,int? page )
         {
-            var ListCategory = _context.Categories.ToList();
+          
+            var ListCategory = _categoryModels.GetCategory(search);
 
-            var totalItem = ListCategory.Count;
-            if(pagesize <= 0) pagesize = Items_Per_Page;
-            int countPages = (int)Math.Ceiling((double)totalItem / pagesize);
+            var pageNumber = page ?? 1;
 
-            if (currentPage > countPages) currentPage = countPages;
-            if(currentPage < 1) currentPage = 1;
+            var OnePageCategories = ListCategory.ToPagedList(pageNumber, Items_Per_Page);
 
-        
-            var categories = ListCategory.Skip((currentPage -1) *pagesize)
-                                            .Take(pagesize)   
-                                            .ToList();
-
-            return View(categories);
+            ViewBag.itemIndex = (pageNumber - 1) * Items_Per_Page;
+            return View(OnePageCategories);
         }
 
         public IActionResult Create()
@@ -44,7 +46,7 @@ namespace Pharmacy.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Category category)
+        public IActionResult Create(Category category)
         {
             if (category.CategoryName == null)
             {
@@ -53,28 +55,25 @@ namespace Pharmacy.Areas.Admin.Controllers
             }
             else
             {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
+                _categoryModels.CreatCategory(category);
                 return RedirectToAction("Index");
             }
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
-            var item = _context.Categories.Find(id);
-            _context.Categories.Remove(item);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+           _categoryModels.DeleteCategory(id);
+            return  RedirectToAction("Index");
         }
 
         public IActionResult Edit(int id)
         {
-            Category item = _context.Categories.Find(id);
-            return View(item);
+            
+            return View(_categoryModels.GetCategory(id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Category category)
+        public IActionResult Edit(Category category)
         {
             if (category.CategoryName == null)
             {
@@ -83,10 +82,7 @@ namespace Pharmacy.Areas.Admin.Controllers
             }
             else
             {
-                
-                var updateitem = _context.Categories.Find(category.CategoryId);
-                updateitem.CategoryName = category.CategoryName;
-                await _context.SaveChangesAsync();
+                _categoryModels.EditCategory(category);
                 return RedirectToAction("Index");
             }
         }

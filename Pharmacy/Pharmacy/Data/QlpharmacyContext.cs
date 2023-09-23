@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Pharmacy.Data;
 
-public partial class QlpharmacyContext :DbContext
+public partial class QlpharmacyContext :IdentityDbContext<IdentityUser>
 {
     public QlpharmacyContext()
     {
@@ -13,9 +15,9 @@ public partial class QlpharmacyContext :DbContext
     public QlpharmacyContext(DbContextOptions<QlpharmacyContext> options)
         : base(options)
     {
+
     }
 
-    public virtual DbSet<Account> Accounts { get; set; }
 
     public virtual DbSet<Cart> Carts { get; set; }
 
@@ -50,21 +52,8 @@ public partial class QlpharmacyContext :DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Account>(entity =>
-        {
-            entity.HasKey(e => e.AccountId).HasName("PK__Account__349DA586FDF0D713");
-
-            entity.ToTable("Account");
-
-            entity.Property(e => e.AccountId).HasColumnName("AccountID");
-            entity.Property(e => e.DisplayName).HasMaxLength(100);
-            entity.Property(e => e.Password)
-                .HasMaxLength(100)
-                .UseCollation("SQL_Latin1_General_CP1_CS_AS");
-            entity.Property(e => e.UserName)
-                .HasMaxLength(100)
-                .UseCollation("SQL_Latin1_General_CP1_CS_AS");
-        });
+        base.OnModelCreating(modelBuilder);
+        
 
         modelBuilder.Entity<Cart>(entity =>
         {

@@ -11,11 +11,11 @@
     <title>Phamacy</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="~/Assets/css/bootstrap.min.css" rel="stylesheet">
-
+  
+    <link href="~/Assets/css/bootstrap.min.css" rel="stylesheet" />
     <!-- MetisMenu CSS -->
  
-    <link href="~/Assets/css/metisMenu.min.css" rel="stylesheet">
+    <link href="~/Assets/css/metisMenu.min.css" rel="stylesheet" />
 
     <!-- Timeline CSS -->
 
@@ -84,18 +84,14 @@
                 </li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i> secondtruth <b class="caret"></b>
+                        <i class="fa fa-user fa-fw"></i> Admin <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
+                       
+                     
                         <li>
-                            <a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                            <a href="~/Login/SignOut" class="fa fa-sign-out fa-fw">Đăng xuất</a>
+             
                         </li>
                     </ul>
                 </li>
@@ -108,8 +104,16 @@
 
                 <ul class="nav" id="side-menu">
                     <li>
-                        <a href="#" class="active"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        <a href="#" class="active"><i class="fa fa-dashboard fa-fw"></i> Thống kê</a>
                     </li>
+                    <li>
+                        @Html.ActionLink("Danh mục sản phẩm", "Index", "Category" , new{ @class ="fa fa-dashboard fa-fw"})
+                    </li>
+                    <li>
+                        @Html.ActionLink("Nhà cung cấp", "Index", "Supplier" , new{ @class ="fa fa-dashboard fa-fw"})
+                    </li>
+
+
                     <li>
                         <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">

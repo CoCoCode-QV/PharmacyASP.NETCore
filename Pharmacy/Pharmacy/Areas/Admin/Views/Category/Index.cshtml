@@ -1,5 +1,6 @@
-﻿@model IEnumerable<Pharmacy.Data.Category> 
-
+﻿@model IEnumerable<Pharmacy.Data.Category>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
@@ -9,14 +10,18 @@
     <div class="product-category">
         <h2>Danh mục sản phẩm</h2>
     </div>
-    <div class="input-group custom-search-form">
-        <input type="text" class="form-control" placeholder="Search...">
-        <span class="input-group-btn">
-            <button class="btn btn-primary" type="button">
-                <i class="fa fa-search"></i>
-            </button>
-        </span>
-    </div>
+    @using (Html.BeginForm("Index", "Category", FormMethod.Get))
+    {   
+        <div class="input-group custom-search-form">
+                <input name ="search"type="text" class="form-control"  placeholder="Search...">
+                <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+        </div>
+       
+    }
 </div>
 
 <p>
@@ -24,7 +29,8 @@
 </p>
 <table class="table">
     <tr>
-        <th>
+        <th style="width: 5%; text-align: center;"><span>STT</span></th>
+        <th scope ="col">
             <span>Tên danh mục</span>
             
         </th>
@@ -34,10 +40,12 @@
     @foreach (var item in Model)
     {
         <tr>
+            <td style="text-align: center;">@(++ViewBag.itemIndex)</td>
             <td>
                 @Html.DisplayFor(modelItem => item.CategoryName)
             </td>
             <td>
+                
                 @*<a class="ToastrDanger" href="#">Sửa</a>*@
                 @Html.ActionLink("Sửa", "Edit", new { id = item.CategoryId }) |
                 <a onclick="confirmDelete('@item.CategoryId', '@item.CategoryName', '@Url.Action("Delete", "Category")','danh mục');" class="link-danger">Xóa</a>
@@ -47,5 +55,7 @@
 
 </table>
 
-<partial name="~/Views/Shared/_PagingXTL.cshtml" model="@ViewBag.pagingModel" />
+
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("Index",new { page , search = Context.Request.Query["search"]}))
+
 <script src="~/Scripts/notify/NotifyAdmin.js"></script>
