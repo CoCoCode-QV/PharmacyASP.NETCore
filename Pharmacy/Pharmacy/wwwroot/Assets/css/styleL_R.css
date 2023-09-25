@@ -176,12 +176,25 @@ a.google {
         padding: 20px 10px;
     }
 }
-span.text-success{
-   color: lawngreen !important;
-   display:block;
+.text-success {
+    color: #3d9e28 !important;
+    display: block;
 }
 .text-danger {
     color: red !important;
     display: block;
     
+}
+
+.form-check{
+    padding-left: 10px;
+}
+
+.mr-2 {
+    margin-right: .5rem !important
+}
+
+.fa-arrow-left {
+    padding-right: 5px;
+    color: #0171d3;
 }
