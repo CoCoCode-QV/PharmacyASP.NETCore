@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
@@ -8,9 +9,9 @@ using Pharmacy.Data;
 using Pharmacy.ViewsModels;
 using System.Configuration;
 using System.Data.Common;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -22,13 +23,26 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkSto
 
 
 
-builder.Services.Configure<IdentityOptions>(options =>
-{
-    options.Tokens.EmailConfirmationTokenProvider = "Default"; // Xác định token provider cho xác nhận email
-                                                               // Cấu hình các tùy chọn khác ở đây
-});
+//Đăng nhập google
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+    })
+    .AddCookie()
+    .AddGoogle(googleOptions =>
+    {
+        // Đọc thông tin Authentication:Google từ appsettings.json
+        IConfigurationSection googleAuthNSection = builder.Configuration.GetSection("Authentication:Google");
+        // Thiết lập ClientID và ClientSecret để truy cập API google
+        googleOptions.ClientId = googleAuthNSection["ClientId"];
+        googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+        // Cấu hình Url callback lại từ Google (không thiết lập thì mặc định là /signin-google)
+        googleOptions.CallbackPath = "/LoginGoogle";
 
+    });
 
+Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 // Truy cập IdentityOptions
 builder.Services.Configure<IdentityOptions>(options => {
     // Thiết lập về Password
@@ -45,21 +59,24 @@ builder.Services.Configure<IdentityOptions>(options => {
     options.Lockout.AllowedForNewUsers = true;
 
     // Cấu hình về User.
-    options.User.AllowedUserNameCharacters = // các ký tự đặt tên user
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+!#$%^&*()[]{}<>|=/\\;:'\"`~, áàảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵ";
     options.User.RequireUniqueEmail = true;  // Email là duy nhất
 
+    
     // Cấu hình đăng nhập.
     options.SignIn.RequireConfirmedEmail = true;            // Cấu hình xác thực địa chỉ email (email phải tồn tại)
     options.SignIn.RequireConfirmedPhoneNumber = false;     // Xác thực số điện thoại
 
+    options.Tokens.EmailConfirmationTokenProvider = "Default";
 });
+
 
 builder.Services.AddTransient<ViewMailSettingcs>();
 
+IConfigurationSection Database = builder.Configuration.GetSection("ConnectionStrings");
 builder.Services.AddDbContext<QlpharmacyContext>(options =>
     //options.UseSqlServer("Server=KIMTAI;Database=QLPharmacy;Trusted_Connection=True;TrustServerCertificate=True;"));
-    options.UseSqlServer("Server=LAPTOP-Q21GJI2Q;Database=QLPharmacy;Trusted_Connection=True;TrustServerCertificate=True;"));
+    options.UseSqlServer(Database["DefaultConnection"]));
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
