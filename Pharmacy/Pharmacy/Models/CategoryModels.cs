@@ -29,16 +29,16 @@ namespace Pharmacy.Models
             return ListCategory;
         }
 
-        public  void CreatCategory(Category category)
+        public  async Task CreatCategory(Category category)
         {
             _context.Add(category);
-            _context.SaveChangesAsync();
+           await _context.SaveChangesAsync();
         }
 
-        public void DeleteCategory(int id) {
+        public async Task DeleteCategory(int id) {
             var item = _context.Categories.Find(id);
             _context.Categories.Remove(item);
-             _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public Category GetCategory(int id)
@@ -46,11 +46,11 @@ namespace Pharmacy.Models
             return _context.Categories.Find(id);
         }
 
-        public  void EditCategory(Category category)
+        public  async Task EditCategory(Category category)
         {
             var updateitem = _context.Categories.Find(category.CategoryId);
             updateitem.CategoryName = category.CategoryName;
-             _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
     }
 }

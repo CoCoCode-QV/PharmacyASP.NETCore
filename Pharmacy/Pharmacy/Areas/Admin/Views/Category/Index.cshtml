@@ -45,8 +45,7 @@
                 @Html.DisplayFor(modelItem => item.CategoryName)
             </td>
             <td>
-                
-                @*<a class="ToastrDanger" href="#">Sửa</a>*@
+
                 @Html.ActionLink("Sửa", "Edit", new { id = item.CategoryId }) |
                 <a onclick="confirmDelete('@item.CategoryId', '@item.CategoryName', '@Url.Action("Delete", "Category")','danh mục');" class="link-danger">Xóa</a>
             </td>

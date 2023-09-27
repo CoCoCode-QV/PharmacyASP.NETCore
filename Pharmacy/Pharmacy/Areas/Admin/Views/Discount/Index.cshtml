@@ -1,14 +1,14 @@
-﻿@model IEnumerable<Pharmacy.Data.Supplier>
+﻿@model IEnumerable<Pharmacy.Data.Discount>
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
 @{
-    ViewBag.Title = "Nhà cung cấp";
+    ViewBag.Title = "Mã giảm giá";
     Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
     // <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
 }
 <div class="main-container">
-    <h2 class="col">Nhà cung cấp</h2>
-    @using (Html.BeginForm("Index", "Supplier", FormMethod.Get))
+    <h2 class="col">Mã giảm giá</h2>
+    @using (Html.BeginForm("Index", "Discount", FormMethod.Get))
     {
         <div class="input-group custom-search-form">
             <input name="search" type="text" class="form-control" placeholder="Search...">
@@ -27,17 +27,17 @@
 <table class="table table-bordered">
     <tr>
         <th>
-            <span>Tên nhà cung cấp</span>
+            <span>Mã giảm giá</span>
 
         </th>
         <th>
-            <span>Email</span>
+            <span>Phần trăm giảm</span>
         </th>
         <th>
-            <span>Số điện thoại</span>
+            <span>Ngày bắt đầu </span>
         </th>
         <th>
-            <span>Địa chỉ</span>
+            <span>Ngày kết thúc</span>
         </th>
         <th></th>
     </tr>
@@ -46,21 +46,21 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.SupplierName)
+                @Html.DisplayFor(modelItem => item.DiscountName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SupplierEmail)
+                @Html.DisplayFor(modelItem => item.DiscountPercent) %
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SupplierPhone)
+                @Html.DisplayFor(modelItem => item.DiscountStartDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SupplierAddress)
+                @Html.DisplayFor(modelItem => item.DiscountEndDate)
             </td>
             <td>
                 @*<a class="ToastrDanger" href="#">Sửa</a>*@
-                @Html.ActionLink("Sửa", "Edit", new { id = item.SupplierId })|
-                <a onclick="confirmDelete('@item.SupplierId', '@item.SupplierName', '@Url.Action("Delete", "Supplier")','nhà cung cấp')">Xóa</a>
+                @Html.ActionLink("Sửa", "Edit", new { id = item.DiscountId })|
+                <a onclick="confirmDelete('@item.DiscountId', '@item.DiscountName', '@Url.Action("Delete", "Discount")','mã giảm giá')">Xóa</a>
             </td>
         </tr>
     }

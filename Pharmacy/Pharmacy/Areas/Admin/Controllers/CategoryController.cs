@@ -46,7 +46,7 @@ namespace Pharmacy.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Category category)
+        public async Task<IActionResult> Create(Category category)
         {
             if (category.CategoryName == null)
             {
@@ -55,14 +55,14 @@ namespace Pharmacy.Areas.Admin.Controllers
             }
             else
             {
-                _categoryModels.CreatCategory(category);
+               await _categoryModels.CreatCategory(category);
                 return RedirectToAction("Index");
             }
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-           _categoryModels.DeleteCategory(id);
+            await _categoryModels.DeleteCategory(id);
             return  RedirectToAction("Index");
         }
 

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Pharmacy.Data;
+using Pharmacy.Models;
 using Pharmacy.ViewsModels;
 using System.Configuration;
 using System.Data.Common;
@@ -18,6 +19,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<Pharmacy.Models.CategoryModels>();
 builder.Services.AddScoped<Pharmacy.Models.SupplierModels>();
+builder.Services.AddScoped<Pharmacy.Models.DiscountModels>();
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<QlpharmacyContext>().AddDefaultTokenProviders(); 
 

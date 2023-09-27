@@ -18,7 +18,7 @@ namespace Pharmacy.Models
             if (search != null)
             {
                 List<Supplier> SupplierFound = new List<Supplier>();
-                foreach (var item in SupplierFound)
+                foreach (var item in ListSupplier)
                 {
                     if (item.SupplierName.Contains(search))
                         SupplierFound.Add(item);
@@ -27,6 +27,34 @@ namespace Pharmacy.Models
             }
 
             return ListSupplier;
+        }
+
+        public void CreatSupplier(Supplier supplier)
+        {
+            _context.Add(supplier);
+            _context.SaveChangesAsync();
+        }
+
+        public void DeleteSupplier(int id)
+        {
+            var item = _context.Suppliers.Find(id);
+            _context.Suppliers.Remove(item);
+            _context.SaveChangesAsync();
+        }
+
+        public Supplier GetSupplier(int id)
+        {
+            return _context.Suppliers.Find(id);
+        }
+
+        public async Task EditSupplierAsync(Supplier supplier)
+        {
+            var updateitem = _context.Suppliers.Find(supplier.SupplierId);
+            updateitem.SupplierName = supplier.SupplierName;
+            updateitem.SupplierEmail = supplier.SupplierEmail;
+            updateitem.SupplierPhone = supplier.SupplierPhone;
+            updateitem.SupplierAddress  = supplier.SupplierAddress;
+            await _context.SaveChangesAsync();
         }
     }
 }

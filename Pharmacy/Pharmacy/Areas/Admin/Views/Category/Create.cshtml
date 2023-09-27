@@ -21,11 +21,7 @@
                 @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group control-label col-md-6">
-            <p class="text-danger">
-                @TempData["error"]
-            </p>
-        </div>
+    
         <div class="form-group">
             <div class="col-lg-2">
                 <input type="submit" value="Thêm mới" class="btn btn-default" />

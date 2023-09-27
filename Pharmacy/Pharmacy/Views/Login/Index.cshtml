@@ -48,7 +48,7 @@
                         <label asp-for="RememberMe" class="form-check-label" for="rememberMe">Nhớ mật khẩu</label>
                     </div>
                     <div class="form-link">
-                        <a href="#" data-target="forgot-password" class="link forgot-pass">Quên mật khẩu?</a>
+                        <a asp-action="ForgotPassword" asp-controller="Login" data-target="forgot-password" >Quên mật khẩu?</a>
                     </div>
 
                     <div class="field button-field">
@@ -82,35 +82,7 @@
 
         </div>
 
-        <!--Forgot password-->
-        <div class="form forgot-password">
-            <div class="form-content">
-                <header>Quên mật khẩu</header>
-                <form action="#">
-                    <div class="field input-field">
-                        <input type="email" placeholder="Email" class="input">
-                    </div>
-
-                    <div class="field input-field">
-                        <input type="password" placeholder="Mật khẩu mới" class="password">
-                        <i class='bx bx-hide eye-icon'></i>
-                    </div>
-
-                    <div class="field input-field">
-                        <input type="password" placeholder="Nhập lại mật khẩu" class="password">
-                        <i class='bx bx-hide eye-icon'></i>
-                    </div>
-
-                    <div class="field button-field">
-                        <button>Đổi mật khẩu</button>
-                    </div>
-                </form>
-
-                <div class="form-link">
-                    <span>Quay lại? <a href="#" data-target="login" class="link signin-link">Đăng nhập</a></span>
-                </div>
-            </div>
-        </div>
+      
 
     </section>
 

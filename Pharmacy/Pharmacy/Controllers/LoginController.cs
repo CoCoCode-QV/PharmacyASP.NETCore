@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Pharmacy.ViewsModels;
+using System.Text;
 
 namespace Pharmacy.Controllers
 {
@@ -31,6 +33,11 @@ namespace Pharmacy.Controllers
             {
                 var result = await _signInManager.PasswordSignInAsync(item.userName, item.Password, item.RememberMe, false);
                 var user = await _userManager.FindByNameAsync(item.userName);
+                if (result.IsLockedOut)
+                {
+                    ModelState.AddModelError("Validation", "Tài khoản bị tạm khóa hãy thử lại sau 2 phút!.");
+                    return View();
+                } 
                 if (user != null && !await _userManager.IsEmailConfirmedAsync(user))
                 {
                     ModelState.AddModelError("Validation", "Vui lòng xác nhận email trước khi đăng nhập.");
@@ -135,6 +142,85 @@ namespace Pharmacy.Controllers
             var user = await _userManager.FindByEmailAsync(userEmail);
             var result = await _userManager.ConfirmEmailAsync(user, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error" );    
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View("ForgotPassword");
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            if (email != null)
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user != null)
+                {
+                    if(await _userManager.IsEmailConfirmedAsync(user))
+                    {
+                        ViewBag.ResetPassword = 1;
+                      
+                        var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+                        var callbackUrl = Url.Action("ResetPassword", "Login", new { email = email, code = code }, Request.Scheme);
+                        SendMailService sendMailService = new SendMailService();
+                        string emailBody = $@"<html>
+                        <head></head>
+                        <body>
+                            <p>Để đặt lại mật khẩu hãy <a href='{callbackUrl}'>bấm vào đây</a></p>
+                        </body>
+                        </html>";
+                        sendMailService.SendMail(user.Email, "Đặt lại mật khẩu", emailBody, "");
+                        return View("ForgotPassword");
+                    }   
+                }
+                ViewBag.ResetPassword = -1;
+                return View("ForgotPassword");
+            }   
+            ViewBag.ResetPassword = 0;
+            return View("ForgotPassword");
+            
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ResetPassword(string email, string code)
+        {
+            if (email == null || code == null)
+            {
+                ViewBag.EmailResetPassword = false;
+                return View("ResetPassword");
+            }
+            else
+            {
+                ViewBag.EmailResetPassword = true;
+                ViewsResetPassword viewsResetPassword = new ViewsResetPassword
+                {
+                    Email = email,
+                    Code = code
+                };
+                return View("ResetPassword", viewsResetPassword);
+            }
+           
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ViewsResetPassword item)
+        {
+            ViewBag.EmailResetPassword = true;
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(item.Email);
+                var result = await _userManager.ResetPasswordAsync(user, Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(item.Code)), item.Password);
+                if (result.Succeeded)
+                {
+                   ViewBag.ConfirmResetPassword = "1";
+                    return View("ResetPassword");
+                }
+                ModelState.AddModelError("Validation", "Có lỗi xảy ra khi cập nhật!");
+                return View("ResetPassword");
+            }
+            return View("ResetPassword");
         }
     }
 }
