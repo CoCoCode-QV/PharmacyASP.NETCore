@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack.NetCore" Version="1.5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.22" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.21" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.11" />
@@ -39,6 +40,7 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Data\" />
     <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\Detail\" />
   </ItemGroup>
 
   <ItemGroup>
