@@ -47,9 +47,10 @@ namespace Pharmacy.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product, IFormFile photo)
         {
-          
+
             // Check if ProductImage is not null or empty
-            if (photo != null)
+            if (photo != null && product.ProductName != null && product.ProductPrice != null && product.ProductInventory != null && product.ProductExpiryDate != null
+                && product.ProductDetail != null && product.ProductIngredients != null && product.CategoryId != null && product.SupplierId != null && product.DiscountId != null)
             {
                 try
                 {
@@ -62,34 +63,47 @@ namespace Pharmacy.Areas.Admin.Controllers
                         getAll();
                         return View();
                     }
-                    var uploadsFolder = Path.Combine("wwwroot", "images"); // Relative path to the wwwroot/images folder
-                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(photo.FileName);
-                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    using (FileStream stream = new FileStream(filePath, FileMode.Create))
+                    string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" }; // Các phần mở rộng cho hình ảnh cho phép
+                    var fileExtension = Path.GetExtension(photo.FileName).ToLower(); // Lấy phần mở rộng của tệp
+
+                    if (allowedExtensions.Contains(fileExtension))
                     {
-                        await photo.CopyToAsync(stream);
-                        stream.Close();
+                        var uploadsFolder = Path.Combine("wwwroot", "images"); // Relative path to the wwwroot/images folder
+                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(photo.FileName);
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        using (FileStream stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await photo.CopyToAsync(stream);
+                            stream.Close();
+                        }
+                        var item = new Product
+                        {
+                            ProductName = product.ProductName,
+                            ProductPrice = product.ProductPrice,
+                            ProductDetail = product.ProductDetail,
+                            ProductImage = Path.Combine("images", uniqueFileName),
+                            ProductInventory = product.ProductInventory,
+                            CategoryId = product.CategoryId,
+                            SupplierId = product.SupplierId,
+                            DiscountId = product.DiscountId,
+                            ProductExpiryDate = product.ProductExpiryDate,
+                            ProductIngredients = product.ProductIngredients,
+                            ProductPrescription = product.ProductPrescription,
+                            ProductActive = product.ProductActive,
+
+                        };
+                        await _ProductModels.CreatProduct(item);
+
+                        // Redirect to the Index action after successful product creation
+                        return RedirectToAction("Index");
                     }
-                    var item = new Product
+                    else
                     {
-                        ProductName = product.ProductName,
-                        ProductPrice = product.ProductPrice,
-                        ProductDetail = product.ProductDetail,
-                        ProductImage = Path.Combine("images", uniqueFileName),
-                        ProductInventory = product.ProductInventory,
-                        CategoryId = product.CategoryId,
-                        SupplierId = product.SupplierId,
-                        DiscountId = product.DiscountId,
-                        ProductExpiryDate = product.ProductExpiryDate,
-                        ProductIngredients = product.ProductIngredients,
-                        ProductPrescription = product.ProductPrescription,
-                        ProductActive   = product.ProductActive,
-
-                    };
-                    await _ProductModels.CreatProduct(item);
-
-                    // Redirect to the Index action after successful product creation
-                    return RedirectToAction("Index");
+                        // Người dùng chọn tệp không hợp lệ, trả về lỗi
+                        TempData["error"] = "Vui lòng chọn một tập tin hình ảnh hợp lệ (jpg, jpeg, png hoặc gif).";
+                        getAll();
+                        return View();
+                    }
                 
                 }
                 catch (Exception ex)
@@ -103,7 +117,7 @@ namespace Pharmacy.Areas.Admin.Controllers
             else
             {
                 // Handle the case where ProductImage is null or empty
-                TempData["error"] = "Vui lòng chọn một tập tin hình ảnh hợp lệ.";
+                TempData["error"] = "Vui lòng điền đầy đủ thông tin.";
                 getAll();
                 return View();
             }
@@ -111,18 +125,20 @@ namespace Pharmacy.Areas.Admin.Controllers
 
         }
 
-
         public void getAll()
         {
             List<Category> categories = _context.Categories.ToList();
             List<Supplier> suppliers = _context.Suppliers.ToList();
             List<Discount> discounts = _context.Discounts.ToList();
-       
-
+      
             ViewBag.Category = new SelectList(categories, "CategoryId", "CategoryName");
             ViewBag.Supplier = new SelectList(suppliers, "SupplierId", "SupplierName");
             ViewBag.Discount = new SelectList(discounts, "DiscountId", "DiscountName");
-         
+        }
+
+        public IActionResult Detail(int id)
+        {
+            return View(_ProductModels.GetProduct(id));
         }
     }
 }

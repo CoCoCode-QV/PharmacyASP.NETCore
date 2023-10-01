@@ -38,17 +38,7 @@ public partial class QlpharmacyContext :IdentityDbContext<IdentityUser>
     public virtual DbSet<Supplier> Suppliers { get; set; }
     
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    ////{
-    ////    var configuration = new ConfigurationBuilder()
-    ////      .SetBasePath(Directory.GetCurrentDirectory()) // Set the path to your appsettings.json file
-    ////      .AddJsonFile("appsettings.json")
-    ////      .Build();
-    ////    var connectionString = configuration.GetConnectionString("DefaultConnection");
-    ////    optionsBuilder.UseSqlServer(connectionString);
-    ////}
-
-    //=> optionsBuilder.UseSqlServer("Server=LAPTOP-Q21GJI2Q;Database=QLPharmacy;Trusted_Connection=True;TrustServerCertificate=True;");
+   
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

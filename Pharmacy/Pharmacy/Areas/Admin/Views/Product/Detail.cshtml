@@ -1,0 +1,91 @@
+﻿@model Pharmacy.Data.Product
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
+}
+
+<h2>Detail</h2>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductPrice)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductPrice)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductDetail)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductDetail)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductImage)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductImage)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductInventory)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductInventory)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductExpiryDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductExpiryDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductIngredients)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductIngredients)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductPrescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductPrescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductActive)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductActive)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.CategoryName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Discount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Discount.DiscountName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Supplier)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Supplier.SupplierAddress)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ProductId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

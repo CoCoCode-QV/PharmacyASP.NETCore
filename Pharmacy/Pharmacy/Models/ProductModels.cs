@@ -1,4 +1,5 @@
-﻿using Pharmacy.Data;
+﻿using Microsoft.IdentityModel.Tokens;
+using Pharmacy.Data;
 
 namespace Pharmacy.Models
 {
