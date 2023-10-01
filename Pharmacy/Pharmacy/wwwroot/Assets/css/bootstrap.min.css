@@ -1847,7 +1847,6 @@ pre {
     position: relative;
     min-height: 1px;
     padding-right: 15px;
-    padding-left: 15px
 }
 
 .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
@@ -7050,15 +7049,6 @@ button.close {
     width: 70%;
 }
 
-.detail-product {
-    width: 80%;
-    margin-left: 5%;
-}
-
-.ingredient {
-    width: 113%;
-}
-
 .dropdown-type {
     position: relative;
     display: flex;
@@ -7067,4 +7057,28 @@ button.close {
     padding-left: 30px;
     padding-top: 25px;
     width: 50%;
+}
+
+.detail-pro {
+    text-align: justify;
+    font-size: 1.1em;
+}
+
+.details {
+    width: 80%;
+    margin: 20px 50px;
+}
+.container-fluid {
+    margin: auto;
+}
+
+.image-dt {
+    margin-left: 50px;
+}
+
+.imge {
+    border: 10px solid #ccc; 
+    padding: 5px; 
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
 }

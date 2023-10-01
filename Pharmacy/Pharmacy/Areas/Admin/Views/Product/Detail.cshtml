@@ -8,97 +8,94 @@
 <h2>Chi tiết sản phẩm</h2>
 
 <div>
-    <hr />
-    <dl class="detail-product">
-        <div class="row">
-            <div class="form-group mb-3 col-xs-12 col-sm-6">
-                <label>
-                    @Html.DisplayNameFor(model => model.ProductName)
-                </label>
-                <input type="text" class="form-control"
-                       value="@Html.DisplayFor(model => model.ProductName)" readonly />
+    <div class="container-fluid pb-5">
+        <div class="row px-xl-5">
+            <div class="col-lg-5 mb-30">
+                <div>
+                    <div class="image-dt">
+                        <img class="imge w-100 h-100" src="@Html.DisplayFor(model => model.ProductImage)" alt="Image">
+                    </div>
+                </div>
             </div>
-            <div class="form-group mb-3 col-xs-12 col-sm-6">
-                <label>
-                @Html.DisplayNameFor(model => model.ProductPrice)
-                </label>
-                <input type="text" class="form-control"
-                       value="@Html.DisplayFor(model => model.ProductPrice)" readonly />
-            </div>
-        </div>
-        <div class="form-group mb-3">
-            <label>@Html.DisplayNameFor(model => model.ProductDetail)</label>
-            <textarea class="form-control tm-small"
-                      rows="5"
-                      readonly>@Html.DisplayFor(model => model.ProductDetail)"</textarea>
-        </div>
-        <div class="form-group ingredient">
-            <label>
-                @Html.DisplayNameFor(model => model.ProductIngredients)
-            </label>
-            <input type="text" class="form-control"
-                   value="@Html.DisplayFor(model => model.ProductIngredients)" readonly />
-        </div>
-        <div class="row">
-            <div class="form-group mb-3 col-xs-12 col-sm-6">
-                <label>
-                    @Html.DisplayNameFor(model => model.ProductInventory)
-                </label>
-                <input type="text" class="form-control"
-                       value="@Html.DisplayFor(model => model.ProductInventory)" readonly />
-            </div>
-            <div class="form-group mb-3 col-xs-12 col-sm-6">
-                <label>
-                    @Html.DisplayNameFor(model => model.ProductExpiryDate)
-                </label>
-                <input type="text" class="form-control"
-                       value="@Html.DisplayFor(model => model.ProductExpiryDate)" readonly />
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group mb-3 col-xs-12 col-sm-6">
-                <label>
-                    @Html.DisplayNameFor(model => model.ProductPrescription)
-                </label>
-                <input type="text" class="form-control" value="@(Model.ProductPrescription.HasValue && Model.ProductPrescription.Value ? "Có" : "Không")" readonly />
-            </div>
-            <div class="form-group mb-3 col-xs-12 col-sm-6">
-                <label>
-                @Html.DisplayNameFor(model => model.ProductActive)
-                </label>
-                <input type="text" class="form-control" value="@(Model.ProductActive.HasValue && Model.ProductActive.Value ? "Đang kinh doanh" : "Ngừng kinh doanh")" readonly />
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group mb-3 col-xs-12 col-sm-6">
-                <label>
-                    @Html.DisplayNameFor(model => model.CategoryId)
-                </label>
-                <input type="text" class="form-control"
-                       value="@ViewBag.categoryName" readonly />
-            </div>
-            <div class="form-group mb-3 col-xs-12 col-sm-6">
-                <label>
-                    @Html.DisplayNameFor(model => model.DiscountId)
-                </label>
-                <input type="text" class="form-control"
-                 value="@ViewBag.discountName" readonly />
-            </div>
-            <div class="form-group mb-3 col-xs-12 col-sm-6">
-                <label>
-                    @Html.DisplayNameFor(model => model.SupplierId)
-                </label>
-                <input type="text" class="form-control"
-                       value="@ViewBag.supplierName" readonly />
-            </div>
-            <div class="form-group mb-3 col-xs-12 col-sm-6">
-                <label>
-                    @Html.DisplayNameFor(model => model.ProductImage)
-                </label>
-                <img src="@Html.DisplayFor(model => model.ProductImage)" alt="Product Image" width="100" height="100" />
+            <div class="col-lg-6 h-auto mb-30">
+                <div class="h-100 bg-light p-30">
+                    <div class="detail-pro d-flex mb-4">
+                        <p class="mb-4">
+                            <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.ProductName):</strong>
+                            @Html.DisplayFor(model => model.ProductName)
+                        </p>
+                    </div>
+                    <div class="detail-pro d-flex mb-4">
+                        <p class="mb-4">
+                            <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.ProductPrice):</strong>
+                            @Html.DisplayFor(model => model.ProductPrice)
+                        </p>
+                    </div>
+                    <div class="detail-pro d-flex mb-4">
+                        <p class="mb-4">
+                            <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.CategoryId):</strong>
+                            @ViewBag.categoryName
+                        </p>
+                    </div>
+                    <div class="detail-pro d-flex mb-3">
+                        <p class="mb-4">
+                            <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.ProductIngredients):</strong>
+                            @Html.DisplayFor(model => model.ProductIngredients)
+                        </p>
+                    </div>
+                    <div class="detail-pro d-flex mb-3">
+                        <p class="mb-4">
+                            <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.ProductDetail):</strong>
+                            @Html.DisplayFor(model => model.ProductDetail)
+                        </p>
+                    </div>
+                    
+                </div>
+                <div class="detail">
+                    <div class="col-lg-7 mb-30">
+                        <div class="detail-pro d-flex mb-4">
+                            <p class="mb-4">
+                                <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.ProductExpiryDate):</strong>
+                                @Html.DisplayFor(model => model.ProductExpiryDate)
+                            </p>
+                        </div>
+                        <div class="detail-pro d-flex mb-4">
+                            <p class="mb-4">
+                                <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.ProductPrescription):</strong>
+                                @(Model.ProductPrescription.HasValue && Model.ProductPrescription.Value ? "Có" : "Không")
+                            </p>
+                        </div>
+                        <div class="detail-pro d-flex mb-4">
+                            <p class="mb-4">
+                                <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.ProductActive):</strong>
+                                @(Model.ProductActive.HasValue && Model.ProductActive.Value ? "Đang kinh doanh" : "Ngừng kinh doanh")
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 mb-30">
+                        <div class="detail-pro d-flex mb-4">
+                            <p class="mb-4">
+                                <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.ProductInventory):</strong>
+                                @Html.DisplayFor(model => model.ProductInventory)
+                            </p>
+                        </div>
+                        <div class="detail-pro d-flex mb-4">
+                            <p class="mb-4">
+                                <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.DiscountId):</strong>
+                                @ViewBag.discountName
+                            </p>
+                        </div>
+                        <div class="detail-pro d-flex mb-4">
+                            <p class="mb-4">
+                                <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.SupplierId):</strong>
+                                @ViewBag.supplierName
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </dl>
+    </div>
 </div>
 <div>
     @Html.ActionLink("Quay lại", "Index")
