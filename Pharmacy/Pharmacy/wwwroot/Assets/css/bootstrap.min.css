@@ -2954,12 +2954,13 @@ output {
 
     .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
         cursor: not-allowed;
-        background-color: #eee;
-        opacity: 1
+        opacity: 1;
+        margin-bottom: 5px;
     }
 
 textarea.form-control {
-    height: auto
+    height: 200%;
+    width: 90.5%;
 }
 
 input[type=search] {
@@ -7047,4 +7048,23 @@ button.close {
     display: flex;
     align-items: center !important;
     width: 70%;
+}
+
+.detail-product {
+    width: 80%;
+    margin-left: 5%;
+}
+
+.ingredient {
+    width: 113%;
+}
+
+.dropdown-type {
+    position: relative;
+    display: flex;
+    border-collapse: separate;
+    justify-content: center;
+    padding-left: 30px;
+    padding-top: 25px;
+    width: 50%;
 }
