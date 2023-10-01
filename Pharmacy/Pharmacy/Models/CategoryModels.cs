@@ -52,5 +52,6 @@ namespace Pharmacy.Models
             updateitem.CategoryName = category.CategoryName;
             await _context.SaveChangesAsync();
         }
+
     }
 }

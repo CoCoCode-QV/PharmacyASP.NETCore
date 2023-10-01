@@ -1,14 +1,14 @@
-﻿@model IEnumerable<Pharmacy.Data.Supplier>
+﻿@model IEnumerable<Pharmacy.Data.Product>
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
 @{
-    ViewBag.Title = "Nhà cung cấp";
+    ViewBag.Title = "Sản phẩm";
     Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
     // <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
 }
 <div class="main-container">
-    <h2 class="col">Nhà cung cấp</h2>
-    @using (Html.BeginForm("Index", "Supplier", FormMethod.Get))
+    <h2 class="col">Sản phẩm</h2>
+    @using (Html.BeginForm("Index", "Product", FormMethod.Get))
     {
         <div class="row custom-search-form">
             <div class="col-sm-3">
@@ -35,17 +35,22 @@
 <table class="table table-bordered">
     <tr>
         <th>
-            <span>Tên nhà cung cấp</span>
-
+            <span>Tên sản phẩm</span>
         </th>
         <th>
-            <span>Email</span>
+            <span>Giá</span>
         </th>
         <th>
-            <span>Số điện thoại</span>
+            <span>Kho</span>
         </th>
         <th>
-            <span>Địa chỉ</span>
+            <span>Hết hạn</span>
+        </th>
+        <th>
+            <span>Hình ảnh</span>
+        </th>
+        <th>
+            <span>Trạng thái</span>
         </th>
         <th></th>
     </tr>
@@ -54,21 +59,27 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.SupplierName)
+                @Html.DisplayFor(modelItem => item.ProductName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SupplierEmail)
+                @Html.DisplayFor(modelItem => item.ProductPrice)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SupplierPhone)
+                @Html.DisplayFor(modelItem => item.ProductInventory)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SupplierAddress)
+                @Html.DisplayFor(modelItem => item.ProductExpiryDate)
             </td>
             <td>
-                @*<a class="ToastrDanger" href="#">Sửa</a>*@
-                @Html.ActionLink("Sửa", "Edit", new { id = item.SupplierId })|
-                <a onclick="confirmDelete('@item.SupplierId', '@item.SupplierName', '@Url.Action("Delete", "Supplier")','nhà cung cấp')">Xóa</a>
+                <img src="@item.ProductImage" alt="Product Image" width="100" height="100" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductActive)
+            </td>
+            <td>
+                @Html.ActionLink("Chi tiết", "Detail", new { id = item.ProductId })|
+                @Html.ActionLink("Sửa", "Edit", new { id = item.ProductId })|
+                <a onclick="confirmDelete('@item.ProductId', '@item.ProductName', '@Url.Action("Delete", "Product")','sản phẩm')">Xóa</a>
             </td>
         </tr>
     }

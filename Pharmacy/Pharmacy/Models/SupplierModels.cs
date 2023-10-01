@@ -12,16 +12,33 @@ namespace Pharmacy.Models
             _context = context;
         }
 
-        public IEnumerable<Supplier> GetSuppliers(string search)
+      
+        public IEnumerable<Supplier> GetSuppliers(string search, string condition)
         {
             var ListSupplier = _context.Suppliers.OrderByDescending(s => s.SupplierId).ToList();
+       
             if (search != null)
             {
                 List<Supplier> SupplierFound = new List<Supplier>();
-                foreach (var item in ListSupplier)
+                switch (condition)
                 {
-                    if (item.SupplierName.Contains(search))
-                        SupplierFound.Add(item);
+                    case "name":
+                        foreach (var item in ListSupplier)
+                            if (item.SupplierName.Contains(search))
+                                SupplierFound.Add(item); 
+                        break;
+                    case "email":
+                        foreach (var item in ListSupplier)
+                            if (item.SupplierEmail.Contains(search))
+                                SupplierFound.Add(item);
+                        break;
+                    
+                    case "phone":
+                        foreach (var item in ListSupplier)
+                            if (item.SupplierPhone.Contains(search))
+                                SupplierFound.Add(item);
+                        break;
+
                 }
                 return SupplierFound;
             }
@@ -29,22 +46,22 @@ namespace Pharmacy.Models
             return ListSupplier;
         }
 
-        public void CreatSupplier(Supplier supplier)
+        public async Task CreatSupplier(Supplier supplier)
         {
             _context.Add(supplier);
-            _context.SaveChangesAsync();
+           await _context.SaveChangesAsync();
         }
 
-        public void DeleteSupplier(int id)
+        public async Task DeleteSupplier(int id)
         {
             var item = _context.Suppliers.Find(id);
             _context.Suppliers.Remove(item);
-            _context.SaveChangesAsync();
+           await _context.SaveChangesAsync();
         }
 
         public Supplier GetSupplier(int id)
         {
-            return _context.Suppliers.Find(id);
+            return  _context.Suppliers.Find(id);
         }
 
         public async Task EditSupplierAsync(Supplier supplier)

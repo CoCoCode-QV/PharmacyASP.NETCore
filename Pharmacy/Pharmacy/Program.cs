@@ -20,6 +20,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<Pharmacy.Models.CategoryModels>();
 builder.Services.AddScoped<Pharmacy.Models.SupplierModels>();
 builder.Services.AddScoped<Pharmacy.Models.DiscountModels>();
+builder.Services.AddScoped<Pharmacy.Models.ProductModels>();
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<QlpharmacyContext>().AddDefaultTokenProviders(); 
 
