@@ -128,7 +128,8 @@ namespace Pharmacy.Areas.Admin.Controllers
 
 
         }
-         [HttpPost]
+
+        [HttpPost]
         public async Task<IActionResult> UploadImage([FromForm] IFormFile file)
         {
             if (file != null && file.Length > 0)
@@ -177,7 +178,15 @@ namespace Pharmacy.Areas.Admin.Controllers
 
         public IActionResult Detail(int id)
         {
-            return View(_ProductModels.GetProduct(id));
+            Product product = _ProductModels.GetProduct(id);
+            Discount discount = _context.Discounts.Where(p => p.DiscountId == product.DiscountId).SingleOrDefault();
+            Supplier supplier = _context.Suppliers.Where(p => p.SupplierId == product.SupplierId).SingleOrDefault();
+            Category category = _context.Categories.Where(p => p.CategoryId == product.CategoryId).SingleOrDefault();
+           
+            ViewBag.discountName = discount?.DiscountName;
+            ViewBag.supplierName = supplier?.SupplierName;
+            ViewBag.categoryName = category?.CategoryName;
+            return View(product);
         }
 
         public IActionResult Edit(int id)
@@ -194,7 +203,7 @@ namespace Pharmacy.Areas.Admin.Controllers
             }
         }
 
-            public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             if(id == 0)
             {

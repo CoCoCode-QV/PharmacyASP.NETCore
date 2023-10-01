@@ -5,10 +5,9 @@
     Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
 }
 
-<h2>Detail</h2>
+<h2>Chi tiết sản phẩm</h2>
 
 <div>
-    <h4>Product</h4>
     <hr />
     <dl class="detail-product">
         <div class="row">
@@ -73,24 +72,24 @@
         <div class="row">
             <div class="form-group mb-3 col-xs-12 col-sm-6">
                 <label>
-                    @Html.DisplayNameFor(model => model.Category)
+                    @Html.DisplayNameFor(model => model.CategoryId)
                 </label>
                 <input type="text" class="form-control"
-                       value="@Html.DisplayFor(model => model.Category.CategoryName)" readonly />
+                       value="@ViewBag.categoryName" readonly />
             </div>
             <div class="form-group mb-3 col-xs-12 col-sm-6">
                 <label>
-                    @Html.DisplayNameFor(model => model.Discount)
+                    @Html.DisplayNameFor(model => model.DiscountId)
                 </label>
                 <input type="text" class="form-control"
-                       value="@Html.DisplayFor(model => model.Discount.DiscountName)" readonly />
+                 value="@ViewBag.discountName" readonly />
             </div>
             <div class="form-group mb-3 col-xs-12 col-sm-6">
                 <label>
-                    @Html.DisplayNameFor(model => model.Supplier)
+                    @Html.DisplayNameFor(model => model.SupplierId)
                 </label>
                 <input type="text" class="form-control"
-                       value="@Html.DisplayFor(model => model.Supplier.SupplierAddress)" readonly />
+                       value="@ViewBag.supplierName" readonly />
             </div>
             <div class="form-group mb-3 col-xs-12 col-sm-6">
                 <label>
@@ -102,6 +101,5 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ProductId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Quay lại", "Index")
 </div>
