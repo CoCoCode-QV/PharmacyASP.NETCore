@@ -1,4 +1,5 @@
-﻿@model Pharmacy.Data.Product
+﻿@using System.Web;
+@model Pharmacy.Data.Product
 
 @{
     ViewData["Title"] = "Detail";
@@ -46,7 +47,7 @@
                     <div class="detail-pro d-flex mb-3">
                         <p class="mb-4">
                             <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.ProductDetail):</strong>
-                            @Html.DisplayFor(model => model.ProductDetail)
+                            @Html.Raw(Model.ProductDetail)
                         </p>
                     </div>
                     

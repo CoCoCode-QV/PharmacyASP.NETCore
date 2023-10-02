@@ -85,7 +85,7 @@ namespace Pharmacy.Areas.Admin.Controllers
                             ProductName = product.ProductName,
                             ProductPrice = product.ProductPrice,
                             ProductDetail = product.ProductDetail,
-                            ProductImage = Path.Combine("images", uniqueFileName),
+                            ProductImage = Path.Combine("\\images", uniqueFileName),
                             ProductInventory = product.ProductInventory,
                             CategoryId = product.CategoryId,
                             SupplierId = product.SupplierId,

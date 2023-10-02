@@ -7077,8 +7077,11 @@ button.close {
 }
 
 .imge {
-    border: 10px solid #ccc; 
-    padding: 5px; 
+    border: 10px solid #ccc;
+    padding: 5px;
     border-radius: 10px;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
 }
