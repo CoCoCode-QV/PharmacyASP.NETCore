@@ -1374,7 +1374,7 @@ figure {
 }
 
 img {
-    vertical-align: middle
+    vertical-align: middle;
 }
 
 .carousel-inner > .item > a > img, .carousel-inner > .item > img, .img-responsive, .thumbnail a > img, .thumbnail > img {
@@ -7084,4 +7084,10 @@ button.close {
     width: 400px;
     height: 400px;
     object-fit: cover;
+}
+
+.detail-pro img {
+    width: 80%;
+    height: 80%;
+    display: block;
 }
