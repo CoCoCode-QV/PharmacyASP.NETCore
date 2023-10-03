@@ -26,7 +26,6 @@
     <!-- Libraries Stylesheet -->
     <link href="~/Assets/lib/animate/animate.min.css" rel="stylesheet" />
     <link href="~/Assets/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
-
     <!-- Customized Bootstrap Stylesheet -->
     <link href="~/Assets/css/style.min.css" rel="stylesheet" />
 </head>
@@ -63,6 +62,7 @@
                     <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Pharmacy</span>
                 </a>
             </div>
+       
             <div class="col-lg-4 col-6 text-left">
                 <form action="">
                     <div class="input-group">
@@ -136,24 +136,13 @@
                         <div class="navbar-nav mr-auto py-0">
                             <a href="~/Home" class="nav-item nav-link active">Trang chủ</a>
                             <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Thực phẩm chức năng <i class="fa fa-angle-down mt-1"></i></a>
-                                <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-                                    <a href="~/Products" class="dropdown-item">Hỗ trợ tiêu hóa</a>
-                                    <a href="~/Products" class="dropdown-item">Vitamin & Khoáng chất</a>
-                                    <a href="~/Products" class="dropdown-item">Hỗ trợ điều trị</a>
-                                    <a href="~/Products" class="dropdown-item">Tăng sức đề kháng</a>
-                                    <a href="~/Products" class="dropdown-item">Dinh dưỡng</a>
-                                </div>
+
+                                <a class="nav-link dropdown-toggle" asp-controller="Products" asp-action="Index">Sản phẩm </a>
+                           
                             </div>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Dược mỹ phẩm <i class="fa fa-angle-down mt-1"></i></a>
-                                <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-                                    <a href="~/Products" class="dropdown-item">Chăm sóc da mặt</a>
-                                    <a href="~/Products" class="dropdown-item">Chăm sóc cơ thể</a>
-                                </div>
-                            </div>
-                            <a href="~/Products" class="nav-item nav-link">Thuốc không kê đơn</a>
-                            <a href="~/Products" class="nav-item nav-link">Thiết bị y tế</a>
+    
+                            <a href="#" class="nav-item nav-link">Thuốc không kê đơn</a>
+               
                             <a href="contact.html" class="nav-item nav-link">Liên hệ</a>
                         </div>
                     </div>
@@ -161,7 +150,7 @@
             </div>
         </div>
     </div>
-    <!-- Navbar End -->
+    <!-- Navbar End --> 
     @RenderBody()
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-secondary mt-5 pt-5">

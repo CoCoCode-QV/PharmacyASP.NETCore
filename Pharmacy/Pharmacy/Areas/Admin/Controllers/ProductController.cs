@@ -7,6 +7,8 @@ using Pharmacy.Data;
 using Pharmacy.Models;
 using Pharmacy.ViewsModels;
 using System.Diagnostics.Metrics;
+using System.Linq;
+using System.Security.Policy;
 using X.PagedList;
 
 namespace Pharmacy.Areas.Admin.Controllers
@@ -29,16 +31,16 @@ namespace Pharmacy.Areas.Admin.Controllers
 
         }
 
-        public const int Items_Per_Page = 10;
+        public const int Items_Per_Page = 3;
         public IActionResult Index(string search, string condition, int? page)
         {
-            var listSupplier = _ProductModels.GetProducts(search, condition);
+            var listProducts = _ProductModels.GetProducts(search, condition);
 
             var pageNumber = page ?? 1;
 
-            var onePageSupplier = listSupplier.ToPagedList(pageNumber, Items_Per_Page);
+            var onePage = listProducts.ToPagedList(pageNumber, Items_Per_Page);
 
-            return View(onePageSupplier);
+            return View(onePage);
         }
 
         public IActionResult Create()
@@ -67,6 +69,7 @@ namespace Pharmacy.Areas.Admin.Controllers
                         getAll();
                         return View();
                     }
+                    
                     string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" }; // Các phần mở rộng cho hình ảnh cho phép
                     var fileExtension = Path.GetExtension(photo.FileName).ToLower(); // Lấy phần mở rộng của tệp
 
@@ -125,8 +128,6 @@ namespace Pharmacy.Areas.Admin.Controllers
                 getAll();
                 return View();
             }
-
-
         }
 
         [HttpPost]
@@ -136,23 +137,29 @@ namespace Pharmacy.Areas.Admin.Controllers
             {
                 try
                 {
-                    // Tạo đường dẫn tới thư mục lưu trữ hình ảnh trên máy chủ
-                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Detail");
+                    string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" }; // Các phần mở rộng cho hình ảnh cho phép
+                    var fileExtension = Path.GetExtension(file.FileName).ToLower(); // Lấy phần mở rộng của tệp
 
-                    // Tạo tên file duy nhất để tránh trùng lặp
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    // Lưu file vào thư mục trên máy chủ
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    if (allowedExtensions.Contains(fileExtension))
                     {
-                        await file.CopyToAsync(fileStream);
-                    }
+                        // Tạo đường dẫn tới thư mục lưu trữ hình ảnh trên máy chủ
+                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Detail");
 
-                    // Trả về đường dẫn tới file đã tải lên
-                    var imageUrl = Path.Combine("\\Detail", uniqueFileName);
-                    var url = new ViewImageUploadResult { Url = imageUrl };
-                    return Json(url);
+                        // Tạo tên file duy nhất để tránh trùng lặp
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        // Lưu file vào thư mục trên máy chủ
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(fileStream);
+                        }
+
+                        // Trả về đường dẫn tới file đã tải lên
+                        var imageUrl = Path.Combine("\\Detail", uniqueFileName);
+                        var url = new ViewImageUploadResult { Url = imageUrl };
+                        return Json(url);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -182,7 +189,7 @@ namespace Pharmacy.Areas.Admin.Controllers
             Discount discount = _context.Discounts.Where(p => p.DiscountId == product.DiscountId).SingleOrDefault();
             Supplier supplier = _context.Suppliers.Where(p => p.SupplierId == product.SupplierId).SingleOrDefault();
             Category category = _context.Categories.Where(p => p.CategoryId == product.CategoryId).SingleOrDefault();
-           
+
             ViewBag.discountName = discount?.DiscountName;
             ViewBag.supplierName = supplier?.SupplierName;
             ViewBag.categoryName = category?.CategoryName;
@@ -203,6 +210,88 @@ namespace Pharmacy.Areas.Admin.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> EditAsync(Product product, IFormFile photo)
+        {
+            var data = _context.Products.Where(p => p.ProductId == product.ProductId).SingleOrDefault();
+
+            if ( product.ProductName != null && product.ProductPrice != null && product.ProductInventory != null && product.ProductExpiryDate != null
+                && product.ProductDetail != null && product.ProductIngredients != null && product.CategoryId != null && product.SupplierId != null && product.DiscountId != null)
+            {
+                try
+                {
+                    DateTime ExpiryDate = (DateTime)product.ProductExpiryDate;
+                    DateTime currentDate = DateTime.Now.Date;
+
+                    if (ExpiryDate < currentDate)
+                    {
+                        TempData["error"] = "Hạn sử dụng không hợp lệ";
+                        getAll();
+                        return View();
+                    }
+                    if(photo != null)
+                    {
+                       
+                        string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" }; // Các phần mở rộng cho hình ảnh cho phép
+                        var fileExtension = Path.GetExtension(photo.FileName).ToLower(); // Lấy phần mở rộng của tệp
+
+                        if (allowedExtensions.Contains(fileExtension))
+                        {
+                           
+
+                            string webRootPath = _webHostEnvironment.WebRootPath;
+                            var pathCurrrent = data.ProductImage.Substring(1);
+                            string currentImage = Path.Combine(webRootPath, pathCurrrent);
+
+                            if (currentImage != null)
+                            {
+                                if (System.IO.File.Exists(currentImage))
+                                {
+                                    System.IO.File.Delete(currentImage);
+                                }
+                            }
+                            var uploadsFolder = Path.Combine("wwwroot", "images"); // Relative path to the wwwroot/images folder
+                            var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(photo.FileName);
+                            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                            using (FileStream stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await photo.CopyToAsync(stream);
+                                stream.Close();
+                            }
+                            string url = Path.Combine("\\images", uniqueFileName);
+                            await _ProductModels.EditProductAsync(product, url);
+                            return RedirectToAction("Index");
+                        }
+                        else
+                        {
+                            // Người dùng chọn tệp không hợp lệ, trả về lỗi
+                            TempData["error"] = "Vui lòng chọn một tập tin hình ảnh hợp lệ (jpg, jpeg, png hoặc gif).";
+                            getAll();
+                            return View();
+                        }
+
+                    }
+                    else
+                    {
+                        await _ProductModels.EditProductAsync(product, null);
+                        return RedirectToAction("Index");
+                    }
+                }catch (Exception ex)
+                {
+                   
+                    TempData["error"] = "Đã sãy ra lỗi khi di chuyển tệp ";
+                    getAll();
+                    return View(data);
+                }
+            }
+            else
+            {
+                TempData["error"] = "Vui lòng điền đầy đủ thông tin.";
+                getAll();
+                return View(data);
+            }
+        }
+
         public async Task<IActionResult> DeleteAsync(int id)
         {
             if(id == 0)
@@ -216,9 +305,10 @@ namespace Pharmacy.Areas.Admin.Controllers
                 {
                    // Không cần thêm wwwroot ở đây
                     string webRootPath = _webHostEnvironment.WebRootPath;
-                    string currentImage = Path.Combine(webRootPath, data.ProductImage);
-
-                    if ( currentImage != null )
+                    var pathCurrrent = data.ProductImage.Substring(1);
+                    string currentImage = Path.Combine(webRootPath, pathCurrrent); 
+                    
+                    if (currentImage != null )
                     {
                         if (System.IO.File.Exists(currentImage))
                         {

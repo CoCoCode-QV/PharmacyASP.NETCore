@@ -14,13 +14,14 @@
 <h2>Cập nhật sản phẩm</h2>
 
 <hr />
-@using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ProductId)
         <div class="form-group row">
             @Html.LabelFor(model =>model.ProductName, htmlAttributes: new { @class = "col-form-label col-sm-2" })
             <div class="col-sm-10">
@@ -39,9 +40,12 @@
 
         <div class="form-group row">
             @Html.LabelFor(model =>model.ProductImage, htmlAttributes: new { @class = "col-form-label col-sm-2" })
-            <div class="col-sm-10">
+            <div class="col-sm-4">
                 <input type="file" name="photo" />
                 @Html.ValidationMessageFor(model =>model.ProductImage, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-3">
+                <img src="@Model.ProductImage" alt="Product Image" width="100" height="100" />
             </div>
         </div>
         <div class="form-group row">
@@ -50,6 +54,7 @@
                 @Html.EditorFor(model =>model.ProductInventory, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model =>model.ProductInventory, "", new { @class = "text-danger" })
             </div>
+      
         </div>
         <div class="form-group row">
             @Html.LabelFor(model =>model.ProductExpiryDate, htmlAttributes: new { @class = "col-form-label col-sm-2" })
@@ -61,7 +66,7 @@
         <div class="form-group row">
             @Html.LabelFor(model =>model.ProductDetail, htmlAttributes: new { @class = "col-form-label col-sm-2" })
             <div class="col-sm-8">
-                <textarea id="summernote" asp-for="ProductDetail" name="ProductDetail" ></textarea>
+                <textarea id="summernote" asp-for="ProductDetail" name="ProductDetail">@Html.Raw(Model.ProductDetail)</textarea>
                 @Html.ValidationMessageFor(model =>model.ProductDetail, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -119,7 +124,7 @@
         </div>
         <div class="form-group">
             <div class="col-lg-2">
-                <input type="submit" value="Thêm mới" class="btn btn-default" />
+                <input type="submit" value="Lưu" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -138,7 +143,7 @@
     <script>
         $(document).ready(function () {
             $('#summernote').summernote({
-                placeholder: 'Hello stand alone ui',
+                placeholder: 'Chi tiết sản phẩm...',
                 tabsize: 2,
                 height: 500,
                 toolbar: [
@@ -156,12 +161,15 @@
                             UploadImage(files[i]);
                         }
                     }
+                }
             });
+
             function UploadImage(file) {
                 var url = "@Url.Action("UploadImage", "Product")";
 
-                formData = new FormData();
-                formData.append("aUploadedFile", file);
+                var formData = new FormData();
+                formData.append("file", file);
+
                 $.ajax({
                     type: "POST",
                     url: url,
@@ -169,18 +177,17 @@
                     cache: false,
                     contentType: false,
                     processData: false,
-                    success: function (FileUrl) {
-                        // alert(FileUrl);
+                    success: function (fileUrl) {
+                        
                         var imgNode = document.createElement("img");
-                        imgNode.src = FileUrl;
-                        $("summernote").summernote("insertNode", imgNode);
+                        imgNode.src = fileUrl.url;
+                        $("#summernote").summernote("insertNode", imgNode);
                     },
                     error: function (data) {
                         alert(data.responseText);
                     }
                 });
+            }
         });
-
     </script>
 }
-

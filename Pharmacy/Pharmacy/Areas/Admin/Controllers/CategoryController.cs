@@ -25,7 +25,7 @@ namespace Pharmacy.Areas.Admin.Controllers
            
         }
 
-        public const int Items_Per_Page = 10;
+        public const int Items_Per_Page = 3;
         public IActionResult Index( string search,int? page )
         {
           

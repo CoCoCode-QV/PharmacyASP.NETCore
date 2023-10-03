@@ -35,6 +35,22 @@ namespace Pharmacy.Models
             return ListProducts;
         }
 
+        public IEnumerable<Product> GetProductsActive(string search)
+        {
+            var ListProducts = _context.Products.Where(s=> s.ProductActive==true).OrderByDescending(s => s.ProductId ).ToList();
+
+            if (search != null)
+            {
+                List<Product> ProductFound = new List<Product>();
+                foreach (var item in ListProducts)
+                    if (item.ProductName.Contains(search))
+                        ProductFound.Add(item);
+                return ProductFound;
+            }
+
+            return ListProducts;
+        }
+
         public async Task CreatProduct(Product product)
         {
             _context.Add(product);
@@ -53,18 +69,41 @@ namespace Pharmacy.Models
             return _context.Products.Find(id);
         }
 
-        public async Task EditProductAsync(Product product)
+        public async Task EditProductAsync(Product product, string url)
         {
-            var updateitem = _context.Products.Find(product.SupplierId);
-            updateitem.ProductName  = product.ProductName;
-            updateitem.ProductPrice = product.ProductPrice;
-            updateitem.ProductDetail = product.ProductDetail;
-            updateitem.ProductImage = product.ProductImage;
-            updateitem.ProductInventory = product.ProductInventory;
-            updateitem.ProductExpiryDate    = product.ProductExpiryDate;
-            updateitem.ProductPrescription = product.ProductPrescription;
-            updateitem.ProductActive = product.ProductActive;
-            await _context.SaveChangesAsync();
+            var updateitem = _context.Products.Find(product.ProductId);
+            if( url != null)
+            {
+                updateitem.ProductName  = product.ProductName;
+                updateitem.ProductPrice = product.ProductPrice;
+                updateitem.ProductDetail = product.ProductDetail;
+                updateitem.ProductImage = url;
+                updateitem.ProductInventory = product.ProductInventory;
+                updateitem.ProductExpiryDate    = product.ProductExpiryDate;
+                updateitem.ProductPrescription = product.ProductPrescription;
+                updateitem.ProductActive = product.ProductActive;
+                updateitem.CategoryId = product.CategoryId;
+                updateitem.DiscountId   = product.DiscountId;
+                updateitem.SupplierId   = product.SupplierId;
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                updateitem.ProductName = product.ProductName;
+                updateitem.ProductPrice = product.ProductPrice;
+                updateitem.ProductDetail = product.ProductDetail;
+                updateitem.ProductInventory = product.ProductInventory;
+                updateitem.ProductExpiryDate = product.ProductExpiryDate;
+                updateitem.ProductPrescription = product.ProductPrescription;
+                updateitem.ProductActive = product.ProductActive;
+                updateitem.CategoryId = product.CategoryId;
+                updateitem.DiscountId = product.DiscountId;
+                updateitem.SupplierId = product.SupplierId;
+                await _context.SaveChangesAsync();
+            }
+            
         }
+
+        
     }
 }

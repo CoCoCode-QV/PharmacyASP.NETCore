@@ -55,5 +55,25 @@ namespace Pharmacy.Models
             updateitem.DiscountEndDate  = discount.DiscountEndDate;
             await _context.SaveChangesAsync();
         }
+
+        public Dictionary<int, double?> GetDiscountPercentMap(IEnumerable<Product> products, List<Discount> discounts)
+        {
+            Dictionary<int, double?> discountPercentMap = new Dictionary<int, double?>();
+            foreach (var product in products)
+            {
+                Discount productDiscount = discounts.FirstOrDefault(p => p.DiscountId == product.DiscountId);
+                if (productDiscount != null && productDiscount.DiscountEndDate > DateTime.Now)
+                {
+                    discountPercentMap[product.ProductId] = productDiscount.DiscountPercent;
+                }
+                else
+                {
+                    discountPercentMap[product.ProductId] = 0; // Không có giảm giá
+                }
+            }
+            return discountPercentMap;
+        }
+
+       
     }
 }

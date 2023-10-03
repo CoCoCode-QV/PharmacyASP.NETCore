@@ -1,7 +1,9 @@
-﻿@{
+﻿@model Pharmacy.ViewsModels.ProductViewModels;
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.title = "Trang chủ";
 }
+
 <!-- Carousel Start -->
 <div class="container-fluid mb-3">
     <div class="row px-xl-5">
@@ -199,266 +201,45 @@
 <div class="container-fluid pt-5 pb-3">
     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">GỢI Ý HÔM NAY</span></h2>
     <div class="row px-xl-5">
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="~/Assets/img/product-1.png" alt="">
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="~/Detail">Dung dịch xịt họng Afree Thái Minh</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
+        @foreach(var item in Model.ListProduct)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+                <div class="product-item bg-light mb-4">
+                    <a asp-controller="Detail" asp-action="Index" asp-route-id="@item.ProductId">
+                    <div class="product-img position-relative overflow-hidden">
+                        <img class="img-fluid w-100" src="@item.ProductImage" alt="@item.ProductName">
                     </div>
-                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
+                    <div class="text-center py-4">
+                        <span class="h6 text-decoration-none text-truncate" >@item.ProductName</span>
+                        <div class="d-flex align-items-center justify-content-center mt-2">
+                                @{
+                                    double? discountPercent = Model.DiscountPercentMap.ContainsKey(item.ProductId) ? Model.DiscountPercentMap[item.ProductId] : 0;
+                                    string ItemformattedPrice = string.Format("{0:N0} VNĐ", item.ProductPrice);
+                                    if (discountPercent != 0)
+                                    {
+                                        double? ItemcurrentPrice = item.ProductPrice - (item.ProductPrice * discountPercent / 100);
+                                        string ItemformattedCurrentPrice = string.Format("{0:N0} VNĐ", ItemcurrentPrice);
+
+                                        <h5>@ItemformattedCurrentPrice</h5>
+                                        <h6 class="text-muted ml-2"><del>@ItemformattedPrice</del></h6>
+                                    }
+                                    else
+                                    {
+                                        <h5>@ItemformattedPrice</h5>
+                                        <h6 class="text-muted ml-2"><del>0%</del></h6>
+                                    }
+                                }
+                        
+                        </div>
+                        <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
+                    </div>
+                    </a>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="~/Assets/img/product-2.png" alt="">
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="~/Detail">Thực phẩm Pharmacy bổ sung Calcium + Vitamin D3</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                    </div>
-                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="~/Assets/img/product-2.png" alt="">
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="~/Detail">Thực phẩm Pharmacy bổ sung Calcium + Vitamin D3</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                    </div>
-                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="~/Assets/img/product-2.png" alt="">
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Thực phẩm Pharmacy bổ sung Calcium + Vitamin D3</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                    </div>
-                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="~/Assets/img/product-2.png" alt="">
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Thực phẩm Pharmacy bổ sung Calcium + Vitamin D3</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                    </div>
-                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="~/Assets/img/product-2.png" alt="">
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Thực phẩm Pharmacy bổ sung Calcium + Vitamin D3</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                    </div>
-                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="~/Assets/img/product-2.png" alt="">
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Thực phẩm Pharmacy bổ sung Calcium + Vitamin D3</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                    </div>
-                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="~/Assets/img/product-2.png" alt="">
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Thực phẩm Pharmacy bổ sung Calcium + Vitamin D3</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                    </div>
-                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                </div>
-            </div>
-        </div>
+        }
     </div>
 </div>
-<!-- Products End -->
-<!-- Offer Start -->
-<div class="container-fluid pt-5 pb-3">
-    <div class="row px-xl-5">
-        <div class="col-md-6">
-            <div class="product-offer mb-30" style="height: 300px;">
-                <img class="img-fluid" src="~/Assets/img/offer1.png" alt="">
-                <div class="offer-text">
-                    <h6 class="text-white text-uppercase">Save 20%</h6>
-                    <h3 class="text-white mb-3">Special Offer</h3>
-                    <a href="~/Products" class="btn btn-primary">Shop Now</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="product-offer mb-30" style="height: 300px;">
-                <img class="img-fluid" src="~/Assets/img/offer2.png" alt="">
-                <div class="offer-text">
-                    <h6 class="text-white text-uppercase">Save 20%</h6>
-                    <h3 class="text-white mb-3">Special Offer</h3>
-                    <a href="~/Products" class="btn btn-primary">Shop Now</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Offer End -->
-<!-- Products Start -->
-<div class="container-fluid pt-5 pb-3">
-    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Recent Products</span></h2>
-    <div class="row px-xl-5">
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="~/Assets/img/product-1.png" alt="">
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Dung dịch xịt họng Afree Thái Minh</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                    </div>
-                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="~/Assets/img/product-1.png" alt="">
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Dung dịch xịt họng Afree Thái Minh</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                    </div>
-                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="~/Assets/img/product-1.png" alt="">
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Dung dịch xịt họng Afree Thái Minh</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                    </div>
-                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="~/Assets/img/product-1.png" alt="">
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Dung dịch xịt họng Afree Thái Minh</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                    </div>
-                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="~/Assets/img/product-1.png" alt="">
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Dung dịch xịt họng Afree Thái Minh</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                    </div>
-                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="~/Assets/img/product-1.png" alt="">
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Dung dịch xịt họng Afree Thái Minh</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                    </div>
-                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="~/Assets/img/product-1.png" alt="">
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Dung dịch xịt họng Afree Thái Minh</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                    </div>
-                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-            <div class="product-item bg-light mb-4">
-                <div class="product-img position-relative overflow-hidden">
-                    <img class="img-fluid w-100" src="~/Assets/img/product-1.png" alt="">
-                </div>
-                <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" href="">Dung dịch xịt họng Afree Thái Minh</a>
-                    <div class="d-flex align-items-center justify-content-center mt-2">
-                        <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                    </div>
-                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Products End -->
+
 <!-- Vendor Start -->
 <div class="container-fluid py-5">
     <div class="row px-xl-5">

@@ -1,8 +1,10 @@
-﻿@{
+﻿@model Pharmacy.ViewsModels.ProductViewModels
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.title = "Chi tiết sản phẩm";
 }
 <!-- Breadcrumb Start -->
+
 <div class="container-fluid">
     <div class="row px-xl-5">
         <div class="col-12">
@@ -15,6 +17,8 @@
     </div>
 </div>
 <!-- Breadcrumb End -->
+
+
 <!-- Shop Detail Start -->
 <div class="container-fluid pb-5">
     <div class="row px-xl-5">
@@ -22,16 +26,7 @@
             <div id="product-carousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner bg-light">
                     <div class="carousel-item active">
-                        <img class="w-100 h-100" src="~/Assets/img/product-1.png" alt="Image">
-                    </div>
-                    <div class="carousel-item">
-                        <img class="w-100 h-100" src="~/Assets/img/product-2.png" alt="Image">
-                    </div>
-                    <div class="carousel-item">
-                        <img class="w-100 h-100" src="~/Assets/img/product-1.png" alt="Image">
-                    </div>
-                    <div class="carousel-item">
-                        <img class="w-100 h-100" src="~/Assets/img/product-2.png" alt="Image">
+                        <img class="w-100 h-100" src="@Model.Product.ProductImage" alt="Image">
                     </div>
                 </div>
                 <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
@@ -45,22 +40,49 @@
 
         <div class="col-lg-7 h-auto mb-30">
             <div class="h-100 bg-light p-30">
-                <h2>Dung dịch xịt họng Afree Thái Minh</h2>
-                <h3 class="font-weight-semi-bold text-dark">100.000đ</h3>
-                <h4 class="text-muted ml-2"><del>130.000đ</del></h4>
-                <p class="mb-4">
-                    Xịt họng AFree Thái Minh Pharma 30ml là thương hiệu dẫn đầu trong dòng sản phẩm xịt họng diệt khuẩn,
-                    diệt virus, giảm sưng viêm nhanh chóng. Khi phối hợp sớm Xịt họng AFree trong điều trị nhiễm khuẩn,
-                    viêm đường hô hấp sẽ mang lại hiệu quả vượt trội.
-                </p>
+                <h2>@Model.Product.ProductName</h2>
+                @{
+                    string formattedCurrentPrice;
+                    string formattedPrice = string.Format("{0:N0} VNĐ", @Model.Product.ProductPrice);
+                    if (ViewBag.isDiscountActive)
+                    {
+                        double? currentPrice = @Model.Product.ProductPrice - (@Model.Product.ProductPrice * @Model.DiscountPercent / 100);
+                        formattedCurrentPrice = string.Format("{0:N0} VNĐ", currentPrice);
+                        
+
+                        <h3 class="font-weight-semi-bold text-dark">@formattedCurrentPrice</h3>
+                        <h4 class="text-muted ml-2"><del>@formattedPrice</del></h4>
+                    }
+                    else
+                    {
+
+                        <h3 class="font-weight-semi-bold text-dark">@formattedPrice</h3>
+                        <h4 class="text-muted ml-2"><del>0%</del></h4>
+                    }
+                }
+                <div class=" mb-3">
+                    <strong class="text-dark mr-3">Thành phần:</strong>
+                    <div class="text-black-50">
+                        @Model.Product.ProductIngredients                     
+                    </div>
+                </div>
                 <div class="d-flex mb-3">
-                    <strong class="text-dark mr-3">Đơn vị tính:</strong>
-                    <div class="text-black-50">Chai</div>
+                    <strong class="text-dark mr-3">Danh mục:</strong>
+                    <div class="text-black-50">@Model.CategoryName</div>
                 </div>
                 <div class="d-flex mb-4">
-                    <strong class="text-dark mr-3">Nhà sản xuất:</strong>
-                    <div class="text-black-50">ABC</div>
+                    <strong class="text-dark mr-3">Nhà cung cấp:</strong>
+                    <div class="text-black-50">@Model.SupplierName</div>
                 </div>
+                <div class="d-flex mb-4">
+                    <strong class="text-dark mr-3">Thuốc có theo toa:</strong>
+                    <div class="text-black-50">@(Model.Product.ProductPrescription.HasValue && Model.Product.ProductPrescription.Value ? "Có" : "Không")</div>
+                </div>  
+                <div class="d-flex mb-4">
+                    <strong class="text-dark mr-3">Nước sản xuất:</strong>
+                    <div class="text-black-50">@Model.AddressSupplier</div>
+                </div>
+
                 <div class="d-flex align-items-center mb-4 pt-2">
                     <div class="input-group quantity mr-3" style="width: 130px;">
                         <div class="input-group-btn">
@@ -105,17 +127,17 @@
             <div class="bg-light p-30">
                 <div class="nav nav-tabs mb-4">
                     <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">Mô tả</a>
-                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Thông tin sản phẩm</a>
-                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Reviews (0)</a>
+                     @*    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Thông tin sản phẩm</a>
+                        <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Reviews (0)</a> *@
                 </div>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="tab-pane-1">
                         <h4 class="mb-3">Mô tả sản phẩm</h4>
-                        <h5>Dung dịch xịt họng Afree Thái Minh</h5>
-                        <p>Thời điểm giao mùa khiến nhiều người mắc các bệnh lý đường hô hấp như viêm họng, viêm amidan, viêm thanh quản, phế quản… Nhất là tại thời điểm dịch bệnh Covid-19 vẫn còn diễn biến phức tạp, các dấu hiệu của người nghi nhiễm cũng như triệu chứng của bệnh thường có đau rát họng kèm ho. Các cơn đau này luôn khiến người bệnh mệt mỏi, gây ảnh hưởng đến sức khoẻ cũng như chất lượng cuộc sống.</p>
-                        <p>Vì vậy, các sản phẩm hỗ trợ điều trị triệu chứng của bệnh lý đường hô hấp rất được ưa chuộng trên thị trường hiện nay. Nếu bạn vẫn đang loay hoay lựa chọn sản phẩm thích hợp cho bản thân và gia đình thì Xịt họng AFree Thái Minh Pharma là một gợi ý tốt mà bạn có thể tham khảo.</p>
+                        <h5>@Model.Product.ProductName</h5>
+                        @Html.Raw(Model.Product.ProductDetail)
                     </div>
-                    <div class="tab-pane fade" id="tab-pane-2">
+                   
+               @*      <div class="tab-pane fade" id="tab-pane-2">
                         <h4 class="mb-3">Thông tin chi tiết</h4>
                         <p>Xịt họng AFree Thái Minh Pharma là sản phẩm được phát triển từ bằng sáng chế của Mỹ. Với các thành phần chính kết hợp tạo thành phân tử ZnI₂ có tác dụng diệt virus, vi khuẩn, chống viêm, hỗ trợ miễn dịch. Từ đó giảm nhanh các triệu chứng ho, sưng viêm, ngứa, đau rát họng sau 1 - 2 lần xịt.</p>
                         <div class="row">
@@ -192,79 +214,57 @@
                                 </form>
                             </div>
                         </div>
-                    </div>
+                    </div> *@
                 </div>
             </div>
         </div>
     </div>
 </div>
 <!-- Shop Detail End -->
+
+
 <!-- Products Start -->
 <div class="container-fluid py-5">
     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">BẠN CŨNG SẼ THÍCH</span></h2>
     <div class="row px-xl-5">
         <div class="col">
             <div class="owl-carousel related-carousel">
-                <div class="product-item bg-light">
-                    <div class="product-img position-relative overflow-hidden">
-                        <img class="img-fluid w-100" src="~/Assets/img/product-2.png" alt="">
-                    </div>
-                    <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href="">Thực phẩm Pharmacy bổ sung Calcium + Vitamin D3</a>
-                        <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
+                @foreach(var item in Model.ListProduct)
+                {
+                    
+                    <div class="product-item bg-light">
+                        <a asp-controller="Detail" asp-action="Index" asp-route-id="@item.ProductId">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="@item.ProductImage" alt="">
+                            </div>
+                            <div class="text-center py-4">
+                                <span class="h6 text-decoration-none text-truncate" >@item.ProductName</span>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    @{
+                                        double? discountPercent = Model.DiscountPercentMap.ContainsKey(item.ProductId) ? Model.DiscountPercentMap[item.ProductId] : 0;
+                                        string ItemformattedPrice = string.Format("{0:N0} VNĐ", item.ProductPrice);
+                                        if (discountPercent != 0)
+                                        {
+                                            double? ItemcurrentPrice = item.ProductPrice - (item.ProductPrice * discountPercent / 100);
+                                            string ItemformattedCurrentPrice = string.Format("{0:N0} VNĐ", ItemcurrentPrice);
+
+                                            <h5>@ItemformattedCurrentPrice</h5>
+                                            <h6 class="text-muted ml-2"><del>@ItemformattedPrice</del></h6>
+                                        }
+                                        else
+                                        {
+                                            <h5>@ItemformattedPrice</h5>
+                                            <h6 class="text-muted ml-2"><del>0%</del></h6>
+                                        }
+                                    }
+                               
+                                </div>
+                            <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
                         </div>
-                        <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
+                        </a>
                     </div>
-                </div>
-                <div class="product-item bg-light">
-                    <div class="product-img position-relative overflow-hidden">
-                        <img class="img-fluid w-100" src="~/Assets/img/product-2.png" alt="">
-                    </div>
-                    <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href="">Thực phẩm Pharmacy bổ sung Calcium + Vitamin D3</a>
-                        <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                        </div>
-                        <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                    </div>
-                </div>
-                <div class="product-item bg-light">
-                    <div class="product-img position-relative overflow-hidden">
-                        <img class="img-fluid w-100" src="~/Assets/img/product-2.png" alt="">
-                    </div>
-                    <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href="">Thực phẩm Pharmacy bổ sung Calcium + Vitamin D3</a>
-                        <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                        </div>
-                        <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                    </div>
-                </div>
-                <div class="product-item bg-light">
-                    <div class="product-img position-relative overflow-hidden">
-                        <img class="img-fluid w-100" src="~/Assets/img/product-2.png" alt="">
-                    </div>
-                    <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href="">Thực phẩm Pharmacy bổ sung Calcium + Vitamin D3</a>
-                        <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                        </div>
-                        <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                    </div>
-                </div>
-                <div class="product-item bg-light">
-                    <div class="product-img position-relative overflow-hidden">
-                        <img class="img-fluid w-100" src="~/Assets/img/product-2.png" alt="">
-                    </div>
-                    <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" href="">Thực phẩm Pharmacy bổ sung Calcium + Vitamin D3</a>
-                        <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>100.000đ / Hộp</h5><h6 class="text-muted ml-2"><del>130.000đ</del></h6>
-                        </div>
-                        <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
-                    </div>
-                </div>
+                }
+              
             </div>
         </div>
     </div>

@@ -17,7 +17,7 @@ public partial class Product
     [Display(Name = "Giá")]
     [DefaultValue(0)]
     [Required(ErrorMessage = "Trường này không được để trống!")]
-    public double ProductPrice { get; set; }
+    public double? ProductPrice { get; set; }
 
     [Required(ErrorMessage = "Trường này không được để trống!")]
     [Display(Name = "Chi tiết sản phẩm")]
@@ -30,7 +30,7 @@ public partial class Product
     [Display(Name = "Kho")]
     [DefaultValue(0)]
     [Required(ErrorMessage = "Trường này không được để trống!")]
-    public double ProductInventory { get; set; }
+    public double? ProductInventory { get; set; }
 
     [Display(Name = "Danh mục sản phẩm")]
     [Required(ErrorMessage = "Trường này không được để trống!")]
