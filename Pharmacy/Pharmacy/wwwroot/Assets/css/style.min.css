@@ -1320,7 +1320,7 @@ pre {
         flex: 0 0 50%;
         max-width: 50%
     }
-
+ 
     .col-lg-7 {
         flex: 0 0 58.33333%;
         max-width: 58.33333%
@@ -9877,4 +9877,51 @@ a.text-dark:hover, a.text-dark:focus {
     100% {
         transform: translateY(-15px)
     }
+}
+
+
+.container-cusInfo {
+    display: flex;
+    justify-content: center;
+    background-color: #80a3c2;
+    width: 800px;
+    height: 600px;
+    margin: auto;
+    border-radius: 10px;
+}
+
+.tm-block-title {
+    text-align: left;
+    padding-left: 15px;
+    color: #f2f0fa;
+    margin-bottom: 10px;
+}
+.tm-col-account-settings {
+    max-width: 800px;
+    width: 80%;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-top: 10%;
+}
+
+.tm-signup-form .form-group .form-control {
+    color: #fff;
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: groove;
+    background-color: #80a3c2
+}
+
+.tm-signup-form .form-control:focus {
+    color: #fff;
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: groove;
+}
+
+.tm-signup-form .form-group label {
+    color: #220875;
+    margin-bottom: 10px;
 }

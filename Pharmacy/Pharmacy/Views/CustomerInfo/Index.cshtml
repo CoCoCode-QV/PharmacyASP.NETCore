@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "Thông tin khách hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-cusInfo">
+    <div class="tm-block-col tm-col-account-settings">
+        <div class="tm-bg-primary-dark tm-block tm-block-settings">
+            <h2 class="tm-block-title">Thông tin khách hàng</h2>
+            <form action="" class="tm-signup-form row">
+                <div class="form-group col-lg-6">
+                    <label for="name">Họ và tên</label>
+                    <input id="name"
+                           name="name"
+                           type="text"
+                           class="form-control validate" />
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="phone">Số điện thoại</label>
+                    <input id="phone"
+                           name="phone"
+                           type="tel"
+                           class="form-control validate" />
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="email">Email</label>
+                    <input id="email"
+                           name="email"
+                           type="email"
+                           class="form-control validate" />
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="address">Địa chỉ</label>
+                    <input id="address"
+                           name="address"
+                           type="text"
+                           class="form-control validate" />
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="gender">Giới tính</label>
+                    <input id="gender"
+                           name="gender"
+                           type="text"
+                           class="form-control validate" />
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="age">Tuổi</label>
+                    <input id="age"
+                           name="age"
+                           type="number"
+                           class="form-control validate" />
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="allergies">Dị ứng</label>
+                    <input id="allergies"
+                           name="allergies"
+                           type="text"
+                           class="form-control validate" />
+                </div>
+                <div class="form-group col-lg-6">
+                    <label class="tm-hide-sm">&nbsp;</label>
+                    <button type="submit"
+                            class="btn btn-primary btn-block text-uppercase">
+                        Cập nhật thông tin
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+

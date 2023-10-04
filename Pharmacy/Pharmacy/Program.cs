@@ -78,8 +78,8 @@ builder.Services.AddTransient<ViewMailSettingcs>();
 
 IConfigurationSection Database = builder.Configuration.GetSection("ConnectionStrings");
 builder.Services.AddDbContext<QlpharmacyContext>(options =>
-    //options.UseSqlServer("Server=KIMTAI;Database=QLPharmacy;Trusted_Connection=True;TrustServerCertificate=True;"));
-    options.UseSqlServer(Database["DefaultConnection"]));
+    options.UseSqlServer("Server=KIMTAI;Database=QLPharmacy;Trusted_Connection=True;TrustServerCertificate=True;"));
+    //options.UseSqlServer(Database["DefaultConnection"]));
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
