@@ -31,7 +31,7 @@ namespace Pharmacy.Controllers
                 return RedirectToAction("Index", "HomeAdmin", new { Areas = "Admin" });
 
             var listProducts = _ProductModels.GetProductsActive(search);
-
+            listProducts = listProducts.Take(Items_Per_Page).ToList();
             ProductViewModels viewModel = new ProductViewModels
             {
               

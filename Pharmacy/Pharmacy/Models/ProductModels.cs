@@ -51,6 +51,18 @@ namespace Pharmacy.Models
             return ListProducts;
         }
 
+        public IEnumerable<Product> GetProductsByCategoryId(int? id)
+        {
+            List<Product> listproduct = new List<Product>();
+            if (id == 0)
+            {
+                listproduct = _context.Products.OrderByDescending(s => s.ProductId).ToList();
+                return listproduct; 
+            }
+            listproduct = _context.Products.Where(p=> p.CategoryId == id && p.ProductActive == true).ToList();
+            return listproduct;
+        }
+
         public async Task CreatProduct(Product product)
         {
             _context.Add(product);
