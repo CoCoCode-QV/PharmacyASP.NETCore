@@ -2,6 +2,7 @@
 using Pharmacy.Data;
 using Pharmacy.Models;
 using Pharmacy.ViewsModels;
+using System.Drawing.Printing;
 using X.PagedList;
 
 namespace Pharmacy.Controllers
@@ -22,21 +23,47 @@ namespace Pharmacy.Controllers
         }
 
         private const int ItemsPerPage = 3;
-
-        public IActionResult Index(string search, int? page)
+        public IActionResult Index(string search, int? page, string orderby, int? selectedCategories)
         {
+            TempData["SearchTerm"] = search;
             var listProducts = _ProductModels.GetProductsActive(search);
+            if (selectedCategories != null )
+            {
+                listProducts = _ProductModels.GetProductsByCategoryId(selectedCategories);
+            }
+            else
+            {
+                 selectedCategories = 0;
+            }
+
+            switch (orderby)
+            {
+                case "increase":
+                    listProducts = listProducts.OrderBy(p => p.ProductPrice).ToList();
+                    break;
+                case "reduce":
+                    listProducts = listProducts.OrderByDescending(p => p.ProductPrice).ToList();
+                    break;
+                default:
+                    listProducts = listProducts.OrderByDescending(s => s.ProductId).ToList();
+                    break;
+            }
             var pageNumber = page ?? 1;
 
             var pagedList = listProducts.ToPagedList(pageNumber, ItemsPerPage);
-
+            var listCategory = _context.Categories.ToList();
             var viewModel = new ProductListViewModel
             {
                 Products = pagedList,
-                DiscountPercentMap = _discountModels.GetDiscountPercentMap(listProducts, _context.Discounts.ToList())
+                Categories = listCategory,
+                DiscountPercentMap = _discountModels.GetDiscountPercentMap(listProducts, _context.Discounts.ToList()),
+                SelectedCategories = selectedCategories,
+                orderby = orderby
             };
-
             return View(viewModel);
-        }
+            }
+
+    
+            
     }
 }
