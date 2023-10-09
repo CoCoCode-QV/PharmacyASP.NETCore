@@ -21,6 +21,8 @@ builder.Services.AddScoped<Pharmacy.Models.CategoryModels>();
 builder.Services.AddScoped<Pharmacy.Models.SupplierModels>();
 builder.Services.AddScoped<Pharmacy.Models.DiscountModels>();
 builder.Services.AddScoped<Pharmacy.Models.ProductModels>();
+builder.Services.AddScoped<Pharmacy.Models.CustomerModels>();
+builder.Services.AddScoped<Pharmacy.Models.CartModels>();
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<QlpharmacyContext>().AddDefaultTokenProviders(); 
 
@@ -78,8 +80,8 @@ builder.Services.AddTransient<ViewMailSettingcs>();
 
 IConfigurationSection Database = builder.Configuration.GetSection("ConnectionStrings");
 builder.Services.AddDbContext<QlpharmacyContext>(options =>
-    options.UseSqlServer("Server=KIMTAI;Database=QLPharmacy;Trusted_Connection=True;TrustServerCertificate=True;"));
-    //options.UseSqlServer(Database["DefaultConnection"]));
+    //options.UseSqlServer("Server=KIMTAI;Database=QLPharmacy;Trusted_Connection=True;TrustServerCertificate=True;"));
+    options.UseSqlServer(Database["DefaultConnection"]));
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.

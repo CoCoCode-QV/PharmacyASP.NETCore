@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Pharmacy.Data;
+using Pharmacy.Models;
 using Pharmacy.ViewsModels;
 using System.Text;
 
@@ -13,11 +15,15 @@ namespace Pharmacy.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly CustomerModels _customerModels;
+        private readonly CartModels _cartModels;
 
-        public LoginController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public LoginController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,CustomerModels customerModels,CartModels cart)
         {
             _userManager = userManager;
             _signInManager = signInManager; 
+            _customerModels = customerModels;
+            _cartModels = cart;
         }
 
         [HttpGet]
@@ -109,6 +115,21 @@ namespace Pharmacy.Controllers
                     </body>
                     </html>";
                     sendMailService.SendMail(user.Email, "Xác nhận tài khoản", emailBody, "");
+                    Customer customer = new Customer
+                    {
+                        CustomerName = Item.UserName,
+                        CustomerEmail = Item.Email,
+                        UserID = user.Id
+                    };
+                    await _customerModels.CreatCustomer(customer);
+                    Cart cart = new Cart
+                    {
+                        CartTotalPrice = 0,
+                        CustomerId = customer.CustomerId
+                    };
+
+                    await _cartModels.CreateCart(cart);
+
                     ModelState.Clear();
                 }
                 else

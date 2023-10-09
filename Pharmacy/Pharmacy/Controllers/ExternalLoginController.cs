@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.VisualBasic;
 using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
+using Pharmacy.Data;
+using Pharmacy.Models;
 
 namespace Pharmacy.Controllers
 {
@@ -18,11 +20,15 @@ namespace Pharmacy.Controllers
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly CustomerModels _customerModels;
+        private readonly CartModels _CartModels;
 
-        public ExternalLoginController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+        public ExternalLoginController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, CustomerModels customerModels, CartModels cartModels)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _customerModels = customerModels;
+            _CartModels = cartModels;
         }
 
         public async Task Login()
@@ -60,15 +66,28 @@ namespace Pharmacy.Controllers
                 {
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     await _userManager.ConfirmEmailAsync(user, code);
+                    Customer customer = new Customer
+                    {
+                        CustomerName = user.UserName,
+                        CustomerEmail = user.Email,
+                        UserID = user.Id
+                    };
+                    await _customerModels.CreatCustomer(customer);
+                    Cart cart = new Cart
+                    {
+                        CartTotalPrice = 0,
+                        CustomerId = customer.CustomerId
+                    };
 
+                    await _CartModels.CreateCart(cart);
                     // Đăng nhập tài khoản mới tạo
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home"); // Chuyển hướng sau khi đăng nhập thành công
                 }
                 else
                 {
-                    // Xử lý lỗi tạo mới tài khoản
-                    // ...
+                    // Xử lý lỗi
+                    return RedirectToAction("Index", "Login");
                 }
             }
             else
@@ -85,8 +104,6 @@ namespace Pharmacy.Controllers
                 else
                 {
                     // Tài khoản đã tồn tại nhưng chưa xác nhận email, bạn có thể gửi lại email xác nhận ở đây
-                    // ...
-
                     // Sau khi gửi lại email xác nhận, bạn có thể gọi ConfirmEmailAsync để xác nhận email
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var result = await _userManager.ConfirmEmailAsync(user, code);

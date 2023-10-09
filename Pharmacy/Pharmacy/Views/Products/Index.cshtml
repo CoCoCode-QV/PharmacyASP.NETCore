@@ -78,9 +78,10 @@
                                         @{
                                             double? discountPercent = Model.DiscountPercentMap.ContainsKey(item.ProductId) ? Model.DiscountPercentMap[item.ProductId] : 0;
                                             string ItemformattedPrice = string.Format("{0:N0} VNĐ", item.ProductPrice);
+                                            double? ItemcurrentPrice = 0;
                                             if (discountPercent != 0)
                                             {
-                                                double? ItemcurrentPrice = item.ProductPrice - (item.ProductPrice * discountPercent / 100);
+                                                ItemcurrentPrice = item.ProductPrice - (item.ProductPrice * discountPercent / 100);
                                                 string ItemformattedCurrentPrice = string.Format("{0:N0} VNĐ", ItemcurrentPrice);
 
                                                 <h5>@ItemformattedCurrentPrice</h5>
@@ -94,7 +95,11 @@
                                         }
 
                                     </div>
-                                    <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
+                                    <form asp-action="AddToCart" asp-controller="Cart">
+                                        <input type="hidden" name="productId" value="@item.ProductId" />
+                                        <input type="hidden" name="Price" value='@(discountPercent == 0? @item.ProductPrice : ItemcurrentPrice)' />
+                                        <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
+                                    </form>
                                 </div>
                             </a>
                         </div>
