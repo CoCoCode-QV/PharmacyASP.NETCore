@@ -22,9 +22,15 @@ builder.Services.AddScoped<Pharmacy.Models.SupplierModels>();
 builder.Services.AddScoped<Pharmacy.Models.DiscountModels>();
 builder.Services.AddScoped<Pharmacy.Models.ProductModels>();
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<QlpharmacyContext>().AddDefaultTokenProviders(); 
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<QlpharmacyContext>().AddDefaultTokenProviders();
 
-
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSession(options =>
+{
+	options.IdleTimeout = TimeSpan.FromMinutes(10);
+});
 
 //Đăng nhập google
 builder.Services.AddAuthentication(options =>
@@ -78,8 +84,8 @@ builder.Services.AddTransient<ViewMailSettingcs>();
 
 IConfigurationSection Database = builder.Configuration.GetSection("ConnectionStrings");
 builder.Services.AddDbContext<QlpharmacyContext>(options =>
-    //options.UseSqlServer("Server=KIMTAI;Database=QLPharmacy;Trusted_Connection=True;TrustServerCertificate=True;"));
-    options.UseSqlServer(Database["DefaultConnection"]));
+    options.UseSqlServer("Server=KIMTAI;Database=QLPharmacy;Trusted_Connection=True;TrustServerCertificate=True;"));
+    //options.UseSqlServer(Database["DefaultConnection"]));
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -92,8 +98,8 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 
-app.UseHttpsRedirection(); 
-
+app.UseHttpsRedirection();
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthentication();

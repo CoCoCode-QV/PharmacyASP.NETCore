@@ -1,0 +1,281 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+	$primary: #e67e22;
+	$font: 'Lato', sans-serif;
+
+	*:focus {
+		outline: none;
+	}
+	#wrapperr {
+		height: 100vh;
+		display: flex;
+		display: -webkit-flex;
+		-webkit-align-items: center;
+		align-items: center;
+		-webkit-justify-content: center;
+		justify-content: center;
+	}
+
+	#containerr {
+		background: white;
+		height: 440px;
+		min-width: 600px;
+		width: 600px;
+		z-index: 1;
+		box-shadow: 0px 3px 15px -1px rgba(0, 0, 0, 0.2);
+	}
+
+	#left-colr {
+		width: 40%;
+		min-width: 240px;
+		height: 100%;
+		float: left;
+		background: #34495e;
+	}
+
+	#left-col-contr {
+		margin: 20px 25px;
+		color: white;
+	}
+
+	h2 {
+		margin: 25px 0 0 0;
+	}
+
+	div.itemr {
+		margin: 30px 0;
+		clear: both;
+	}
+
+	.img-colr {
+		width: 30%;
+		float: left;
+	}
+
+		.img-colr img {
+			width: 100%;
+			max-height: 100px;
+		}
+
+	.meta-colr {
+		width: 70%;
+		float: right;
+	}
+
+	h3 {
+		font-size: 0.7em;
+		margin: 10px 0 0 5px;
+	}
+
+	p {
+		font-size: 0.9em;
+		margin: 5px 0 0 5px;
+		opacity: 0.5;
+	}
+
+		p#totalr {
+			text-transform: uppercase;
+			text-align: left;
+			font-size: 0.7em;
+			opacity: 0.5;
+			margin: 115px 0 5px 0;
+		}
+
+	h4#total-pricer {
+		text-align: left;
+		font-size: 2em;
+		margin: 0;
+	}
+
+	span {
+		color: #1c2834;
+	}
+
+	#right-colr {
+		width: calc(60% - 50px);
+		min-width: 310px;
+		height: 100%;
+		margin: 20px 25px;
+		float: right;
+	}
+
+	h2 {
+		display: block;
+		float: left;
+		margin: 6px 0 0 0;
+	}
+
+	#logotyper {
+		float: right;
+		margin: 4px 0 0 0;
+	}
+
+		#logotyper img {
+			width: 60px;
+			height: auto;
+		}
+
+	#visar {
+		margin-top: -10px;
+	}
+
+	form {
+		width: 100%;
+	}
+
+	label {
+		display: block;
+		font-family: $font;
+		font-size: 0.7em;
+		font-weight: 600;
+		text-transform: uppercase;
+		margin: 14px 0 4px;
+	}
+
+	#cvc-label i {
+		cursor: pointer;
+		margin-left: 3px;
+	}
+
+	input {
+		display: block;
+		padding: 6px 8px;
+		border: 1px solid lightgrey;
+		border-radius: 2px;
+		font-size: 0.9em;
+	}
+
+		input:focus {
+			border-color: $primary;
+		}
+
+		input::placeholder {
+			opacity: 0.5;
+		}
+
+	#cardholder {
+		width: calc(100% - 18px);
+	}
+
+	#addressr {
+		width: calc(100% - 18px);
+	}
+
+	#cvc {
+		width: calc(100% - 18px);
+	}
+
+	select {
+		border: 1px solid lightgrey;
+		border-radius: 2px;
+		background: none;
+		width: 90px;
+		font-weight: 500;
+		font-size: 0.9em;
+		padding: 6px 8px;
+		color: rgba(0, 0, 0, 0.2);
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+	}
+
+	button {
+		display: block;
+		width: 100%;
+		border: none;
+		border-radius: 2px;
+		padding: 8px 0;
+		font-size: 0.8em;
+		background-color: #003087;
+	}
+
+	#purchaser {
+		background: $primary;
+		color: white;
+		font-size: 0.9em;
+		margin-top: 10px;
+		width: 95%;
+	}
+
+	#paypalr {
+		background: none;
+		border: 1px solid lightgrey;
+		margin-top: 10px;
+		width: 95%;
+	}
+
+		#paypalr:hover {
+			background: #003087;
+			border-color: #003087;
+			color: white;
+		}
+
+		#paypalr i {
+			color: #003087;
+		}
+
+	#supportr {
+		font-size: 0.7em;
+		text-align: center;
+		color: rgba(0, 0, 0, 0.5);
+	}
+
+		#supportr a {
+			text-decoration: none;
+			color: inherit;
+			padding: 0 1px 2px 1px;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+		}
+
+			#supportr a:hover {
+				padding-bottom: 3px;
+			}
+
+	#dailyuir {
+		position: fixed;
+		font-size: 15em;
+		font-weight: 700;
+		margin: 0 0 -55px 0;
+		padding: 0;
+		right: 0;
+		bottom: 0;
+		color: rgba(0, 0, 0, 0.3);
+		z-index: 0;
+		text-align: right;
+		font-family: 'proxima-nova', 'Lato', sans-serif;
+	}
+
+	.payment-form {
+		padding-top: 15%;
+	}
+
+</style>
+<div id="wrapperr">
+    <div id="containerr">
+        <div id="left-colr">
+
+        </div>
+        <div id="right-colr">
+            <h2>Payment</h2>
+            <div id="logotyper">
+                <img id="mastercard" src="http://emilcarlsson.se/assets/MasterCard_Logo.png" alt="" />
+            </div>
+			<div class="payment-form">
+				<form action="">
+					<label for="">Số thẻ</label>
+					<input id="cardholder" type="text" placeholder="Nhập số thẻ" />
+					<label for="">Tên</label>
+					<input id="cardholder" type="text" placeholder="Nhập tên khách hàng" />
+					<label for="">Địa chỉ</label>
+					<input id="addressr" type="text" placeholder="Nhập địa chỉ" />
+					<button id="purchaser">Xác nhận thanh toán</button>
+					<button id="paypalr"><i class="fa fa-paypal" aria-hidden="true"></i> Pay with PayPal</button>
+					<p id="supportr">Having problem with checkout? <a href="#">Contact our support</a>.</p>
+				</form>
+			</div>
+        </div>
+    </div>
+</div>
