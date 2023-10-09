@@ -1,4 +1,5 @@
-﻿
+﻿@model Pharmacy.Data.Customer;
+
 @{
     ViewBag.Title = "Thông tin khách hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,66 +8,105 @@
     <div class="tm-block-col tm-col-account-settings">
         <div class="tm-bg-primary-dark tm-block tm-block-settings">
             <h2 class="tm-block-title">Thông tin khách hàng</h2>
-            <form action="" class="tm-signup-form row">
+            <form asp-action="Edit" asp-controller="CustomerInfo" method="post" class="tm-signup-form row">
+                <input type="hidden" name="CustomerId" id="hidden-orderby" value=@(Model != null && Model.CustomerId !=null ? Model.CustomerId : null)>
                 <div class="form-group col-lg-6">
                     <label for="name">Họ và tên</label>
                     <input id="name"
-                           name="name"
+                           name="CustomerName"
                            type="text"
-                           class="form-control validate" />
+                           class="form-control validate"
+                           value='@(Model != null && Model.CustomerName !=null ? Model.CustomerName : null)' />
+                    @Html.ValidationMessageFor(model =>model.CustomerName, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group col-lg-6">
                     <label for="phone">Số điện thoại</label>
                     <input id="phone"
-                           name="phone"
+                           name="CustomerPhone"
                            type="tel"
-                           class="form-control validate" />
+                           class="form-control validate"
+                           value='@(Model != null && Model.CustomerPhone !=null ? Model.CustomerPhone : null)' />
+                    @Html.ValidationMessageFor(model =>model.CustomerPhone, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group col-lg-6">
                     <label for="email">Email</label>
                     <input id="email"
-                           name="email"
+                           name="CustomerEmail"
                            type="email"
-                           class="form-control validate" />
+                           class="form-control validate"
+                           value=@(Model != null && Model.CustomerEmail !=null ? Model.CustomerEmail : null) disabled />
+
                 </div>
                 <div class="form-group col-lg-6">
                     <label for="address">Địa chỉ</label>
                     <input id="address"
-                           name="address"
+                           name="CustomerAddress"
                            type="text"
-                           class="form-control validate" />
+                           class="form-control validate"
+                           value='@(Model != null && Model.CustomerAddress !=null ? Model.CustomerAddress : null)' />
+                    @Html.ValidationMessageFor(model =>model.CustomerAddress, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group col-lg-6">
                     <label for="gender">Giới tính</label>
-                    <input id="gender"
-                           name="gender"
-                           type="text"
-                           class="form-control validate" />
+                    <input type="hidden" name="CustomerGender" id="hidden-CustomerGender" value="@Model?.CustomerGender.ToString()" />
+                    <select id="gender" name="Gender" class="form-control validate">
+                        <option value="-1" selected="@(Model == null || Model.CustomerGender == null)">Chưa xác đinh</option>
+                        <option value="true" selected="@(Model != null && Model.CustomerGender == true )">Nam</option>
+                        <option value="false" selected="@(Model != null && Model.CustomerGender == false)">Nữ</option>
+                    </select>
+                    @Html.ValidationMessageFor(model =>model.CustomerGender, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group col-lg-6">
                     <label for="age">Tuổi</label>
-                    <input min="18" id="age"
-                           name="age"
+                    <input id="age"
+                           name="CustomerAge"
                            type="number"
-                           class="form-control validate" />
+                           class="form-control validate"
+                           min="12"
+                           value=@(Model != null && Model.CustomerAge !=null ? Model.CustomerAge : null) />
+                    @Html.ValidationMessageFor(model =>model.CustomerAge, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group col-lg-6">
                     <label for="allergies">Dị ứng</label>
                     <input id="allergies"
-                           name="allergies"
+                           name="CustomerAllergies"
                            type="text"
-                           class="form-control validate" />
+                           class="form-control validate"
+                           value='@(Model != null && Model.CustomerAllergies !=null ? Model.CustomerAllergies : null)' />
+                    @Html.ValidationMessageFor(model =>model.CustomerAllergies, "", new { @class = "text-danger" })
                 </div>
+
                 <div class="form-group col-lg-6">
                     <label class="tm-hide-sm">&nbsp;</label>
                     <button type="submit"
-                            class="btn btn-primary btn-block text-uppercase">
+                            class="btn btn-primary btn-block text-uppercase"
+                    @(ViewBag.UserId == false ? "disabled" : "")>
                         Cập nhật thông tin
                     </button>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <p class="text-danger ">
+                            @TempData["error"]
+                        </p>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 
 </div>
+<script>
+    document.getElementById("gender").addEventListener("change", function () {
+        var genderValue = this.value;
+        // Gán giá trị đã chọn cho trường input ẩn
+        document.getElementById("hidden-CustomerGender").value = genderValue;
+    });
 
+
+    var successMessage = '@Html.Raw(TempData["success"])';
+    if (successMessage) {
+        // Hiển thị thông báo bằng JavaScript, ví dụ: sử dụng alert()
+        alert(successMessage.toString());
+    }
+</script>

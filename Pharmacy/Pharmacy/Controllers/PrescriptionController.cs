@@ -1,40 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Pharmacy.Data;
 using Pharmacy.Models;
 using Pharmacy.ViewsModels;
-using System.Drawing.Printing;
 using X.PagedList;
 
 namespace Pharmacy.Controllers
 {
-  
-    public class ProductsController : Controller
+    public class PrescriptionController : Controller
     {
+
         private readonly ProductModels _ProductModels;
         private readonly QlpharmacyContext _context;
         private readonly DiscountModels _discountModels;
 
 
-        public ProductsController(QlpharmacyContext context, ProductModels productModels, DiscountModels discountModels)
+        public PrescriptionController(QlpharmacyContext context, ProductModels productModels, DiscountModels discountModels)
         {
             _context = context;
             _ProductModels = productModels;
             _discountModels = discountModels;
         }
 
-        private const int ItemsPerPage = 3;
-        public IActionResult Index(string search, int? page, string orderby, int? selectedCategories)
+        private const int ItemsPerPage = 12;
+        public IActionResult Index(int? page, string orderby)
         {
-            TempData["SearchTerm"] = search;
-            var listProducts = _ProductModels.GetProductsActive(search);
-            if (selectedCategories != null )
-            {
-                listProducts = _ProductModels.GetProductsByCategoryId(selectedCategories);
-            }
-            else
-            {
-                 selectedCategories = 0;
-            }
+            var listProducts = _ProductModels.GetProductsPresciption();
 
             switch (orderby)
             {
@@ -51,17 +42,15 @@ namespace Pharmacy.Controllers
             var pageNumber = page ?? 1;
 
             var pagedList = listProducts.ToPagedList(pageNumber, ItemsPerPage);
-            var listCategory = _context.Categories.ToList();
             var viewModel = new ProductListViewModel
             {
                 Products = pagedList,
-                Categories = listCategory,
                 DiscountPercentMap = _discountModels.GetDiscountPercentMap(listProducts, _context.Discounts.ToList()),
-                SelectedCategories = selectedCategories,
                 orderby = orderby
             };
             ViewBag.countCart = HttpContext.Session.GetInt32("counter");
             return View(viewModel);
-        }    
+        
+        }
     }
 }

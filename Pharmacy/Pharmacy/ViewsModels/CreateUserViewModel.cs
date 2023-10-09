@@ -5,10 +5,8 @@ namespace Pharmacy.ViewsModels
 {
     public class CreateUserViewModel
     {
-        
         [Required(ErrorMessage = "Tên tài khoản không được để trống")]
         public string UserName { get; set; }
-
 
         [EmailAddress]
         [Required(ErrorMessage ="Email không được để trống")]

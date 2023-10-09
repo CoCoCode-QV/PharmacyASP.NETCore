@@ -6,6 +6,7 @@ namespace Pharmacy.Controllers
     {
         public IActionResult Index()
         {
+            ViewBag.countCart = HttpContext.Session.GetInt32("counter");
             return View();
         }
     }

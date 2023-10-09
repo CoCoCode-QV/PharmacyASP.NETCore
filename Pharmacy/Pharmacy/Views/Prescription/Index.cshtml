@@ -1,0 +1,143 @@
+﻿@model Pharmacy.ViewsModels.ProductListViewModel;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.title = "Thuốc không kê đơn";
+}
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" asp-action="Index" asp-controller="Home">Trang chủ</a>
+                <a class="breadcrumb-item text-dark" asp-action="Index" asp-controller="Products">Sản phẩm</a>
+                <span class="breadcrumb-item active">Thuốc không kê đơn</span>
+            </nav>
+
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <!-- Shop Product Start -->
+        <div class="row pb-3">
+            <div class="col-12 pb-1">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div>
+                        <button class="btn btn-sm btn-light"><i class="fa fa-th-large"></i></button>
+                    </div>
+                    <div class="ml-2">
+                        <form asp-action="Index" asp-controller="Prescription" class="btn-group ml-2 " method="get" id="order-form">
+                            <input type="hidden" name="selectedCategories" id="hidden-orderby" value="@Model.SelectedCategories">
+                            <select name="orderby" class="orderby">
+                                <option value="Latest" selected="@(Model.orderby == "Latest" || Model.orderby == null)">Mới nhất</option>
+                                <option value="reduce" selected="@(Model.orderby == "reduce")">Sắp xếp theo giá: Cao tới thấp</option>
+                                <option value="increase" selected="@(Model.orderby == "increase")">Sắp xếp theo giá: Thấp tới cao</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @foreach (var item in Model.Products)
+            {
+                <div class="col-lg-3 col-md-6 col-sm-6 pb-1">
+                    <div class="product-item bg-light mb-4">
+                        <a asp-controller="Detail" asp-action="Index" asp-route-id="@item.ProductId">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="@item.ProductImage" alt="@item.ProductName">
+                            </div>
+                            <div class="text-center py-4">
+                                <span class="h6 text-decoration-none text-truncate">@item.ProductName</span>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    @{
+                                        double? discountPercent = Model.DiscountPercentMap.ContainsKey(item.ProductId) ? Model.DiscountPercentMap[item.ProductId] : 0;
+                                        string ItemformattedPrice = string.Format("{0:N0} VNĐ", item.ProductPrice);
+                                        if (discountPercent != 0)
+                                        {
+                                            double? ItemcurrentPrice = item.ProductPrice - (item.ProductPrice * discountPercent / 100);
+                                            string ItemformattedCurrentPrice = string.Format("{0:N0} VNĐ", ItemcurrentPrice);
+
+                                            <h5>@ItemformattedCurrentPrice</h5>
+                                            <h6 class="text-muted ml-2"><del>@ItemformattedPrice</del></h6>
+                                        }
+                                        else
+                                        {
+                                            <h5>@ItemformattedPrice</h5>
+                                            <h6 class="text-muted ml-2"><del>0%</del></h6>
+                                        }
+                                    }
+
+                                </div>
+                                <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+            }
+        </div>
+        @Html.PagedListPager(Model.Products,
+        page => Url.Action("Index", new { page, orderby = Model.orderby}),
+        new X.PagedList.Web.Common.PagedListRenderOptions
+        {
+        UlElementClasses = new string[] { "pagination justify-content-center" },
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" }
+        })
+
+            
+    </div>
+
+    <!-- Shop Product End -->
+</div>
+
+<!-- Shop End -->
+
+<script>
+    // Lắng nghe sự kiện khi checkbox được thay đổi
+    const categoryCheckboxes = document.querySelectorAll('.category-checkbox');
+    categoryCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            // Bỏ chọn tất cả các checkbox khác
+            categoryCheckboxes.forEach(otherCheckbox => {
+                if (otherCheckbox !== checkbox) {
+                    otherCheckbox.checked = false;
+                }
+            });
+        });
+    });
+    const orderDropdown = document.querySelector('.orderby');
+    orderDropdown.addEventListener('change', function () {
+        // Lấy form và gửi yêu cầu khi có sự thay đổi giá trị
+        const orderForm = document.getElementById('order-form');
+        orderForm.submit();
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById('category-form');
+        const checkboxes = document.querySelectorAll('.custom-control-input');
+
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                // Tạo một mảng để lưu trữ giá trị của các checkbox được chọn
+                const selectedCategories = Array.from(checkboxes)
+                    .filter(function (checkbox) {
+                        return checkbox.checked;
+                    })
+                    .map(function (checkbox) {
+                        return checkbox.value;
+                    });
+
+                // Gán giá trị của mảng vào một input ẩn trong form
+                const selectedCategoriesInput = document.createElement('input');
+                selectedCategoriesInput.type = 'hidden';
+                selectedCategoriesInput.name = 'selectedCategories';
+                selectedCategoriesInput.value = selectedCategories;
+                form.appendChild(selectedCategoriesInput);
+
+                // Gửi form
+                form.submit();
+            });
+        });
+    });
+</script>

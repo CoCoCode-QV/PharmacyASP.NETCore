@@ -66,8 +66,7 @@ namespace Pharmacy.Areas.Admin.Controllers
                     if(ExpiryDate < currentDate)
                     {
                         TempData["error"] = "Hạn sử dụng không hợp lệ";
-                        getAll();
-                        return View();
+                        return RedirectToAction("Create");
                     }
                     
                     string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" }; // Các phần mở rộng cho hình ảnh cho phép
@@ -108,8 +107,7 @@ namespace Pharmacy.Areas.Admin.Controllers
                     {
                         // Người dùng chọn tệp không hợp lệ, trả về lỗi
                         TempData["error"] = "Vui lòng chọn một tập tin hình ảnh hợp lệ (jpg, jpeg, png hoặc gif).";
-                        getAll();
-                        return View();
+                        return RedirectToAction("Create");
                     }
                 
                 }
@@ -117,16 +115,14 @@ namespace Pharmacy.Areas.Admin.Controllers
                 {
                     // Handle the exception, log it, and return an error view or message
                     TempData["error"] = "Đã sãy ra lỗi khi di chuyển tệp ";
-                    getAll();
-                    return View();
+                    return RedirectToAction("Create");
                 }
             }
             else
             {
                 // Handle the case where ProductImage is null or empty
                 TempData["error"] = "Vui lòng điền đầy đủ thông tin.";
-                getAll();
-                return View();
+                return RedirectToAction("Create");
             }
         }
 

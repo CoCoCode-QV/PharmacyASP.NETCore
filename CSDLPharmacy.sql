@@ -82,6 +82,8 @@ create table CartDetail(
 	foreign key (CartID) references dbo.Cart(CartID),
 	foreign key (ProductID) references dbo.Product(ProductID)
 )
+ALTER TABLE CartDetail
+ADD CartDetailPriceCurrent float default 0;
 
 create table Orders (
 	OrderID int identity primary key,

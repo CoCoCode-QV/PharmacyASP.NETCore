@@ -11,6 +11,8 @@ public partial class CartDetail
 
     public double? CartDetailTemporaryPrice { get; set; }
 
+    public double? CartDetailPriceCurrent { get; set; }
+
     public int CartId { get; set; }
 
     public int ProductId { get; set; }

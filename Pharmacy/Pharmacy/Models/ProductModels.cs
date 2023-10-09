@@ -51,6 +51,13 @@ namespace Pharmacy.Models
             return ListProducts;
         }
 
+        public IEnumerable<Product> GetProductsPresciption()
+        {
+            var ListProducts = _context.Products.Where(s => s.ProductPrescription == false).OrderByDescending(s => s.ProductId).ToList();
+
+            return ListProducts;
+        }
+
         public IEnumerable<Product> GetProductsByCategoryId(int? id)
         {
             List<Product> listproduct = new List<Product>();
@@ -65,7 +72,7 @@ namespace Pharmacy.Models
 
         public async Task CreatProduct(Product product)
         {
-            _context.Add(product);
+            _context.Products.Add(product);
            await _context.SaveChangesAsync();
         }
 

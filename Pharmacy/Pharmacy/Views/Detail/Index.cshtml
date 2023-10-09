@@ -18,7 +18,6 @@
 </div>
 <!-- Breadcrumb End -->
 
-
 <!-- Shop Detail Start -->
 <div class="container-fluid pb-5">
     <div class="row px-xl-5">
@@ -44,12 +43,11 @@
                 @{
                     string formattedCurrentPrice;
                     string formattedPrice = string.Format("{0:N0} VNĐ", @Model.Product.ProductPrice);
+                    double? currentPrice = null;
                     if (ViewBag.isDiscountActive)
                     {
-                        double? currentPrice = @Model.Product.ProductPrice - (@Model.Product.ProductPrice * @Model.DiscountPercent / 100);
+                        currentPrice = @Model.Product.ProductPrice - (@Model.Product.ProductPrice * @Model.DiscountPercent / 100);
                         formattedCurrentPrice = string.Format("{0:N0} VNĐ", currentPrice);
-                        
-
                         <h3 class="font-weight-semi-bold text-dark">@formattedCurrentPrice</h3>
                         <h4 class="text-muted ml-2"><del>@formattedPrice</del></h4>
                     }
@@ -82,26 +80,37 @@
                     <strong class="text-dark mr-3">Nước sản xuất:</strong>
                     <div class="text-black-50">@Model.AddressSupplier</div>
                 </div>
-
-                <div class="d-flex align-items-center mb-4 pt-2">
-                    <div class="input-group quantity mr-3" style="width: 130px;">
-                        <div class="input-group-btn">
-                            <button class="btn btn-primary btn-minus">
-                                <i class="fa fa-minus"></i>
+                @if (Model.Product.ProductPrescription == true)
+                {
+                    <span class="text-danger">Sản phẩm này cần có toa thuốc từ bác sĩ vui lòng đến cửa hàng để mua</span>
+                }
+                else
+                {
+                    <form asp-action="AddToCart" asp-controller="Cart">
+                        <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+                        <input type="hidden" name="Price" value='@(ViewBag.isDiscountActive? currentPrice : @Model.Product.ProductPrice)'/>
+                        <div class="d-flex align-items-center mb-4 pt-2">
+                            <div class="input-group quantity mr-3" style="width: 130px;">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-primary btn-minus" id="decreaseQuantityBtn">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input name="quantity" type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                                <div class="input-group-btn">
+                                    <button type="button"  class="btn btn-primary btn-plus" id="increaseQuantityBtn">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>  
+                          
+                            <button type="submit" class="btn btn-primary px-3" id="addToCartBtn" >
+                                <i class="fa fa-shopping-cart mr-1"></i>
+                                Thêm vào giỏ hàng
                             </button>
                         </div>
-                        <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
-                        <div class="input-group-btn">
-                            <button class="btn btn-primary btn-plus">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary px-3">
-                        <i class="fa fa-shopping-cart mr-1"></i> Add To
-                        Cart
-                    </button>
-                </div>
+                    </form>
+                }
                 <div class="d-flex pt-2">
                     <strong class="text-dark mr-2">Share on:</strong>
                     <div class="d-inline-flex">
@@ -127,8 +136,7 @@
             <div class="bg-light p-30">
                 <div class="nav nav-tabs mb-4">
                     <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">Mô tả</a>
-                     @*    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Thông tin sản phẩm</a>
-                        <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Reviews (0)</a> *@
+           
                 </div>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="tab-pane-1">
@@ -136,85 +144,6 @@
                         <h5>@Model.Product.ProductName</h5>
                         @Html.Raw(Model.Product.ProductDetail)
                     </div>
-                   
-               @*      <div class="tab-pane fade" id="tab-pane-2">
-                        <h4 class="mb-3">Thông tin chi tiết</h4>
-                        <p>Xịt họng AFree Thái Minh Pharma là sản phẩm được phát triển từ bằng sáng chế của Mỹ. Với các thành phần chính kết hợp tạo thành phân tử ZnI₂ có tác dụng diệt virus, vi khuẩn, chống viêm, hỗ trợ miễn dịch. Từ đó giảm nhanh các triệu chứng ho, sưng viêm, ngứa, đau rát họng sau 1 - 2 lần xịt.</p>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item px-0">
-                                        Tác dụng tại chỗ, hỗ trợ làm giảm nhanh ngứa họng, ho, viêm họng, amidan, thanh quản, khản tiếng.
-                                    </li>
-                                    <li class="list-group-item px-0">
-                                        Dùng cho người bị ngứa họng, ho, viêm họng, viêm amidan, thanh quản, khản tiếng và trẻ em trên 1 tuổi.
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item px-0">
-                                        Thành phần gồm: Xạ can, kim ngân hoa, bạch chỉ, lá trầu không, hoàng bá, ngũ vị tử, hoa đu đủ đực, lá đào, natri benzoate, tinh dầu bạc hà, nước tinh khiết
-                                    </li>
-                                    <li class="list-group-item px-0">
-                                        Thương hiệu: Nhất Nhất
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="tab-pane-3">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h4 class="mb-4">1 review for "Product Name"</h4>
-                                <div class="media mb-4">
-                                    <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
-                                    <div class="media-body">
-                                        <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
-                                        <div class="text-primary mb-2">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star-half-alt"></i>
-                                            <i class="far fa-star"></i>
-                                        </div>
-                                        <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <h4 class="mb-4">Leave a review</h4>
-                                <small>Your email address will not be published. Required fields are marked *</small>
-                                <div class="d-flex my-3">
-                                    <p class="mb-0 mr-2">Your Rating * :</p>
-                                    <div class="text-primary">
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                    </div>
-                                </div>
-                                <form>
-                                    <div class="form-group">
-                                        <label for="message">Your Review *</label>
-                                        <textarea id="message" cols="30" rows="5" class="form-control"></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="name">Your Name *</label>
-                                        <input type="text" class="form-control" id="name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="email">Your Email *</label>
-                                        <input type="email" class="form-control" id="email">
-                                    </div>
-                                    <div class="form-group mb-0">
-                                        <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div> *@
                 </div>
             </div>
         </div>
@@ -231,7 +160,6 @@
             <div class="owl-carousel related-carousel">
                 @foreach(var item in Model.ListProduct)
                 {
-                    
                     <div class="product-item bg-light">
                         <a asp-controller="Detail" asp-action="Index" asp-route-id="@item.ProductId">
                             <div class="product-img position-relative overflow-hidden">
@@ -243,9 +171,10 @@
                                     @{
                                         double? discountPercent = Model.DiscountPercentMap.ContainsKey(item.ProductId) ? Model.DiscountPercentMap[item.ProductId] : 0;
                                         string ItemformattedPrice = string.Format("{0:N0} VNĐ", item.ProductPrice);
+                                        double? ItemcurrentPrice = 0;
                                         if (discountPercent != 0)
                                         {
-                                            double? ItemcurrentPrice = item.ProductPrice - (item.ProductPrice * discountPercent / 100);
+                                            ItemcurrentPrice = item.ProductPrice - (item.ProductPrice * discountPercent / 100);
                                             string ItemformattedCurrentPrice = string.Format("{0:N0} VNĐ", ItemcurrentPrice);
 
                                             <h5>@ItemformattedCurrentPrice</h5>
@@ -259,14 +188,18 @@
                                     }
                                
                                 </div>
-                            <a href="" class="btn btn-primary">Thêm vào giỏ hàng</a>
+                                <form asp-action="AddToCart" asp-controller="Cart">
+                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                    <input type="hidden" name="Price" value='@(discountPercent == 0? @item.ProductPrice : ItemcurrentPrice)' />
+                                    <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>    
+                                </form>
                         </div>
                         </a>
                     </div>
-                }
-              
+                }          
             </div>
         </div>
     </div>
 </div>
 <!-- Products End -->
+

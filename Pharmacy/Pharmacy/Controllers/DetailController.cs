@@ -42,7 +42,7 @@ namespace Pharmacy.Controllers
                 AddressSupplier = supplier?.SupplierAddress,
                 DiscountPercentMap = _discount.GetDiscountPercentMap(ListProduct, _context.Discounts.ToList())
             };
-
+            ViewBag.countCart = HttpContext.Session.GetInt32("counter");
             return View(viewModel);
         }
 
