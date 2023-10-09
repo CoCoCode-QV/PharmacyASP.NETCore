@@ -8,54 +8,56 @@
 <h2>Cập nhật nhà cung cấp</h2>
 
 <hr />
-@using (Html.BeginForm("Edit", "Supplier", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+<div class="edit-admin">
+    @using (Html.BeginForm("Edit", "Supplier", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
+        <div class="form-horizontal">
 
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.SupplierId)
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.SupplierId)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.SupplierName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SupplierName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SupplierName, "", new { @class = "text-danger" })
+            <div class="form-group row">
+                @Html.LabelFor(model => model.SupplierName, htmlAttributes: new { @class = "col-form-label col-sm-2" })
+                <div class="col-sm-10">
+                    @Html.EditorFor(model => model.SupplierName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SupplierName, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            @Html.LabelFor(model => model.SupplierEmail, htmlAttributes: new { @class = "col-form-label col-sm-2" })
-            <div class="col-sm-10">
-                @Html.EditorFor(model => model.SupplierEmail, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SupplierEmail, "", new { @class = "text-danger" })
+            <div class="form-group row">
+                @Html.LabelFor(model => model.SupplierEmail, htmlAttributes: new { @class = "col-form-label col-sm-2" })
+                <div class="col-sm-10">
+                    @Html.EditorFor(model => model.SupplierEmail, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SupplierEmail, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            @Html.LabelFor(model => model.SupplierPhone, htmlAttributes: new { @class = "col-form-label col-sm-2" })
-            <div class="col-sm-10">
-                @Html.EditorFor(model => model.SupplierPhone, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SupplierPhone, "", new { @class = "text-danger" })
+            <div class="form-group row">
+                @Html.LabelFor(model => model.SupplierPhone, htmlAttributes: new { @class = "col-form-label col-sm-2" })
+                <div class="col-sm-10">
+                    @Html.EditorFor(model => model.SupplierPhone, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SupplierPhone, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            @Html.LabelFor(model => model.SupplierAddress, htmlAttributes: new { @class = "col-form-label col-sm-2" })
-            <div class="col-sm-10">
-                @Html.EditorFor(model => model.SupplierAddress, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SupplierAddress, "", new { @class = "text-danger" })
+            <div class="form-group row">
+                @Html.LabelFor(model => model.SupplierAddress, htmlAttributes: new { @class = "col-form-label col-sm-2" })
+                <div class="col-sm-10">
+                    @Html.EditorFor(model => model.SupplierAddress, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SupplierAddress, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
-      
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Lưu" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-}
 
-<div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Lưu" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="back-pro">
     @Html.ActionLink("Quay lại", "Index")
 </div>
 

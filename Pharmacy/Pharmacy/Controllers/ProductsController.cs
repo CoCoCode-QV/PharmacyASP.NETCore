@@ -60,10 +60,8 @@ namespace Pharmacy.Controllers
                 SelectedCategories = selectedCategories,
                 orderby = orderby
             };
+            ViewBag.countCart = HttpContext.Session.GetInt32("counter");
             return View(viewModel);
-            }
-
-    
-            
+        }    
     }
 }

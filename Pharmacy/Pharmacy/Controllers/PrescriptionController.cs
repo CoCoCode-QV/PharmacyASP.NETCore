@@ -48,6 +48,7 @@ namespace Pharmacy.Controllers
                 DiscountPercentMap = _discountModels.GetDiscountPercentMap(listProducts, _context.Discounts.ToList()),
                 orderby = orderby
             };
+            ViewBag.countCart = HttpContext.Session.GetInt32("counter");
             return View(viewModel);
         
         }

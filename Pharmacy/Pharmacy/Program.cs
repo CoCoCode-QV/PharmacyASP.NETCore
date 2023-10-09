@@ -24,10 +24,16 @@ builder.Services.AddScoped<Pharmacy.Models.ProductModels>();
 builder.Services.AddScoped<Pharmacy.Models.CustomerModels>();
 builder.Services.AddScoped<Pharmacy.Models.CartModels>();
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<QlpharmacyContext>().AddDefaultTokenProviders(); 
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<QlpharmacyContext>().AddDefaultTokenProviders();
 
 
-
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
+});
 //Đăng nhập google
 builder.Services.AddAuthentication(options =>
     {
@@ -93,6 +99,7 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseStaticFiles();
 
+app.UseSession();
 
 app.UseHttpsRedirection(); 
 

@@ -1,4 +1,5 @@
 ﻿using Pharmacy.Data;
+using System.Security.Claims;
 
 namespace Pharmacy.Models
 {
@@ -47,6 +48,13 @@ namespace Pharmacy.Models
             var item = _context.CartDetails.Find(id);
             _context.CartDetails.Remove(item);
             await _context.SaveChangesAsync();
+        }
+
+        public int TotalQuantityCartDetail(int id)
+        {
+            var count = _context.CartDetails
+                   .Where(cd => cd.CartId == id).Sum(cd => cd.CartDetailQuantity);
+            return Convert.ToInt32(count);
         }
     }
 }

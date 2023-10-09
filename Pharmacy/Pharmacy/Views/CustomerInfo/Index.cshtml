@@ -24,7 +24,7 @@
                     <input id="phone"
                            name="CustomerPhone"
                            type="tel"
-                           class="form-control validate" 
+                           class="form-control validate"
                            value='@(Model != null && Model.CustomerPhone !=null ? Model.CustomerPhone : null)' />
                     @Html.ValidationMessageFor(model =>model.CustomerPhone, "", new { @class = "text-danger" })
                 </div>
@@ -42,15 +42,15 @@
                     <input id="address"
                            name="CustomerAddress"
                            type="text"
-                           class="form-control validate"    
+                           class="form-control validate"
                            value='@(Model != null && Model.CustomerAddress !=null ? Model.CustomerAddress : null)' />
                     @Html.ValidationMessageFor(model =>model.CustomerAddress, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group col-lg-6">
                     <label for="gender">Giới tính</label>
-                    <input type="hidden" name="CustomerGender" id="hidden-CustomerGender" value=@Model?.CustomerGender.ToString() />
+                    <input type="hidden" name="CustomerGender" id="hidden-CustomerGender" value="@Model?.CustomerGender.ToString()" />
                     <select id="gender" name="Gender" class="form-control validate">
-                        <option value="-1" selected="@(Model == null)">Chưa xác đinh</option>
+                        <option value="-1" selected="@(Model == null || Model.CustomerGender == null)">Chưa xác đinh</option>
                         <option value="true" selected="@(Model != null && Model.CustomerGender == true )">Nam</option>
                         <option value="false" selected="@(Model != null && Model.CustomerGender == false)">Nữ</option>
                     </select>
@@ -61,7 +61,7 @@
                     <input id="age"
                            name="CustomerAge"
                            type="number"
-                           class="form-control validate" 
+                           class="form-control validate"
                            min="12"
                            value=@(Model != null && Model.CustomerAge !=null ? Model.CustomerAge : null) />
                     @Html.ValidationMessageFor(model =>model.CustomerAge, "", new { @class = "text-danger" })
@@ -75,7 +75,7 @@
                            value='@(Model != null && Model.CustomerAllergies !=null ? Model.CustomerAllergies : null)' />
                     @Html.ValidationMessageFor(model =>model.CustomerAllergies, "", new { @class = "text-danger" })
                 </div>
-               
+
                 <div class="form-group col-lg-6">
                     <label class="tm-hide-sm">&nbsp;</label>
                     <button type="submit"
@@ -99,15 +99,14 @@
 <script>
     document.getElementById("gender").addEventListener("change", function () {
         var genderValue = this.value;
-        // Chọn trường ẩn CustomerGender dựa trên giá trị của dropdown
+        // Gán giá trị đã chọn cho trường input ẩn
         document.getElementById("hidden-CustomerGender").value = genderValue;
     });
-    var successMessage = '@TempData["success"]';
+
+
+    var successMessage = '@Html.Raw(TempData["success"])';
     if (successMessage) {
         // Hiển thị thông báo bằng JavaScript, ví dụ: sử dụng alert()
-        alert(successMessage);
-
-        // Đặt TempData["success"] thành null để tránh hiển thị lại thông báo
-        '@TempData["success"]' = null;
+        alert(successMessage.toString());
     }
 </script>

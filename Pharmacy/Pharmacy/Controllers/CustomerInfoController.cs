@@ -31,6 +31,7 @@ namespace Pharmacy.Controllers
             }
 
             var CustomerInfo = _customer.GetCustomer(userId);
+            ViewBag.countCart = HttpContext.Session.GetInt32("counter");
             return View(CustomerInfo);
         }
 

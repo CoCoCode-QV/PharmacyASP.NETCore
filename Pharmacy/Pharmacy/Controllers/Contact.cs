@@ -2,7 +2,7 @@
 
 namespace Pharmacy.Controllers
 {
-    public class AboutController : Controller
+    public class Contact : Controller
     {
         public IActionResult Index()
         {

@@ -12,13 +12,14 @@ namespace Pharmacy.Controllers
         private readonly QlpharmacyContext _context;
         private readonly CustomerModels _customer;
         private readonly CartModels _cart;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-
-        public CartController(QlpharmacyContext context, CustomerModels customerModels, CartModels cartModels)
+        public CartController(QlpharmacyContext context, CustomerModels customerModels, CartModels cartModels, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _customer = customerModels;
             _cart = cartModels;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<IActionResult> IndexAsync()
         {
@@ -48,7 +49,10 @@ namespace Pharmacy.Controllers
 
             ViewBag.CartTotalPrice = cartTotalPrice;
             ViewBag.CustomerId = CustomerInfo.CustomerId;
-
+            //count
+            int countCart = _cart.TotalQuantityCartDetail(Cart.CartId);
+            _httpContextAccessor.HttpContext.Session.SetInt32("counter", countCart);
+            ViewBag.countCart = _httpContextAccessor.HttpContext.Session.GetInt32("counter");
             return View(cartItems);
 
         }
@@ -67,7 +71,7 @@ namespace Pharmacy.Controllers
             var product = _context.Products
                 .Include(p => p.Discount)
                 .FirstOrDefault(p => p.ProductId == productId);
-
+        
             if (product == null)
             {
                 return NotFound();
@@ -94,7 +98,6 @@ namespace Pharmacy.Controllers
                 };
                 await _cart.CreateCartDetail(cartDetail);
             }
-
             return RedirectToAction("Index");
         }
         [HttpPost]
@@ -121,6 +124,7 @@ namespace Pharmacy.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
+
             await _cart.DeleteDetailAsync(id);
             return RedirectToAction("Index");
         }
