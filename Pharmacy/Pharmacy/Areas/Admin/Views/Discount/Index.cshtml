@@ -65,6 +65,8 @@
         </tr>
     }
 </table>
-@Html.PagedListPager((IPagedList)Model, page => Url.Action("Index",new { page , search = Context.Request.Query["search"]}))
+<div class="pagination-admin">
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index",new { page , search = Context.Request.Query["search"]}))
+</div>
 
 <script src="~/Scripts/notify/NotifyAdmin.js"></script>

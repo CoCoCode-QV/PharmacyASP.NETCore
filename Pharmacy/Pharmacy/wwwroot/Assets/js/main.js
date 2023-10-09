@@ -101,21 +101,45 @@
     });
 
     //active page
+    const links = document.querySelectorAll('.nav-item.nav-link');
+    links.forEach(link => {
+        link.addEventListener('click', (e) => {
+            console.log("Link clicked"); // Thêm dòng này để kiểm tra
+            // Rest of your code
+        });
+    });
 
-    //const links = document.querySelectorAll('.nav-item.nav-link');
+    links.forEach(link => {
+        link.addEventListener('click', (e) => {
+            // Loại bỏ trạng thái active từ tất cả các liên kết
+            links.forEach(l => {
+                l.classList.remove('active');
+            });
 
-    //links.forEach(link => {
-    //    link.addEventListener('click', (e) => {
-    //        //e.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
-
-    //        // Loại bỏ trạng thái active từ tất cả các liên kết
-    //        links.forEach(l => {
-    //            l.classList.remove('active');
-    //        });
-
-    //        // Thêm trạng thái active cho liên kết được click
-    //        link.classList.add('active');
-    //    });
-    //});
+            // Thêm trạng thái active cho liên kết được click
+            link.classList.add('active');
+        });
+    });
+    // Testimonials carousel
+    $(".testimonial-carousel").owlCarousel({
+        autoplay: true,
+        smartSpeed: 1000,
+        margin: 24,
+        dots: false,
+        loop: true,
+        nav: true,
+        navText: [
+            '<i class="bi bi-arrow-left"></i>',
+            '<i class="bi bi-arrow-right"></i>'
+        ],
+        responsive: {
+            0: {
+                items: 1
+            },
+            992: {
+                items: 2
+            }
+        }
+    });
 })(jQuery);
 
