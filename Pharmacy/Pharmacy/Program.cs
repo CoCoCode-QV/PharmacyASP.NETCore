@@ -23,6 +23,8 @@ builder.Services.AddScoped<Pharmacy.Models.DiscountModels>();
 builder.Services.AddScoped<Pharmacy.Models.ProductModels>();
 builder.Services.AddScoped<Pharmacy.Models.CustomerModels>();
 builder.Services.AddScoped<Pharmacy.Models.CartModels>();
+builder.Services.AddScoped<Pharmacy.Models.OrderModels>();
+
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<QlpharmacyContext>().AddDefaultTokenProviders();
 

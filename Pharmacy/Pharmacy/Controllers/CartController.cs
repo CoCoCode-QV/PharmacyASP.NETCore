@@ -111,6 +111,11 @@ namespace Pharmacy.Controllers
 
             var existingCartDetail = _context.CartDetails
                  .FirstOrDefault(cd => cd.CartId == Cart.CartId && cd.ProductId == productId);
+            if(quantity <= 0)
+            {
+				await _cart.DeleteDetailAsync(existingCartDetail.CartDetailId);
+				return RedirectToAction("Index");
+			}
             if (existingCartDetail != null)
             {
                 // Nếu sản phẩm đã tồn tại trong giỏ hàng, cập nhật số lượng và tính lại giá tạm thời
