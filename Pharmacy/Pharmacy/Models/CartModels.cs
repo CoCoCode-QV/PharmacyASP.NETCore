@@ -77,7 +77,7 @@ namespace Pharmacy.Models
 				htmlTable.Append("<td style='text-align:center;padding: 10px;'>" + item.CartDetailQuantity + "</td>");
 				htmlTable.Append("<td style='text-align:center;padding: 10px;'>" + string.Format("{0:N0} VNĐ", item.CartDetailTemporaryPrice) + "</td>");
 				htmlTable.Append("</tr>");
-			}
+			}   
 			// Tính tổng tiền
 			var cartTotalPrice = cartItems.Sum(item => item.CartDetailTemporaryPrice);
 			htmlTable.Append("<tr><td colspan='3' style='text-align:right;padding: 10px;'>Tổng cộng:</td><td style='text-align:center;padding: 10px;'>" + string.Format("{0:N0} VNĐ", cartTotalPrice) + "</td></tr>");

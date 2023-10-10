@@ -103,7 +103,9 @@ namespace Pharmacy.Controllers
                     </body>
                     </html>";
 				sendMailService.SendMail(customer.CustomerEmail, "Mua hàng VTPharmacy:", emailBody, "");
-				return RedirectToAction("Index", "Cart");
+
+				TempData["PaymentSuccess"] = "Thanh toán thành công vui lòng kiểm tra đơn hàng ở Email";
+				return RedirectToAction("Index", "Cart", TempData["PaymentSuccess"]);
 			}
 
 			return BadRequest(new { Message = "Không có sản phẩm trong giỏ hàng để đặt hàng." });
