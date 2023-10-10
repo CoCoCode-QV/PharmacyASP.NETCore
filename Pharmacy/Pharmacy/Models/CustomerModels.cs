@@ -26,7 +26,7 @@ namespace Pharmacy.Models
         public async Task EditCustomer(Customer item)
         {
             var updateitem = _context.Customers.Find(item.CustomerId);
-           if(updateitem != null)
+            if (updateitem != null)
             {
                 updateitem.CustomerName = item.CustomerName;
                 updateitem.CustomerPhone = item.CustomerPhone;
@@ -38,5 +38,9 @@ namespace Pharmacy.Models
             }
         }
 
+        public Customer GetCustomerByid(int id)
+        {
+            return _context.Customers.FirstOrDefault(c => c.CustomerId == id);
+        }
     }
 }
