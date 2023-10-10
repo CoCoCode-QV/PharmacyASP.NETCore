@@ -1,6 +1,8 @@
 ﻿@model IEnumerable<Pharmacy.ViewsModels.CartItemViewModels>;
+
 @{
     ViewBag.Title = "Giỏ hàng";
+
     string CartTotalPrice = (@ViewBag.CartTotalPrice!=null ? string.Format("{0:N0} VNĐ", @ViewBag.CartTotalPrice) : null);
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -91,7 +93,7 @@
                         <h5>Tạm tính</h5>
                         <h5>@CartTotalPrice </h5>
                     </div>
-                    <form asp-action="Index" asp-controller="Payment" method="post">
+                    <form>
                         <input type="hidden" name="CustomerId" value="@ViewBag.CustomerId" />
                         <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">TIẾN HÀNH THANH TOÁN</button>
                     </form>

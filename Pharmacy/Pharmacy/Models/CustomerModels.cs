@@ -38,9 +38,5 @@ namespace Pharmacy.Models
             }
         }
 
-        public Customer GetCustomerByid(int id)
-        {
-            return _context.Customers.FirstOrDefault(c => c.CustomerId == id);
-        }
     }
 }

@@ -1,5 +1,4 @@
-﻿@model Pharmacy.Data.Customer;
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -265,50 +264,18 @@
                 <img id="mastercard" src="http://emilcarlsson.se/assets/MasterCard_Logo.png" alt="" />
             </div>
 			<div class="payment-form">
-				@if(Model != null)
-				{
-					<form asp-action="CreateOrder" asp-controller="Payment" method="post">
-						<input type="hidden" name="CustomerId" value="@Model.CustomerId" />
-						<input type="hidden" name="CustomerEmail" value="@Model.CustomerEmail" />
-
-						<label for="">Số thẻ</label>
-						<input id="cardholder" type="text" placeholder="Nhập số thẻ" disabled />
-						<label for="">Tên</label>
-						<input id="cardholder" type="text" name="CustomerName" readonly value="@Model.CustomerName" />
-						<label for="">Địa chỉ</label>
-						<input id="addressr" type="text" name="CustomerAddress" readonly value="@Model.CustomerAddress" />
-						<button type="submit" id="purchaser" title="Submit Form">Xác nhận thanh toán</button>	
-						<button id="paypalr"><i class="fa fa-paypal" aria-hidden="true"></i> Pay with PayPal</button>
-						<p id="supportr">Having problem with checkout? <a href="#">Contact our support</a>.</p>
-					</form>
-				}
+				<form action="">
+					<label for="">Số thẻ</label>
+					<input id="cardholder" type="text" placeholder="Nhập số thẻ" />
+					<label for="">Tên</label>
+					<input id="cardholder" type="text" placeholder="Nhập tên khách hàng" />
+					<label for="">Địa chỉ</label>
+					<input id="addressr" type="text" placeholder="Nhập địa chỉ" />
+					<button id="purchaser">Xác nhận thanh toán</button>
+					<button id="paypalr"><i class="fa fa-paypal" aria-hidden="true"></i> Pay with PayPal</button>
+					<p id="supportr">Having problem with checkout? <a href="#">Contact our support</a>.</p>
+				</form>
 			</div>
         </div>
     </div>
 </div>
-<script>
-
-	var ErrorCustomer = '@Html.Raw(@ViewBag.ErrorCustomer)';
-	if (ErrorCustomer) {
-		setTimeout(function () {
-			window.location.href = '/CustomerInfo/Index'; 
-		}, 2000);
-		alert(ErrorCustomer.toString());
-	}
-
-	var ErrorLogin = '@Html.Raw(@ViewBag.ErrorLogin)';
-	if (ErrorLogin) {
-		setTimeout(function () {
-			window.location.href = '/Login/Index';
-		}, 1000);
-		alert(ErrorLogin.toString());
-	}
-
-	var ErrorCartDetail = '@Html.Raw(@ViewBag.ErrorCartDetail)';
-	if (ErrorCartDetail) {
-		setTimeout(function () {
-			window.location.href = '/Cart/Index';
-		}, 2000);
-		alert( ErrorCartDetail.toString());
-	}
-</script>

@@ -103,9 +103,6 @@ create table OrderDetails(
 	Foreign key (OrderID) references dbo.Orders(OrderID),
 	Foreign key (ProductID) references dbo.Product(ProductID)
 )
-ALTER TABLE OrderDetails
-ADD OrderDetailsTemporaryPrice  float default 0;
-
 
 --ACCOUNT
 INSERT INTO dbo.Account(userName,displayName,password,Type)
