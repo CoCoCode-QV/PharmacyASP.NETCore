@@ -47,7 +47,7 @@
         <!-- Top Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">VT PHARMACY ADMIN</a>
+                <a class="navbar-brand" href="@Url.Action("Index", "HomeAdmin")">VT PHARMACY ADMIN</a>
             </div>
 
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -58,7 +58,7 @@
             </button>
             <!-- Left Menu -->
             <ul class="nav navbar-nav navbar-left navbar-top-links">
-                <li><a href="#"><i class="fa fa-home fa-fw"></i> Thống kê</a></li>
+                <li><a href="@Url.Action("Index", "HomeAdmin")"><i class="fa fa-home fa-fw"></i> Thống kê</a></li>
             </ul>
 
             <!-- Right Menu -->
@@ -125,9 +125,10 @@
                         <ul class="nav nav-second-level">
                             <li>
                                 <a href="@Url.Action("Index", "Order")"><i class="fa fa-hand-o-right fa-fw"></i>Quản lý đơn hàng</a>
-                            
                             </li>
-          
+                            <li>
+                                <a href="@Url.Action("Index", "Customer")"><i class="fa fa-hand-o-right fa-fw"></i>Quản lý khách hàng</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>

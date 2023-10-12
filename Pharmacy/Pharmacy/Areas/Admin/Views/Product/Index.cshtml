@@ -10,7 +10,7 @@
     <h2 class="col">Sản phẩm</h2>
     @using (Html.BeginForm("Index", "Product", FormMethod.Get))
     {
-        <div class="row custom-search-form">
+       @*  <div class="row custom-search-form">
             <div class="dropdown-type col-sm-3">
                 <select name="condition" class="form-control">
                     <option value="name">Tên</option>
@@ -26,6 +26,14 @@
                     </button>
                 </span>
             </div>
+        </div> *@
+        <div class="input-group custom-search-form">
+            <input name="search" type="text" class="form-control" placeholder="Search...">
+            <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fa fa-search"></i>
+                </button>
+            </span>
         </div>
     }
 </div>
@@ -72,7 +80,10 @@
                 <img src="@item.ProductImage" alt="Product Image" width="100" height="100" />
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProductActive)
+                <span style="background-color: @(item.ProductActive == true ? "green" : "orange"); color: white">
+
+                    @(item.ProductActive == true ? "Đang kinh doanh" : "Ngừng kinh doanh")
+                </span>
             </td>
             <td>
                 @Html.ActionLink("Chi tiết", "Detail", new { id = item.ProductId })|

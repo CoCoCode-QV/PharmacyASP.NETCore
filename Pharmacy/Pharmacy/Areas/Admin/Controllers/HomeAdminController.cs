@@ -58,7 +58,7 @@ namespace Pharmacy.Areas.Admin.Controllers
                            };
 
             var bestSellingsProducts = Revennue.GroupBy(o => o.ProductName)
-                                                .Select(X => new ChartBestSellings
+                                                .Select(X => new ChartBestSellingsViewModel
                                                 {
                                                     ProductName = X.Key,
                                                     DataQuantitySell = X.Sum(o => o.DataQuantitySell)

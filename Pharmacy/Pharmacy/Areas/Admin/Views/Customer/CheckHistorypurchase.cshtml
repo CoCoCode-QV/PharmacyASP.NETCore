@@ -1,0 +1,79 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IEnumerable<Pharmacy.Data.Order>
+
+@{
+    ViewData["Title"] = "Lịch sử mua hàng";
+    Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
+}
+
+<h2>Lịch sử mua hàng</h2>
+
+<div>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <span>ID</span>
+                </th>
+                <th>
+                    <span>Thời gian mua</span>
+                </th>
+                <th>
+                    <span>Số lượng</span>
+                </th>
+                <th>
+                    <span>Tên sản phẩm</span>
+                </th>
+                <th>
+                    <span>Giá sản phẩm</span>
+                </th>
+                <th>
+                    <span>Tạm tính</span>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                @foreach (var temp in item.OrderDetails)
+                {
+
+                    <tr>
+                        <td>
+                            @item.OrderId
+                        </td>
+                        <td>
+                            @item.OrderDate
+                        </td>
+                        <td>
+                            @temp.OrderDetailsQuantity
+                        </td>
+                        <td>
+                            @temp.Product.ProductName
+                        </td>
+                        <td>
+                            @(string.Format("{0:N0} VNĐ", @temp.OrderDetailsPrice))
+                        </td>
+                        <td>
+                            @(string.Format("{0:N0} VNĐ", @temp.OrderDetailsTemporaryPrice))
+
+                        </td>
+
+                    </tr>
+
+                }
+            }
+
+        </tbody>
+    </table>
+    <div class="pagination-admin">
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("CheckHistorypurchase",new { page , id = @ViewBag.CustomerId}))
+    </div>
+</div>
+<div>
+    <i class="fa fa-reply"></i>
+    @Html.ActionLink("Quay lại", "Index")
+</div>

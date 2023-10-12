@@ -1,0 +1,98 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IEnumerable<Pharmacy.Data.Customer>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
+}
+<div class="main-container">
+    <h2>Khách hàng</h2>
+    @using (Html.BeginForm("Index", "Customer", FormMethod.Get))
+    {
+        <div class="row custom-search-form">
+            <div class="dropdown-type col-sm-3">
+                <select name="condition" class="form-control">
+                    <option value="name">Tên</option>
+                    <option value="email">Email</option>
+                    <option value="phone">Số điện thoại</option>
+                </select>
+            </div>
+            <div class="input-group  col-sm-10">
+                <input name="search" type="text" class="form-control" placeholder="Search...">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+               <span>Tên người dùng</span>
+            </th>
+            <th>
+                <span>SĐT</span>
+            </th>
+            <th>
+                <span>Địa chỉ</span>
+            </th>
+            <th>
+                <span>Email</span>
+            </th>
+            <th>
+                <span>Giới tính</span>
+            </th>
+            <th>
+               <span>Tuổi</span>
+            </th>
+            <th>
+                <span>Dị ứng</span>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerPhone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerEmail)
+            </td>
+            <td>
+                    <span>
+                        @(item.CustomerGender == true ? "Nam" : "Nữ")
+                    </span>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerAge)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerAllergies)
+            </td>
+            <td>
+                    @Html.ActionLink("Lịch sử mua hàng", "CheckHistorypurchase", new { id = item.CustomerId })
+               
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<div class="pagination-admin">
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index",new { page , search = Context.Request.Query["search"],  condition = Context.Request.Query["condition"]}))
+</div>

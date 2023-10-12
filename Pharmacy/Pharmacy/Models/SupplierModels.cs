@@ -23,20 +23,14 @@ namespace Pharmacy.Models
                 switch (condition)
                 {
                     case "name":
-                        foreach (var item in ListSupplier)
-                            if (item.SupplierName.Contains(search))
-                                SupplierFound.Add(item); 
+                        SupplierFound = _context.Suppliers.Where(item => item.SupplierName.Contains(search)).ToList();
                         break;
                     case "email":
-                        foreach (var item in ListSupplier)
-                            if (item.SupplierEmail.Contains(search))
-                                SupplierFound.Add(item);
+                        SupplierFound = _context.Suppliers.Where(item => item.SupplierEmail.Contains(search)).ToList();
                         break;
                     
                     case "phone":
-                        foreach (var item in ListSupplier)
-                            if (item.SupplierPhone.Contains(search))
-                                SupplierFound.Add(item);
+                        SupplierFound = _context.Suppliers.Where(item => item.SupplierPhone.Contains(search)).ToList();
                         break;
 
                 }

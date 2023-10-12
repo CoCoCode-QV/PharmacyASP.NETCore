@@ -17,12 +17,7 @@ namespace Pharmacy.Models
             var ListCategory = _context.Categories.OrderByDescending(category => category.CategoryId).ToList();
             if (search != null)
             {
-                List<Category> categoriesFound = new List<Category>();
-                foreach(var item in  ListCategory)
-                {
-                    if (item.CategoryName.Contains(search))
-                        categoriesFound.Add(item);
-                }                  
+                List<Category> categoriesFound =  _context.Categories.Where(item => item.CategoryName.Contains(search)).ToList();
                 return categoriesFound;
             }
           

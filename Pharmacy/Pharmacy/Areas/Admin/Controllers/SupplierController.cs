@@ -16,7 +16,7 @@ namespace Pharmacy.Areas.Admin.Controllers
             this._supplierModels = supplierModels;
         }
 
-        public const int Items_Per_Page = 3;
+        public const int Items_Per_Page = 10;
         public IActionResult Index(string search,string condition,int? page)
         {
             var listSupplier = _supplierModels.GetSuppliers(search,condition);

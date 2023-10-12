@@ -14,21 +14,14 @@ namespace Pharmacy.Models
         }
 
 
-        public IEnumerable<Product> GetProducts(string search, string condition)
+        public IEnumerable<Product> GetProducts(string search)
         {
             var ListProducts = _context.Products.OrderByDescending(s => s.ProductId).ToList();
 
             if (search != null)
             {
-                List<Product> ProductFound = new List<Product>();
-                switch (condition)
-                {
-                    case "name":
-                        foreach (var item in ListProducts)
-                            if (item.ProductName.Contains(search))
-                                ProductFound.Add(item);
-                        break;
-                }
+                List<Product> ProductFound = _context.Products.Where(item => item.ProductName.Contains(search)).ToList();
+
                 return ProductFound;
             }
 
@@ -41,10 +34,9 @@ namespace Pharmacy.Models
 
             if (search != null)
             {
-                List<Product> ProductFound = new List<Product>();
-                foreach (var item in ListProducts)
-                    if (item.ProductName.Contains(search))
-                        ProductFound.Add(item);
+                List<Product> ProductFound =  _context.Products
+                                            .Where(item => item.ProductName.Contains(search))
+                                            .ToList();
                 return ProductFound;
             }
 

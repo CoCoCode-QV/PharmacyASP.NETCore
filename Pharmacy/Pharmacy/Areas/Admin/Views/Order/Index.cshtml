@@ -40,7 +40,6 @@
                 </td>
                 <td >
                     <span style="background-color: @(item.OrderStatus == 1 ? "green" : "orange"); color: white">
-
                         @(item.OrderStatus == 1 ? "Đã thanh toán" : "Chưa thanh toán")
                     </span>
                 </td>
@@ -48,8 +47,7 @@
                     @Html.DisplayFor(modelItem => item.OrderAddress)
                 </td>
                 <td>
-                    @Html.ActionLink("Chi tiết", "Detail", new { id = item.OrderId })|
-                   @*  <a onclick="confirmDelete('@item.DiscountId', '@item.DiscountName', '@Url.Action("Delete", "Discount")','mã giảm giá')">Xóa</a> *@
+                    @Html.ActionLink("Chi tiết", "Detail", new { id = item.OrderId })
                 </td>
             </tr>
     }

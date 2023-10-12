@@ -31,10 +31,10 @@ namespace Pharmacy.Areas.Admin.Controllers
 
         }
 
-        public const int Items_Per_Page = 3;
-        public IActionResult Index(string search, string condition, int? page)
+        public const int Items_Per_Page = 10;
+        public IActionResult Index(string search,  int? page)
         {
-            var listProducts = _ProductModels.GetProducts(search, condition);
+            var listProducts = _ProductModels.GetProducts(search);
 
             var pageNumber = page ?? 1;
 

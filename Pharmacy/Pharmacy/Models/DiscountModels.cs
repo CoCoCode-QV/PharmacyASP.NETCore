@@ -16,12 +16,8 @@ namespace Pharmacy.Models
             var ListDiscount = _context.Discounts.OrderByDescending(category => category.DiscountId).ToList();
             if (search != null)
             {
-                List<Discount> discountsFound = new List<Discount>();
-                foreach (var item in ListDiscount)
-                {
-                    if (item.DiscountName.Contains(search))
-                        discountsFound.Add(item);
-                }
+                List<Discount> discountsFound = _context.Discounts.Where(item => item.DiscountName.Contains(search)).ToList();
+              
                 return discountsFound;
             }
 
