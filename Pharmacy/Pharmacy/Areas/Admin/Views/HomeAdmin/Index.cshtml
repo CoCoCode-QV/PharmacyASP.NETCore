@@ -1,9 +1,140 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-
+@model Pharmacy.ViewsModels.chartDataViewModel
 @{
-   
+
+    ViewData["Title"] = "Thống kê";
     Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
-}
+    
+} 
+
+<div class="container mt-5">
+    <div class="row mb-3" style="margin-top: 50px; margin-bottom: 20px;">
+        <div class="col">
+            <form asp-action="Index" asp-controller="HomeAdmin" method="get" class="form-inline">
+                <div class="form-group mr-2">
+                    <label for="startDate" class="mr-2">Từ ngày:</label>
+                    <input type="date" id="startDate" name="fromdate" required class="form-control" value="@((ViewBag.fromdate != null && ViewBag.fromdate is DateTime) ? ((DateTime)ViewBag.fromdate).ToString("yyyy-MM-dd") : string.Empty)"
+                </div>
+                <div class="form-group mr-2">
+                    <label for="endDate" class="mr-2">Đến ngày:</label>
+                    <input type="date" id="endDate" name="todate" required class="form-control" value="@((ViewBag.todate != null && ViewBag.todate is DateTime) ? ((DateTime)ViewBag.todate).ToString("yyyy-MM-dd") : string.Empty)">
+                </div>
+                <button type="submit" class="btn btn-primary">Xem Thống kê</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9">
+            <div class="card">
+                <div class="card-header" style="text-align: center; padding: 15px;">
+                    <h4>Doanh thu</h4>
+                </div>
+                <div class="card-body">
+                    <canvas id="Line" class="my-4 h-25"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card">
+                <div class="card-header">
+                </div>
+                <div class="card-body" style=" max-height: 300px;overflow-y: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Ngày</th>
+                                <th scope="col">Doanh thu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int i = 1;
+
+                                @foreach (var item in Model.Result)
+                                {
+                                    <tr>
+                                        <th>@(i++) </th>
+                                        <th>@(item.LabelsDate.ToShortDateString())</th>
+                                        <td> @(string.Format("{0:N0} VNĐ",@item.DataRevenue))</td>
+                                    </tr>
+                                }
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-3">
+    <div class="row mb-3">
+        <div class="col" style="padding: 10px;">
+            <div class="card">
+                <div class="card-header" style="padding: 10px;text-align: center;">
+                   <h4> Top sản phẩm bán chạy nhất </h4>
+                </div>
+                <div class="card-body">
+                    <canvas id="bar" class="my-4 h-25"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script type="text/javascript">
+
+    var barData = @Html.Raw(Json.Serialize(Model.BestSellingProducts));
+    var lineData = @Html.Raw(Json.Serialize(Model.Result));
+
+    var barChart = document.getElementById('bar').getContext('2d');
+    var barChartInstance = new Chart(barChart, {
+        type: 'bar',
+        data: {
+            labels: barData.map(item => item.productName),
+            datasets: [{
+                label: 'Số lượng đã bán',
+                data: barData.map(item => item.dataQuantitySell),
+                backgroundColor: 'rgba(6,128,250,0.2)', // Điều chỉnh độ trong suốt tại đây
+                borderColor: 'rgba(6,128,250,1)', // Màu đường viền
+                borderWidth: 1 // Độ rộng của đường viền
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    var lineChart = document.getElementById('Line').getContext('2d');
+    var lineChartInstance = new Chart(lineChart, {
+        type: 'line',
+        data: {
+            labels: lineData.map(item => new Date(item.labelsDate).toLocaleDateString()),
+            datasets: [{
+                label: 'Tổng doanh thu',
+                data: lineData.map(item => item.dataRevenue),
+                backgroundColor: 'rgba(6,128,250,0.2)',
+                borderColor: 'rgba(6,128,250,1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+</script>
 

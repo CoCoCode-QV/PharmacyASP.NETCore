@@ -104,36 +104,30 @@
 
                 <ul class="nav" id="side-menu">
                     <li>
-                        <a href="#" class="active"><i class="fa fa-dashboard fa-fw"></i> Quản lý</a>
-                    </li>
-                    <li>
-                        @Html.ActionLink("Sản phẩm", "Index", "Product" , new{ @class ="fa fa-dashboard fa-fw"})
-                    </li>
-                    <li>
-                        @Html.ActionLink("Danh mục sản phẩm", "Index", "Category" , new{ @class ="fa fa-dashboard fa-fw"})
-                    </li>
-                    <li>
-                        @Html.ActionLink("Nhà cung cấp", "Index", "Supplier" , new{ @class ="fa fa-dashboard fa-fw"})
-                    </li>
-                    <li>
-                        @Html.ActionLink("Mã giảm giá", "Index", "Discount" , new{ @class ="fa fa-dashboard fa-fw"})
-                    </li>
+                        
+                        <a href="@Url.Action("Index", "HomeAdmin")"><i class="fa fa-bar-chart-o fa-fw"></i>Thống kê</a>
 
-
+                    </li>
                     <li>
-                        <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
+                        @Html.ActionLink("Sản phẩm", "Index", "Product" )
+                    </li>
+                    <li>
+                        @Html.ActionLink("Danh mục sản phẩm", "Index", "Category")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Nhà cung cấp", "Index", "Supplier")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Mã giảm giá", "Index", "Discount" )
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa  fa-building-o fa-fw"></i>Quản lý<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="#">Second Level Item</a>
+                                <a href="@Url.Action("Index", "Order")"><i class="fa fa-hand-o-right fa-fw"></i>Quản lý đơn hàng</a>
+                            
                             </li>
-                            <li>
-                                <a href="#">Third Level <span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="#">Third Level Item</a>
-                                    </li>
-                                </ul>
-                            </li>
+          
                         </ul>
                     </li>
                 </ul>

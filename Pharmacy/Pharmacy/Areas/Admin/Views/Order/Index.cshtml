@@ -1,29 +1,30 @@
-﻿@model IEnumerable<Pharmacy.Data.Order>
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IEnumerable<Pharmacy.Data.Order>
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
 }
 
-<h2>Index</h2>
-
+<h2>Quản lý đơn hàng</h2>
 <p>
-    <a asp-action="Create">Create New</a>
+    Danh sách đơn đặt hàng
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.OrderDate)
+                <span>ID</span>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OrderAddress)
+                <span>Ngày đặt</span>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OrderStatus)
+                <span>Thanh toán</span>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Customer)
+                <span>Địa chỉ đặt hàng</span>
             </th>
             <th></th>
         </tr>
@@ -32,23 +33,28 @@
     @foreach (var item in Model) {
             <tr>
                 <td>
+                    @Html.DisplayFor(modelItem => item.OrderId)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.OrderDate)
+                </td>
+                <td >
+                    <span style="background-color: @(item.OrderStatus == 1 ? "green" : "orange"); color: white">
+
+                        @(item.OrderStatus == 1 ? "Đã thanh toán" : "Chưa thanh toán")
+                    </span>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.OrderAddress)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.OrderStatus)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Customer.CustomerId)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.OrderId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.OrderId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.OrderId">Delete</a>
+                    @Html.ActionLink("Chi tiết", "Detail", new { id = item.OrderId })|
+                   @*  <a onclick="confirmDelete('@item.DiscountId', '@item.DiscountName', '@Url.Action("Delete", "Discount")','mã giảm giá')">Xóa</a> *@
                 </td>
             </tr>
     }
     </tbody>
 </table>
+<div class="pagination-admin">
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index",new { page} ))
+</div>

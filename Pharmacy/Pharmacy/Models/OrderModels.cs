@@ -1,4 +1,5 @@
-﻿using Pharmacy.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Pharmacy.Data;
 
 namespace Pharmacy.Models
 {
@@ -23,5 +24,17 @@ namespace Pharmacy.Models
 			_context.OrderDetails.Add(item);
 			await _context.SaveChangesAsync();
 		}
+
+		public IEnumerable<Order> GetListOrder()
+		{
+			return _context.Orders.OrderByDescending(o => o.OrderId).ToList();
+        }
+
+		public IEnumerable<OrderDetail> GetListOrderDetailByOrderId(int id)
+		{
+			return  _context.OrderDetails.Include(x =>x.Product).Where(x => x.OrderId == id).ToList();
+		}
+
+	
 	}
 }

@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Pharmacy.Data.OrderDetail>
+
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+    Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
+}
+
+<h2>Chi tiết đơn hàng</h2>
+
+<div>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <span>ID</span>
+                </th>
+                <th>
+                    <span>Số lượng</span>
+                </th>
+                <th>
+                    <span>Tên sản phẩm</span>
+                </th>
+                <th>
+                    <span>Giá sản phẩm</span>
+                </th>
+                <th>
+                    <span>Tạm tính</span>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                         @item.OrderDetails
+                    </td>
+                    <td >
+                        @item.OrderDetailsQuantity
+                    </td>
+                    <td>
+                        @item.Product.ProductName
+                    </td>
+                    <td>
+                        @(string.Format("{0:N0} VNĐ",   @item.OrderDetailsPrice))
+                    </td>
+                    <td>
+                        @(string.Format("{0:N0} VNĐ", @item.OrderDetailsTemporaryPrice))
+         
+                    </td>
+                  
+                </tr>
+              
+            }
+        
+        </tbody>
+        <tr>
+            <td colspan='3' style='text-align:right;padding: 10px;'>Tổng cộng:</td>
+            <td style='text-align:center;padding: 10px;'> @string.Format("{0:N0} VNĐ", @ViewBag.CartTotalPrice)</td>
+        </tr>
+    </table>
+</div>
+<div>
+    @Html.ActionLink("Quay lại", "Index")
+</div>
