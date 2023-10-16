@@ -1,0 +1,90 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IEnumerable<Pharmacy.Data.Order>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">LỊCH SỬ ĐƠN HÀNG</span></h2>
+<div class="row px-xl-5">
+    <div class="col">
+        <div class="bg-light p-30">
+
+            <ul class="nav nav-tabs mb-4">
+                <li class="nav-item nav-link @(ViewData["CurrentTab"].ToString() == "accept" ? "active":"")">
+                    <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "accept" })">Danh sách đã duyệt</a>
+                </li>
+                <li class="nav-item nav-link @(ViewData["CurrentTab"].ToString() == "noaccept" ? "active":"")">
+                    <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "noaccept" })">Danh sách chưa duyệt</a>
+                </li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane show active" id="accept">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span>ID</span>
+                                </th>
+                                <th>
+                                    <span>Ngày đặt</span>
+                                </th>
+                                <th>
+                                    <span>Thanh toán</span>
+                                </th>
+                                <th>
+                                    <span>Trạng thái</span>
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.OrderId)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.OrderDate)
+                                        </td>
+                                        <td>
+                                            <span style="background-color: @(item.OrderStatus == 1 ? "green" : "orange"); color: white">
+                                                @(item.OrderStatus == 1 ? "Đã thanh toán" : "Chưa thanh toán")
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span style="background-color: @(item.OrderAccept ? "green" : "orange"); color: white">
+                                                @(item.OrderAccept ? "Đã duyệt" : "Chưa duyệt")
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Chi tiết", "OrderDetail", new { id = item.OrderId })
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <div class="pagination-admin">
+                        @Html.PagedListPager((IPagedList)Model, page => Url.Action("HistoryOrder",new { page , tab = ViewData["CurrentTab"]}),   new X.PagedList.Web.Common.PagedListRenderOptions
+                        {
+                        UlElementClasses = new string[] { "pagination justify-content-center" },
+                        LiElementClasses = new string[] { "page-item" },
+                        PageClasses = new string[] { "page-link" }
+                        })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+

@@ -11,48 +11,87 @@
 <p>
     Danh sách đơn đặt hàng
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <span>ID</span>
-            </th>
-            <th>
-                <span>Ngày đặt</span>
-            </th>
-            <th>
-                <span>Thanh toán</span>
-            </th>
-            <th>
-                <span>Địa chỉ đặt hàng</span>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OrderId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OrderDate)
-                </td>
-                <td >
-                    <span style="background-color: @(item.OrderStatus == 1 ? "green" : "orange"); color: white">
-                        @(item.OrderStatus == 1 ? "Đã thanh toán" : "Chưa thanh toán")
-                    </span>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OrderAddress)
-                </td>
-                <td>
-                    @Html.ActionLink("Chi tiết", "Detail", new { id = item.OrderId })
-                </td>
-            </tr>
-    }
-    </tbody>
-</table>
-<div class="pagination-admin">
-    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index",new { page} ))
+
+<div class="col">
+    <div class="panel panel-default">
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs">
+                <li class="@(ViewData["CurrentTab"].ToString() == "accept" ? "active":"")">
+                    <a href="@Url.Action("Index", new { tab = "accept" })">Danh sách đã duyệt</a>
+                </li>
+                <li class="@(ViewData["CurrentTab"].ToString() == "noaccept" ? "active":"")">
+                    <a href="@Url.Action("Index", new { tab = "noaccept" })">Danh sách chưa duyệt</a>
+                </li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="accept">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span>ID</span>
+                                </th>
+                                <th>
+                                    <span>Ngày đặt</span>
+                                </th>
+                                <th>
+                                    <span>Thanh toán</span>
+                                </th>
+                                <th>
+                                    <span>Trạng thái</span>
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>   
+                            @if(Model != null && Model.Any())
+                            {
+                             @foreach (var item in Model)
+                                {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.OrderId)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.OrderDate)
+                                            </td>
+                                            <td>
+                                                <span style="background-color: @(item.OrderStatus == 1 ? "green" : "orange"); color: white">
+                                                    @(item.OrderStatus == 1 ? "Đã thanh toán" : "Chưa thanh toán")
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span style="background-color: @(item.OrderAccept ? "green" : "orange"); color: white">
+                                                    @(item.OrderAccept ? "Đã duyệt" : "Chưa duyệt")
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Chi tiết", "Detail", new { id = item.OrderId })
+                                            @if (!item.OrderAccept)
+                                            {  
+                                                <span>|</span>
+                                                <a onclick="confirmDelete('@item.OrderId', '@item.OrderId' , '@Url.Action("DeleteOrder", "Order")','đơn hàng')">Hủy</a>
+                                            }
+                                            </td>
+                                        </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <div class="pagination-admin">
+                        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index",new { page , tab = ViewData["CurrentTab"]    } ))
+                    </div> 
+                </div>
+            </div>
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
 </div>
+
+
+<script src="~/Scripts/notify/NotifyAdmin.js"></script>

@@ -2,9 +2,8 @@
 
 @{
     ViewData["Title"] = "Chi tiết đơn hàng";
-    Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
-    // Lấy Order đầu tiên từ danh sách OrderDetails (nếu danh sách không rỗng)
-    var firstOrder = Model.FirstOrDefault()?.Order;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
 <h2>Chi tiết đơn hàng</h2>
@@ -37,49 +36,36 @@
             {
                 <tr>
                     <td>
-                         @item.OrderDetails
+                        @item.OrderDetails
                     </td>
-                    <td >
+                    <td>
                         @item.OrderDetailsQuantity
                     </td>
                     <td>
                         @item.Product.ProductName
                     </td>
                     <td>
-                        @(string.Format("{0:N0} VNĐ",   @item.OrderDetailsPrice))
+                        @(string.Format("{0:N0} VNĐ", @item.OrderDetailsPrice))
                     </td>
                     <td>
                         @(string.Format("{0:N0} VNĐ", @item.OrderDetailsTemporaryPrice))
-         
+
                     </td>
-                  
+
                 </tr>
-              
+
             }
-        
         </tbody>
         <tr>
             <td style='text-align:left;padding: 10px;' colspan='3'></td>
             <td style='text-align:left;padding: 10px;'>Tổng cộng:</td>
             <td style='text-align:left;padding: 10px;'> @string.Format("{0:N0} VNĐ", @ViewBag.CartTotalPrice)</td>
 
-          
-           @if (firstOrder != null)
-            {
-                if (!firstOrder.OrderAccept)
-                {
-
-                    <td>  <a href="@Url.Action("AcceptOrder", "Order", new { OrderId = @ViewBag.OrderId })" class="btn btn-primary">Duyệt</a></td>
-                }
-            }
-
-
-            
             <td></td>
         </tr>
     </table>
 </div>
 <div>
     <i class="fa fa-reply"></i>
-    @Html.ActionLink("Quay lại", "Index")
+    @Html.ActionLink("Quay lại", "HistoryOrder")
 </div>

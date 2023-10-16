@@ -22,7 +22,7 @@ namespace Pharmacy.Controllers
             _discountModels = discountModels;
         }
 
-        private const int ItemsPerPage = 3;
+        private const int ItemsPerPage = 9;
         public IActionResult Index(string search, int? page, string orderby, int? selectedCategories)
         {
             TempData["SearchTerm"] = search;

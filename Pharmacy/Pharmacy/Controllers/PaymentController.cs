@@ -59,7 +59,8 @@ namespace Pharmacy.Controllers
 					OrderAddress = customer.CustomerAddress,
 					OrderStatus = 1,
 					CustomerId = customer.CustomerId,
-					OrderDate = DateTime.Now
+					OrderDate = DateTime.Now,
+					OrderAccept = false
 				};
 
 				await _order.CreateOrder(newOrder);

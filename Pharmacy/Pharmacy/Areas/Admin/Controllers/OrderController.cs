@@ -18,14 +18,13 @@ namespace Pharmacy.Areas.Admin.Controllers
             _orderModels = orderModels;
         }
 
-        public const int Items_Per_Page = 10;
-        public IActionResult Index(int? page)
+        public const int Items_Per_Page = 3;
+        public IActionResult Index(int? page, string tab = "accept")
         {
-            var listOrder = _orderModels.GetListOrder();
-
+            ViewData["CurrentTab"] = tab;
+            var ListOrder = _orderModels.GetListOrder(tab);
             var pageNumber = page ?? 1;
-
-            var onePage = listOrder.ToPagedList(pageNumber, Items_Per_Page);
+            var onePage = ListOrder.ToPagedList(pageNumber, Items_Per_Page);
 
             return View(onePage);
         }
@@ -39,9 +38,21 @@ namespace Pharmacy.Areas.Admin.Controllers
             var lisrOrderDetail = _orderModels.GetListOrderDetailByOrderId(id);
             var cartTotalPrice = lisrOrderDetail.Sum(item => item.OrderDetailsTemporaryPrice);
             ViewBag.CartTotalPrice = cartTotalPrice;
+            ViewBag.OrderId = id;
             return View(lisrOrderDetail);
         }
 
+        public async Task<IActionResult> AcceptOrderAsync(int OrderId)
+        {
+            await _orderModels.AcceptOrder(OrderId);
+            return RedirectToAction("Index");
+        }
 
+        public async Task<IActionResult> DeleteOrder(int id)
+        {
+            await _orderModels.DeleteOrderAsync(id);
+
+            return RedirectToAction("Index");
+        }
     }
 }

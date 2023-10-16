@@ -15,6 +15,8 @@ public partial class Order
 
     public int CustomerId { get; set; }
 
+    public bool OrderAccept {  get; set; }
+
     public virtual Customer Customer { get; set; } = null!;
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();

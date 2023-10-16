@@ -4,6 +4,7 @@ using Pharmacy.Data;
 using Pharmacy.Models;
 using Pharmacy.ViewsModels;
 using System.Security.Claims;
+using X.PagedList;
 
 namespace Pharmacy.Controllers
 {
@@ -12,14 +13,16 @@ namespace Pharmacy.Controllers
         private readonly QlpharmacyContext _context;
         private readonly CustomerModels _customer;
         private readonly CartModels _cart;
+        private readonly OrderModels _order;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CartController(QlpharmacyContext context, CustomerModels customerModels, CartModels cartModels, IHttpContextAccessor httpContextAccessor)
+        public CartController(QlpharmacyContext context, CustomerModels customerModels, CartModels cartModels,OrderModels order, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _customer = customerModels;
             _cart = cartModels;
             _httpContextAccessor = httpContextAccessor;
+            _order = order;
         }
         public async Task<IActionResult> IndexAsync()
         {
@@ -132,6 +135,37 @@ namespace Pharmacy.Controllers
 
             await _cart.DeleteDetailAsync(id);
             return RedirectToAction("Index");
+        }
+
+        public const int Items_Per_Page = 3;
+        public async Task<IActionResult> HistoryOrder(int? page, string tab = "accept")
+        {
+            ViewData["CurrentTab"] = tab;
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+                return RedirectToAction("Index", "Login");
+            var CustomerInfo = _customer.GetCustomer(userId);
+
+            var ListOrder = _order.GetListOrderByCustomerId(CustomerInfo.CustomerId, tab);
+
+            var pageNumber = page ?? 1;
+
+            var onePage = ListOrder.ToPagedList(pageNumber, Items_Per_Page);
+
+            return View(onePage);
+        }
+
+        public IActionResult OrderDetail(int id)
+        {
+            if (id == 0)
+            {
+                return View();
+            }
+            var lisrOrderDetail = _order.GetListOrderDetailByOrderId(id);
+            var cartTotalPrice = lisrOrderDetail.Sum(item => item.OrderDetailsTemporaryPrice);
+            ViewBag.CartTotalPrice = cartTotalPrice;
+            ViewBag.OrderId = id;
+            return View(lisrOrderDetail);
         }
     }
 }

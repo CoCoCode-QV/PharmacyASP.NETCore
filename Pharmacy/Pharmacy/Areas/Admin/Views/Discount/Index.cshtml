@@ -59,7 +59,6 @@
                 @Html.DisplayFor(modelItem => item.DiscountEndDate)
             </td>
             <td>
-                @*<a class="ToastrDanger" href="#">Sửa</a>*@
                 @Html.ActionLink("Sửa", "Edit", new { id = item.DiscountId })|
                 <a onclick="confirmDelete('@item.DiscountId', '@item.DiscountName', '@Url.Action("Delete", "Discount")','mã giảm giá')">Xóa</a>
             </td>
