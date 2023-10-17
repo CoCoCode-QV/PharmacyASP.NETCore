@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Pharmacy.Data;
@@ -24,6 +25,7 @@ builder.Services.AddScoped<Pharmacy.Models.ProductModels>();
 builder.Services.AddScoped<Pharmacy.Models.CustomerModels>();
 builder.Services.AddScoped<Pharmacy.Models.CartModels>();
 builder.Services.AddScoped<Pharmacy.Models.OrderModels>();
+builder.Services.AddScoped<Pharmacy.ViewsModels.StripeSettings>();
 
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<QlpharmacyContext>().AddDefaultTokenProviders();
@@ -88,6 +90,15 @@ builder.Services.Configure<IdentityOptions>(options => {
     options.SignIn.RequireConfirmedPhoneNumber = false;     // Xác thực số điện thoại
 
     options.Tokens.EmailConfirmationTokenProvider = "Default";
+});
+
+
+IConfigurationSection stripeSettings = builder.Configuration.GetSection("StripeSettings");
+builder.Services.Configure<StripeSettings>(options =>
+{
+
+	options.PublicKey = stripeSettings["PublicKey"];
+	options.SecretKey = stripeSettings["SecretKey"];
 });
 
 

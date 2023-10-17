@@ -75,6 +75,12 @@
                         @Html.Raw(TempData["PaymentSuccess"])
                     </span>
                     }
+                    @if (TempData["PaymentCancel"] != null)
+                    {
+                        <span class="text-danger">
+                         @Html.Raw(TempData["PaymentCancel"])
+                        </span>
+                    }
         </div>
         <div class="col-lg-4">
             <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Tóm tắt giỏ hàng</span></h5>
@@ -93,6 +99,7 @@
                     </div>
                     <form asp-action="Index" asp-controller="Payment" method="post">
                         <input type="hidden" name="CustomerId" value="@ViewBag.CustomerId" />
+                        <input type="hidden" name="amount" value="@ViewBag.CartTotalPrice" />
                         <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">TIẾN HÀNH THANH TOÁN</button>
                     </form>
                 </div>

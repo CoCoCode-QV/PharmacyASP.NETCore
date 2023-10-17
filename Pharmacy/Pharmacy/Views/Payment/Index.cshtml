@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+	string CartTotalPrice = (@ViewBag.amount != null ? string.Format("{0:N0} VNĐ", @ViewBag.amount) : null);
 }
 <style>
 	$primary: #e67e22;
@@ -267,18 +268,19 @@
 			<div class="payment-form">
 				@if(Model != null)
 				{
-					<form asp-action="CreateOrder" asp-controller="Payment" method="post">
+					<form asp-action="createCheckoutSession" asp-controller="Payment" method="post">
 						<input type="hidden" name="CustomerId" value="@Model.CustomerId" />
 						<input type="hidden" name="CustomerEmail" value="@Model.CustomerEmail" />
+						<input type="hidden" name="amount" value="@ViewBag.amount" />
 
-						<label for="">Số thẻ</label>
-						<input id="cardholder" type="text" placeholder="Nhập số thẻ" disabled />
+
+						<label for="">Tổng tiền</label>
+						<input id="cardholder" type="text" name="CartTotalPrice" readonly value="@CartTotalPrice" disabled/>
 						<label for="">Tên</label>
 						<input id="cardholder" type="text" name="CustomerName" readonly value="@Model.CustomerName" />
 						<label for="">Địa chỉ</label>
 						<input id="addressr" type="text" name="CustomerAddress" readonly value="@Model.CustomerAddress" />
-						<button type="submit" id="purchaser" title="Submit Form">Xác nhận thanh toán</button>	
-						<button id="paypalr"><i class="fa fa-paypal" aria-hidden="true"></i> Pay with PayPal</button>
+						<button type="submit" id="purchaser" title="Submit Form">Thanh toán với Stripe</button>	
 						<p id="supportr">Having problem with checkout? <a href="#">Contact our support</a>.</p>
 					</form>
 				}

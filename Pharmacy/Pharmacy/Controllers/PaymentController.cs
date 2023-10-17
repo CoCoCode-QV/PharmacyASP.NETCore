@@ -1,7 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.CodeAnalysis.Options;
+using Microsoft.Extensions.Options;
 using Pharmacy.Data;
 using Pharmacy.Models;
 using Pharmacy.ViewsModels;
+using Stripe;
+using Stripe.Checkout;
+using System.Globalization;
 
 namespace Pharmacy.Controllers
 {
@@ -11,17 +17,20 @@ namespace Pharmacy.Controllers
 		private readonly CustomerModels _customer;
 		private readonly OrderModels _order;
 		private readonly ProductModels _product;
+		private readonly StripeSettings _stripeSettings;
 
 
-		public PaymentController( CartModels cartModels, CustomerModels customer, OrderModels order, ProductModels product)
+		public PaymentController( CartModels cartModels, CustomerModels customer, OrderModels order, ProductModels product, StripeSettings stripesetting)
 		{
 			_cart = cartModels;
 			_customer = customer;
 			_order = order;
 			_product = product;
-		}
+			_stripeSettings = stripesetting;
+
+        }
 		[HttpPost]
-        public IActionResult Index(int CustomerId)
+        public IActionResult Index(int CustomerId, long? amount)
 		{
 			if (CustomerId == 0)
 			{
@@ -41,12 +50,12 @@ namespace Pharmacy.Controllers
 				ViewBag.ErrorCustomer = "Vui lòng cập nhật thông tin khách hàng trước khi thanh toán!";
 				return View(customer);
 			}
-			
+			ViewBag.amount = amount;
 			return View(customer);
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> CreateOrderAsync(Customer customer)
+		
+		public async Task<IActionResult> CreateOrderAsync(Pharmacy.Data.Customer customer)
 		{
 			// Kiểm tra xem có cartdetail nào cho người dùng này không
 			var cart = _cart.getCartByCustomerId(customer.CustomerId);
@@ -112,5 +121,52 @@ namespace Pharmacy.Controllers
 			return BadRequest(new { Message = "Không có sản phẩm trong giỏ hàng để đặt hàng." });
 			//}
 		}
+
+		[HttpPost]
+		public IActionResult createCheckoutSession(Pharmacy.Data.Customer customer , long? amount)
+		{
+			var currency = "VND";
+			var host = HttpContext.Request.Host.Host; // Địa chỉ (host)
+			var port = HttpContext.Request.Host.Port; // Cổng
+			var scheme = HttpContext.Request.Scheme;
+			StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
+			var options = new SessionCreateOptions
+			{
+				PaymentMethodTypes = new List<string>
+				{
+					"card"
+				},
+				LineItems = new List<SessionLineItemOptions>
+				{
+					new SessionLineItemOptions
+					{
+						PriceData = new SessionLineItemPriceDataOptions
+						{
+							Currency = currency,
+							UnitAmount = amount,
+							ProductData = new SessionLineItemPriceDataProductDataOptions
+							{
+								Name = "VTPharmacy",
+								Description = customer.CustomerEmail + "-" + customer.CustomerName
+							}
+
+                        },
+						Quantity =1
+					}
+				},
+                Mode = "payment",
+				SuccessUrl = Url.ActionLink("CreateOrder","Payment", customer),
+				CancelUrl = Url.ActionLink("cancelStripe", "Payment")
+            };
+            var service = new SessionService();
+            Session session = service.Create(options);
+            return Redirect(session.Url);
+        }
+		
+		public IActionResult cancelStripe()
+		{
+            TempData["PaymentCancel"] = "Thanh toán thất bại";
+            return RedirectToAction("Index", "Cart", TempData["PaymentCancel"]);
+        }
 	}
 }
