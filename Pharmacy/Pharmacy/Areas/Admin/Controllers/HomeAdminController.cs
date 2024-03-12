@@ -48,7 +48,7 @@ namespace Pharmacy.Areas.Admin.Controllers
                            on o.OrderId equals od.OrderId
                            join p in _context.Products
                            on od.ProductId equals p.ProductId
-                           where o.OrderStatus == 1 && o.OrderDate.Date >= startDate.Date && o.OrderDate.Date <= endDate.Date
+                           where o.OrderStatus == 1 && o.OrderDate.Date >= startDate.Date && o.OrderDate.Date <= endDate.Date && o.OrderAccept == true
                            select new
                            {
                                OrderDate = o.OrderDate,

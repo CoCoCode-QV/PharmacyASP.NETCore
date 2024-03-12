@@ -52,7 +52,6 @@ namespace Pharmacy.Controllers
                 // Xử lý lỗi
                 return RedirectToAction("Index", "Login");
             }
-            // Các thông tin khác mà bạn muốn lấy
             // Kiểm tra xem tài khoản đã tồn tại hay chưa
             var user = await _userManager.FindByEmailAsync(userEmail);
 

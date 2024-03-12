@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Pharmacy.Data;
 using Pharmacy.Models;
 using Pharmacy.ViewsModels;
+using Stripe;
 using System.Configuration;
 using System.Data.Common;
 using System.Text;
@@ -94,12 +95,11 @@ builder.Services.Configure<IdentityOptions>(options => {
 
 
 IConfigurationSection stripeSettings = builder.Configuration.GetSection("StripeSettings");
-builder.Services.Configure<StripeSettings>(options =>
-{
+builder.Services.Configure<StripeSettings>(stripeSettings);
 
-	options.PublicKey = stripeSettings["PublicKey"];
-	options.SecretKey = stripeSettings["SecretKey"];
-});
+// Đăng ký StripeSettings để có thể sử dụng Dependency Injection
+builder.Services.AddSingleton(provider => provider.GetRequiredService<IOptions<StripeSettings>>().Value);
+
 
 
 builder.Services.AddTransient<ViewMailSettingcs>();

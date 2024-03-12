@@ -11,37 +11,46 @@
 	*:focus {
 		outline: none;
 	}
+
+	body {
+		margin: 0;
+		padding: 0;
+		font-family: $font;
+	}
+
 	#wrapperr {
-		height: 100vh;
 		display: flex;
-		display: -webkit-flex;
-		-webkit-align-items: center;
 		align-items: center;
-		-webkit-justify-content: center;
 		justify-content: center;
 	}
 
 	#containerr {
 		background: white;
-		height: 440px;
-		min-width: 600px;
-		width: 600px;
+		width: 40%; /* Đảm bảo rằng nó chiếm toàn bộ chiều rộng của màn hình */
 		z-index: 1;
 		box-shadow: 0px 3px 15px -1px rgba(0, 0, 0, 0.2);
+		justify-content: center;
 	}
 
 	#left-colr {
-		width: 40%;
-		min-width: 240px;
-		height: 100%;
-		float: left;
+		width: 100%; /* Đảm bảo rằng nó chiếm toàn bộ chiều rộng của màn hình */
 		background: #34495e;
 	}
 
-	#left-col-contr {
-		margin: 20px 25px;
-		color: white;
+	#right-colr {
+		width: 100%; /* Đảm bảo rằng nó chiếm toàn bộ chiều rộng của màn hình */
+		margin: 0;
+		padding: 30px 30px;
 	}
+
+	/* CSS cho màn hình nhỏ hơn (dưới 768px) */
+	@@media (max-width: 768px) {
+		#containerr {
+			min-width: 100%;
+			flex-direction: column;
+		}
+	}
+
 
 	h2 {
 		margin: 25px 0 0 0;
@@ -96,13 +105,6 @@
 		color: #1c2834;
 	}
 
-	#right-colr {
-		width: calc(60% - 50px);
-		min-width: 310px;
-		height: 100%;
-		margin: 20px 25px;
-		float: right;
-	}
 
 	h2 {
 		display: block;
@@ -253,7 +255,6 @@
 	.payment-form {
 		padding-top: 15%;
 	}
-
 </style>
 <div id="wrapperr">
     <div id="containerr">

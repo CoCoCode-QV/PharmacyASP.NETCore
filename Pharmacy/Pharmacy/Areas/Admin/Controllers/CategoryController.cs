@@ -17,8 +17,6 @@ namespace Pharmacy.Areas.Admin.Controllers
       
         private readonly CategoryModels _categoryModels;
 
-       
-
         public CategoryController( CategoryModels categoryModels)
         {
             _categoryModels = categoryModels;

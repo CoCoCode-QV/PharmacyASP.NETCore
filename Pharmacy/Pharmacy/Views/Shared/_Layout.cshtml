@@ -37,13 +37,10 @@
         <div>
             <div class="col-lg-6 text-center text-lg-right">
                 <div class="d-inline-flex align-items-center d-block d-lg-none">
-                    <a href="" class="btn px-0 ml-2">
-                        <i class="fas fa-heart text-dark"></i>
-                        <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
-                    </a>
+                   
                     <a href="~/Cart" class="btn px-0 ml-2">
                         <i class="fas fa-shopping-cart text-dark"></i>
-                        <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
+                        @Html.Partial("_counterCart")
                     </a>
                 </div>
             </div>
@@ -135,7 +132,41 @@
 
                             <a href="~/About" class="nav-item nav-link @(Context.Request.Path.StartsWithSegments("/About") ? "active" : "")" id="gioi-thieu">Giới thiệu</a>
 
+                          
                             <a href="~/Contact" class="nav-item nav-link @(Context.Request.Path.StartsWithSegments("/Contact") ? "active" : "")">Liên hệ</a>
+                            <div class="d-inline-flex align-items-center d-block d-lg-none">
+                                <div class="btn-group" style="padding-left:0px;">
+                                    @{
+                                        <button type="button" class="btn nav-item nav-link dropdown-toggle" data-toggle="dropdown">
+                                            @if (SignManager.IsSignedIn(User))
+                                            {
+                                                <span>@UserManager.GetUserName(User)</span>
+
+                                            }
+                                            else
+                                            {
+                                                <span>Tài khoản</span>
+
+                                            }
+
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            @if (SignManager.IsSignedIn(User))
+                                            {
+                                                <a href="~/Login/SignOut" class="dropdown-item" type="button">Đăng xuất</a>
+                                                <a href="@Url.Action("HistoryOrder", "Cart")" class="dropdown-item" type="button">Đơn đặt hàng</a>
+                                            }
+                                            else
+                                            {
+                                                <a href="~/Login" class="dropdown-item" type="button">Đăng nhập</a>
+                                            }
+
+                                        </div>
+                                    }
+
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </nav>
