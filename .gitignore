@@ -1,5 +1,5 @@
 Pharmacy/Pharmacy/bin/
 Pharmacy/Pharmacy/obj/
 Pharmacy/.vs/
-*/appsettings.Development.json
-*/appsettings.json
+Pharmacy/appsettings.Development.json
+Pharmacy/appsettings.json
