@@ -1,0 +1,78 @@
+﻿@model IEnumerable<ProductDiscount>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@{
+    ViewData["Title"] = "Mã giảm giá sản phẩm";
+    Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
+}
+
+<div class="main-container">
+    <h2 class="col">Mã giảm giá trên sản phẩm</h2>
+    @using (Html.BeginForm("ProductDiscount", "Discount", FormMethod.Get))
+    {
+        <div class="input-group custom-search-form">
+            <input name="search" type="text" class="form-control" placeholder="Search...">
+            <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fa fa-search"></i>
+                </button>
+            </span>
+        </div>
+    }
+</div>
+
+@Html.ActionLink("Thêm mới", "CreateProductDiscount", "Discount", null, new { @class = "btn btn-outline btn-success", style = "margin-bottom: 20px;" })
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <label>Tên sản phẩm</label>
+            </th>
+            <th>
+                <label>Tên nhà cung cấp</label>
+            </th>
+            <th>
+               <label>Tên mã giảm giá</label>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiscountStartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiscountEndDate)
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+             <td>
+                @Html.DisplayFor(modelItem => item.Cost.Product.ProductName)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cost.Supplier.SupplierName)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Discount.DiscountName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DiscountStartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DiscountEndDate)
+            </td>
+           
+            <td>
+                @Html.ActionLink("Sửa", "EditProductDiscount", new { id = item.CostId })|
+                <a onclick="confirmDelete('@item.ProductDiscountId', '@item.Cost.Product.ProductName', '@Url.Action("DeleteProductDiscount", "Discount")','Mã giảm giá sản phẩm')">Xóa</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<div class="pagination-admin">
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("ProductDiscount", new { page, search = Context.Request.Query["search"] }))
+</div>
+
+<script src="~/Scripts/notify/NotifyAdmin.js"></script>

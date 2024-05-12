@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Amazon.Extensions.NETCore.Setup;
+using Amazon.Runtime;
+using Amazon.S3;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -6,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
-using Pharmacy.Data;
+using Pharmacy.Hubs;
 using Pharmacy.Models;
 using Pharmacy.ViewsModels;
 using Stripe;
@@ -17,19 +20,27 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddRazorPages();
+
+
 builder.Services.AddScoped<Pharmacy.Models.CategoryModels>();
 builder.Services.AddScoped<Pharmacy.Models.SupplierModels>();
 builder.Services.AddScoped<Pharmacy.Models.DiscountModels>();
 builder.Services.AddScoped<Pharmacy.Models.ProductModels>();
 builder.Services.AddScoped<Pharmacy.Models.CustomerModels>();
+builder.Services.AddScoped<Pharmacy.Models.ProductCostModel>();
 builder.Services.AddScoped<Pharmacy.Models.CartModels>();
 builder.Services.AddScoped<Pharmacy.Models.OrderModels>();
 builder.Services.AddScoped<Pharmacy.ViewsModels.StripeSettings>();
 
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<QlpharmacyContext>().AddDefaultTokenProviders();
+
+builder.Services.AddSignalR();
+
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
@@ -101,6 +112,11 @@ builder.Services.Configure<StripeSettings>(stripeSettings);
 builder.Services.AddSingleton(provider => provider.GetRequiredService<IOptions<StripeSettings>>().Value);
 
 
+//config aws_s3
+IConfigurationSection s3Config = builder.Configuration.GetSection("AWS_S3");
+builder.Services.AddSingleton<IAmazonS3>(new AmazonS3Client(s3Config["AWS_BUCKET_ACCESS_KEY"], s3Config["AWS_BUCKET_SECRET_KEY"], Amazon.RegionEndpoint.GetBySystemName("ap-southeast-1")));
+
+//
 
 builder.Services.AddTransient<ViewMailSettingcs>();
 
@@ -127,6 +143,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization(); // xác thực quyền truy cập
+
+app.MapHub<ChatHub>("/ChatHub");
 
 app.UseEndpoints(endpoints =>
 {
@@ -155,25 +173,45 @@ using(var scope = app.Services.CreateScope())
             await roleManager.CreateAsync(new IdentityRole(role));
     }
 }
-using (var scope = app.Services.CreateScope())
-{
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+//using (var scope = app.Services.CreateScope())
+//{
+//    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-    string email = "hovan12022002@gmail.com";
-    string password = "Admin123";
+//    string email = "hovan12022002@gmail.com";
+//    string password = "Admin123";
 
-    if (await userManager.FindByEmailAsync(email) == null)
-    {
-        var user = new IdentityUser();
-        user.UserName = email;
-        user.Email = email;
-        user.EmailConfirmed = true;
+//    if (await userManager.FindByEmailAsync(email) == null)
+//    {
+//        var user = new IdentityUser();
+//        user.UserName = email;
+//        user.Email = email;
+//        user.EmailConfirmed = true;
 
-        await userManager.CreateAsync(user,password);
-        await userManager.AddToRoleAsync(user, "Admin");
+//        await userManager.CreateAsync(user,password);
+//        await userManager.AddToRoleAsync(user, "Admin");
 
-    }
-}
+//    }
+//}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+//    string email = "staff@gmail.com";
+//    string password = "Staff123";
+    
+//    if (await userManager.FindByEmailAsync(email) == null)
+//    {
+//        var user = new IdentityUser();
+//        user.UserName = email;
+//        user.Email = email;
+//        user.EmailConfirmed = true;
+
+//        await userManager.CreateAsync(user, password);
+//        await userManager.AddToRoleAsync(user, "Staff");
+
+//    }
+//}
+
 
 
 app.Run();

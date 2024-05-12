@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Pharmacy.Data.Product>
+﻿@model IEnumerable<Product>
+@using System.Web
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
 @{
@@ -6,27 +7,13 @@
     Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
     // <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
 }
+
+
 <div class="main-container">
     <h2 class="col">Sản phẩm</h2>
     @using (Html.BeginForm("Index", "Product", FormMethod.Get))
     {
-       @*  <div class="row custom-search-form">
-            <div class="dropdown-type col-sm-3">
-                <select name="condition" class="form-control">
-                    <option value="name">Tên</option>
-                    <option value="email">Email</option>
-                    <option value="phone">Số điện thoại</option>
-                </select>
-            </div>
-            <div class="input-group  col-sm-10">
-                <input name="search" type="text" class="form-control" placeholder="Search...">
-                <span class="input-group-btn">
-                    <button class="btn btn-primary" type="submit">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </span>
-            </div>
-        </div> *@
+       
         <div class="input-group custom-search-form">
             <input name="search" type="text" class="form-control" placeholder="Search...">
             <span class="input-group-btn">
@@ -46,12 +33,12 @@
         <th>
             <span>Giá</span>
         </th>
-        <th>
+      @*   <th>
             <span>Kho</span>
         </th>
         <th>
             <span>Hết hạn</span>
-        </th>
+        </th> *@
         <th>
             <span>Hình ảnh</span>
         </th>
@@ -70,18 +57,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ProductPrice)
             </td>
-            <td>
+          @*   <td>
                 @Html.DisplayFor(modelItem => item.ProductInventory)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ProductExpiryDate)
-            </td>
+            </td> *@
             <td>
                 <img src="@item.ProductImage" alt="Product Image" width="100" height="100" />
             </td>
             <td>
                 <span style="background-color: @(item.ProductActive == true ? "green" : "orange"); color: white">
-
                     @(item.ProductActive == true ? "Đang kinh doanh" : "Ngừng kinh doanh")
                 </span>
             </td>
@@ -97,5 +83,15 @@
     @Html.PagedListPager((IPagedList)Model,
     page => Url.Action("Index",new { page , search = Context.Request.Query["search"], condition = Context.Request.Query["condition"]}))
 </div>
+
+@{
+    var deleteError = TempData["DeleteError"] as string;
+    if (!string.IsNullOrEmpty(deleteError))
+    {
+        <script>
+            alert("@Html.Raw(HttpUtility.JavaScriptStringEncode(deleteError))");
+        </script>
+    }
+}
 
 <script src="~/Scripts/notify/NotifyAdmin.js"></script>

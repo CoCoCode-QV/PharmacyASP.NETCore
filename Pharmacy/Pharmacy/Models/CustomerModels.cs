@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Pharmacy.Data;
+
 
 namespace Pharmacy.Models
 {
@@ -22,7 +22,7 @@ namespace Pharmacy.Models
 
         public Customer GetCustomer(string id)
         {
-            return _context.Customers.FirstOrDefault(p => p.UserID == id);
+            return _context.Customers.FirstOrDefault(p => p.UserId == id);
         }
 
         public async Task EditCustomer(Customer item)
@@ -75,8 +75,9 @@ namespace Pharmacy.Models
 
         public IEnumerable<Order> historyPurchase(int id)
         {
+
+            return _context.Orders.Include(o => o.OrderDetails).ThenInclude(od => od.Cost).ThenInclude(c=>c.Product).Where(o => o.OrderDelivery == 1 && o.CustomerId == id).ToList();
           
-            return _context.Orders.Include(o => o.OrderDetails).ThenInclude(od => od.Product).Where(o => o.OrderStatus == 1 && o.CustomerId == id).ToList();
         }
         #endregion
     }

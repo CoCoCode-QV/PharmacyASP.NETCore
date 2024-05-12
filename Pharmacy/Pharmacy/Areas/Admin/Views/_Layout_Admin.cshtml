@@ -47,8 +47,16 @@
         <!-- Top Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="navbar-header">
-                <a class="navbar-brand" href="@Url.Action("Index", "HomeAdmin")">VT PHARMACY ADMIN</a>
-            </div>
+                @if (User.IsInRole("Admin"))
+                {
+                    
+                    <a class="navbar-brand" href="@Url.Action("Index", "HomeAdmin")">VT PHARMACY ADMIN</a>
+                }
+                else{
+
+                    <a class="navbar-brand" href="@Url.Action("Index", "Product")">VT PHARMACY ADMIN</a>
+                    }
+                </div>
 
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                             <span class="sr-only">Toggle navigation</span>
@@ -57,10 +65,17 @@
                             <span class="icon-bar"></span>
             </button>
             <!-- Left Menu -->
-            <ul class="nav navbar-nav navbar-left navbar-top-links">
-                <li><a href="@Url.Action("Index", "HomeAdmin")"><i class="fa fa-home fa-fw"></i> Thống kê</a></li>
-            </ul>
+            @if (User.IsInRole("Admin"))
+            {
+                
+                <ul class="nav navbar-nav navbar-left navbar-top-links">
+                    <li><a href="@Url.Action("Index", "HomeAdmin")"><i class="fa fa-home fa-fw"></i> Thống kê</a></li>
+                </ul>
 
+            }
+            <ul class="nav navbar-nav navbar-left navbar-top-links">
+                <li><a href="@Url.Action("ChatAdmin", "HomeAdmin")"><i class="fa fa-envelope fa-fw"></i>Tin nhắn</a></li>
+            </ul>
             <!-- Right Menu -->
             <ul class="nav navbar-right navbar-top-links">
                 <li class="dropdown navbar-inverse">
@@ -104,9 +119,11 @@
 
                 <ul class="nav" id="side-menu">
                     <li>
-                        
-                        <a href="@Url.Action("Index", "HomeAdmin")"><i class="fa fa-bar-chart-o fa-fw"></i>Thống kê</a>
 
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a href="@Url.Action("Index", "HomeAdmin")"><i class="fa fa-bar-chart-o fa-fw"></i>Thống kê</a>
+                        }
                     </li>
                     <li>
                         @Html.ActionLink("Sản phẩm", "Index", "Product" )
@@ -115,10 +132,24 @@
                         @Html.ActionLink("Danh mục sản phẩm", "Index", "Category")
                     </li>
                     <li>
-                        @Html.ActionLink("Nhà cung cấp", "Index", "Supplier")
+                        @Html.ActionLink("Quản lý giá nhập sản phẩm", "Index", "ProductCost")
                     </li>
                     <li>
+                        @Html.ActionLink("Nhà cung cấp", "Index", "Supplier")
+                    </li>
+                   @*  <li>
                         @Html.ActionLink("Mã giảm giá", "Index", "Discount" )
+                    </li> *@
+                    <li>
+                        <a href="#">Mã giảm giá<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="@Url.Action("Index", "Discount")"><i class="fa fa-hand-o-right fa-fw"></i>Quản lý mã giảm giá</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("ProductDiscount", "Discount")"><i class="fa fa-hand-o-right fa-fw"></i>Mã giảm giá trên sản phẩm</a>
+                            </li>
+                        </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fa  fa-building-o fa-fw"></i>Quản lý<span class="fa arrow"></span></a>
@@ -144,7 +175,6 @@
     </div>
 
     <!-- jQuery -->
-
 
     <script src="~/Assets/js/jquery.min.js"></script>
     <!-- Bootstrap Core JavaScript -->

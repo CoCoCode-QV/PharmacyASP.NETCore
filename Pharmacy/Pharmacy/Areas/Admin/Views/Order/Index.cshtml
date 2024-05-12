@@ -1,6 +1,6 @@
 ﻿@using X.PagedList.Mvc.Core;
 @using X.PagedList;
-@model IEnumerable<Pharmacy.Data.Order>
+@model IEnumerable<Order>
 
 @{
     ViewData["Title"] = "Index";
@@ -18,11 +18,17 @@
         <div class="panel-body">
             <!-- Nav tabs -->
             <ul class="nav nav-tabs">
-                <li class="@(ViewData["CurrentTab"].ToString() == "accept" ? "active":"")">
+                <li class="@(ViewData["CurrentTab"]!.ToString() == "accept" ? "active":"")">
                     <a href="@Url.Action("Index", new { tab = "accept" })">Danh sách đã duyệt</a>
                 </li>
-                <li class="@(ViewData["CurrentTab"].ToString() == "noaccept" ? "active":"")">
+                <li class="@(ViewData["CurrentTab"]!.ToString() == "noaccept" ? "active":"")">
                     <a href="@Url.Action("Index", new { tab = "noaccept" })">Danh sách chưa duyệt</a>
+                </li>
+                <li class="@(ViewData["CurrentTab"]!.ToString() == "delivery" ? "active":"")">
+                    <a href="@Url.Action("Index", new { tab = "delivery" })">Danh sách đã giao hàng</a>
+                </li>
+                <li class="@(ViewData["CurrentTab"]!.ToString() == "nodelivery" ? "active":"")">
+                    <a href="@Url.Action("Index", new { tab = "nodelivery" })">Danh sách chờ giao hàng</a>
                 </li>
             </ul>
 
@@ -65,12 +71,22 @@
                                                 </span>
                                             </td>
                                             <td>
+                                                
+                                                @if (ViewData["CurrentTab"]!.ToString() != "accept" && ViewData["CurrentTab"]!.ToString() != "noaccept")
+                                                    {
+                                                    <span style="background-color: @(item.OrderDelivery == 1 ? "green" : "orange"); color: white">
+                                                    @(item.OrderDelivery == 1 ? "Đã giao hàng" : "Đang chờ đóng gói")
+                                                </span>
+                                                }
+                                                else
+                                                {
                                                 <span style="background-color: @(item.OrderAccept ? "green" : "orange"); color: white">
                                                     @(item.OrderAccept ? "Đã duyệt" : "Chưa duyệt")
                                                 </span>
-                                            </td>
+                                                }
+                                        </td>
                                             <td>
-                                                @Html.ActionLink("Chi tiết", "Detail", new { id = item.OrderId })
+                                            @Html.ActionLink("Chi tiết", "Detail", new { id = item.OrderId, tab = ViewData["CurrentTab"]!.ToString() })
                                             @if (!item.OrderAccept)
                                             {  
                                                 <span>|</span>

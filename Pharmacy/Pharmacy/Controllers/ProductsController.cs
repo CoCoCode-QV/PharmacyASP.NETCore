@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Pharmacy.Data;
+using Microsoft.EntityFrameworkCore;
 using Pharmacy.Models;
 using Pharmacy.ViewsModels;
 using System.Drawing.Printing;
@@ -27,6 +27,7 @@ namespace Pharmacy.Controllers
         {
             TempData["SearchTerm"] = search;
             var listProducts = _ProductModels.GetProductsActive(search);
+            
             if (selectedCategories != null )
             {
                 listProducts = _ProductModels.GetProductsByCategoryId(selectedCategories);
@@ -50,13 +51,20 @@ namespace Pharmacy.Controllers
             }
             var pageNumber = page ?? 1;
 
-            var pagedList = listProducts.ToPagedList(pageNumber, ItemsPerPage);
+            var listProductsCost = listProducts
+                                    .SelectMany(product => _context.ProductCosts
+                                    .Where(pc => pc.ProductId == product.ProductId && pc.CostActive).Include(pc => pc.ProductDiscounts)
+                                    .Include(pc =>pc.Product))
+                                    
+                                    .ToList();
+            var pagedList = listProductsCost.ToPagedList(pageNumber, ItemsPerPage);
             var listCategory = _context.Categories.ToList();
+
             var viewModel = new ProductListViewModel
             {
-                Products = pagedList,
+                ProductCost = pagedList,
                 Categories = listCategory,
-                DiscountPercentMap = _discountModels.GetDiscountPercentMap(listProducts, _context.Discounts.ToList()),
+                DiscountPercentMap = _discountModels.GetDiscountPercentMap(pagedList, _context.Discounts.ToList()),
                 SelectedCategories = selectedCategories,
                 orderby = orderby
             };

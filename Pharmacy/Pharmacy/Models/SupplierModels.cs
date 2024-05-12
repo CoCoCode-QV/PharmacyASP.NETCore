@@ -1,4 +1,4 @@
-﻿using Pharmacy.Data;
+﻿
 
 namespace Pharmacy.Models
 {

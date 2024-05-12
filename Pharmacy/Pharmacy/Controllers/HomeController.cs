@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Pharmacy.Data;
+
 using Pharmacy.Models;
 using Pharmacy.ViewsModels;
 using System.Diagnostics;
@@ -38,13 +38,22 @@ namespace Pharmacy.Controllers
            if(User.IsInRole("Admin"))
                 return RedirectToAction("Index", "HomeAdmin", new { Areas = "Admin" });
 
+            if (User.IsInRole("Staff"))
+                return RedirectToAction("Index", "Product", new { Areas = "Admin" });
+
+
             var listProducts = _ProductModels.GetProductsActive(search);
-            listProducts = listProducts.Take(Items_Per_Page).ToList();
-            ProductViewModels viewModel = new ProductViewModels
+            var listProductsCost = listProducts
+                        .SelectMany(product => _qlpharmacyContext.ProductCosts
+                        .Where(pc => pc.ProductId == product.ProductId && pc.CostActive).Include(pc =>pc.ProductDiscounts).Include(pc =>pc.Product))
+                        .ToList();
+
+            listProductsCost = listProductsCost.Take(Items_Per_Page).ToList();
+            ProductViewModels viewModel = null;
+             viewModel = new ProductViewModels
             {
-              
-                ListProduct = listProducts,
-                DiscountPercentMap = _discountModels.GetDiscountPercentMap(listProducts, _qlpharmacyContext.Discounts.ToList())
+                ListProductCost = listProductsCost,
+                DiscountPercentMap = _discountModels.GetDiscountPercentMap(listProductsCost, _qlpharmacyContext.Discounts.ToList())
             };
 
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

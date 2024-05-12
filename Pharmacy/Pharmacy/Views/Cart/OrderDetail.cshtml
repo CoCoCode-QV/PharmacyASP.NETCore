@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Pharmacy.Data.OrderDetail>
+﻿@model IEnumerable<OrderDetail>
 
 @{
     ViewData["Title"] = "Chi tiết đơn hàng";
@@ -42,7 +42,7 @@
                         @item.OrderDetailsQuantity
                     </td>
                     <td>
-                        @item.Product.ProductName
+                        @item.Cost.Product.ProductName
                     </td>
                     <td>
                         @(string.Format("{0:N0} VNĐ", @item.OrderDetailsPrice))

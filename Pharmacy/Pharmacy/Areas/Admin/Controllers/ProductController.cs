@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.IdentityModel.Tokens;
-using Pharmacy.Data;
+
 using Pharmacy.Models;
 using Pharmacy.ViewsModels;
 using System.Diagnostics.Metrics;
@@ -14,7 +14,7 @@ using X.PagedList;
 namespace Pharmacy.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Staff")]
     public class ProductController : Controller
     {
         private readonly ProductModels _ProductModels;
@@ -55,19 +55,19 @@ namespace Pharmacy.Areas.Admin.Controllers
         {
 
             // Check if ProductImage is not null or empty
-            if (photo != null && product.ProductName != null && product.ProductPrice != null && product.ProductInventory != null && product.ProductExpiryDate != null
-                && product.ProductDetail != null && product.ProductIngredients != null && product.CategoryId != null && product.SupplierId != null && product.DiscountId != null)
+            if (photo != null && product.ProductName != null &&  product.ProductPrice != null 
+                && product.ProductDetail != null && product.ProductIngredients != null && product.CategoryId != null )
             {
                 try
                 {
-                    DateTime ExpiryDate = (DateTime)product.ProductExpiryDate;
-                    DateTime currentDate = DateTime.Now.Date;
+                    //DateTime ExpiryDate = (DateTime)product.ProductExpiryDate;
+                    //DateTime currentDate = DateTime.Now.Date;
 
-                    if(ExpiryDate < currentDate)
-                    {
-                        TempData["error"] = "Hạn sử dụng không hợp lệ";
-                        return RedirectToAction("Create");
-                    }
+                    //if(ExpiryDate < currentDate)
+                    //{
+                    //    TempData["error"] = "Hạn sử dụng không hợp lệ";
+                    //    return RedirectToAction("Create");
+                    //}
                     
                     string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" }; // Các phần mở rộng cho hình ảnh cho phép
                     var fileExtension = Path.GetExtension(photo.FileName).ToLower(); // Lấy phần mở rộng của tệp
@@ -82,17 +82,18 @@ namespace Pharmacy.Areas.Admin.Controllers
                             await photo.CopyToAsync(stream);
                             stream.Close();
                         }
+
                         var item = new Product
                         {
                             ProductName = product.ProductName,
                             ProductPrice = product.ProductPrice,
                             ProductDetail = product.ProductDetail,
                             ProductImage = Path.Combine("\\images", uniqueFileName),
-                            ProductInventory = product.ProductInventory,
+                            //ProductInventory = product.ProductInventory,
                             CategoryId = product.CategoryId,
-                            SupplierId = product.SupplierId,
-                            DiscountId = product.DiscountId,
-                            ProductExpiryDate = product.ProductExpiryDate,
+                           
+                            //DiscountId = product.DiscountId,
+                            //ProductExpiryDate = product.ProductExpiryDate,
                             ProductIngredients = product.ProductIngredients,
                             ProductPrescription = product.ProductPrescription,
                             ProductActive = product.ProductActive,
@@ -171,23 +172,23 @@ namespace Pharmacy.Areas.Admin.Controllers
         public void getAll()
         {
             List<Category> categories = _context.Categories.ToList();
-            List<Supplier> suppliers = _context.Suppliers.ToList();
-            List<Discount> discounts = _context.Discounts.ToList();
+            //List<Discount> discounts = _context.Discounts.ToList();
       
             ViewBag.Category = new SelectList(categories, "CategoryId", "CategoryName");
-            ViewBag.Supplier = new SelectList(suppliers, "SupplierId", "SupplierName");
-            ViewBag.Discount = new SelectList(discounts, "DiscountId", "DiscountName");
+            //ViewBag.Discount = new SelectList(discounts, "DiscountId", "DiscountName");
         }
 
         public IActionResult Detail(int id)
         {
             Product product = _ProductModels.GetProduct(id);
-            Discount discount = _context.Discounts.Where(p => p.DiscountId == product.DiscountId).SingleOrDefault();
-            Supplier supplier = _context.Suppliers.Where(p => p.SupplierId == product.SupplierId).SingleOrDefault();
-            Category category = _context.Categories.Where(p => p.CategoryId == product.CategoryId).SingleOrDefault();
+            //         List<Supplier> supplier = _context.ProductCosts
+            //                           .Where(pc => pc.ProductId == product.ProductId && pc.CostActive)
+            //				  .Select(pc => pc.Supplier)
+            //				  .ToList();
+            Category? category = _context.Categories.Where(p => p.CategoryId == product.CategoryId).SingleOrDefault();
 
-            ViewBag.discountName = discount?.DiscountName;
-            ViewBag.supplierName = supplier?.SupplierName;
+            //ViewBag.discountName = discount?.DiscountName;
+            //ViewBag.supplierName = new SelectList(supplier, "SupplierID", "SupplierName");
             ViewBag.categoryName = category?.CategoryName;
             return View(product);
         }
@@ -211,20 +212,20 @@ namespace Pharmacy.Areas.Admin.Controllers
         {
             var data = _context.Products.Where(p => p.ProductId == product.ProductId).SingleOrDefault();
 
-            if ( product.ProductName != null && product.ProductPrice != null && product.ProductInventory != null && product.ProductExpiryDate != null
-                && product.ProductDetail != null && product.ProductIngredients != null && product.CategoryId != null && product.SupplierId != null && product.DiscountId != null)
+            if ( product.ProductName != null && product.ProductPrice != null 
+                && product.ProductDetail != null && product.ProductIngredients != null && product.CategoryId != null )
             {
                 try
                 {
-                    DateTime ExpiryDate = (DateTime)product.ProductExpiryDate;
-                    DateTime currentDate = DateTime.Now.Date;
+                    //DateTime ExpiryDate = (DateTime)product.ProductExpiryDate;
+                    //DateTime currentDate = DateTime.Now.Date;
 
-                    if (ExpiryDate < currentDate)
-                    {
-                        TempData["error"] = "Hạn sử dụng không hợp lệ";
-                        getAll();
-                        return View();
-                    }
+                    //if (ExpiryDate < currentDate)
+                    //{
+                    //    TempData["error"] = "Hạn sử dụng không hợp lệ";
+                    //    getAll();
+                    //    return View();
+                    //}
                     if(photo != null)
                     {
                        
@@ -296,7 +297,14 @@ namespace Pharmacy.Areas.Admin.Controllers
             }
             else
             {
+                var costProduct = _context.ProductCosts.Where(item => item.ProductId == id);
+                if (costProduct.Any())
+                {
+                    TempData["DeleteError"] = "Không thể xóa sản phẩm. Vui lòng xóa giá liên quan.";
+                    return RedirectToAction("Index");
+                }
                 var data = _context.Products.Where(_ => _.ProductId == id).SingleOrDefault();
+                
                 if( data != null)
                 {
                    // Không cần thêm wwwroot ở đây

@@ -40,7 +40,8 @@
                             string ProductPrice = string.Format("{0:N0} VNĐ", @item.CartDetailPriceCurrent);
                             string CartDetailTemporaryPrice = string.Format("{0:N0} VNĐ", @item.CartDetailTemporaryPrice);
                             <form asp-action="UpdateToCart" asp-controller="Cart">
-                                <input type="hidden" name="productId" value="@item.ProductId" />
+                               
+                                <input type="hidden" name="CostId" value="@item.CostId" />
                                 <input type="hidden" name="Price" value='@item.CartDetailPriceCurrent' />
                                 <tr>
                                     <td class="align-middle"><img src="@item.ProductImage" alt="@item.ProductName" style="width: 50px;"> @item.ProductName</td>

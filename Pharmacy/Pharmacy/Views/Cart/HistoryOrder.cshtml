@@ -1,6 +1,6 @@
 ﻿@using X.PagedList.Mvc.Core;
 @using X.PagedList;
-@model IEnumerable<Pharmacy.Data.Order>
+@model IEnumerable<Order>
 
 @{
     ViewData["Title"] = "Index";
@@ -8,17 +8,37 @@
 }
 
 <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">LỊCH SỬ ĐƠN HÀNG</span></h2>
+
 <div class="row px-xl-5">
     <div class="col">
+        @{
+            if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+        else if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                    @TempData["SuccessMessage"]
+            </div>
+        }
+        }
         <div class="bg-light p-30">
-
+           
             <ul class="nav nav-tabs mb-4">
-                <li class="nav-item nav-link @(ViewData["CurrentTab"].ToString() == "accept" ? "active":"")">
+                <li class="nav-item nav-link @(ViewData["CurrentTab"]!.ToString() == "accept" ? "active":"")">
                     <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "accept" })">Danh sách đã duyệt</a>
                 </li>
-                <li class="nav-item nav-link @(ViewData["CurrentTab"].ToString() == "noaccept" ? "active":"")">
+                <li class="nav-item nav-link @(ViewData["CurrentTab"]!.ToString() == "noaccept" ? "active":"")">
                     <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "noaccept" })">Danh sách chưa duyệt</a>
                 </li>
+                <li class="nav-item nav-link @(ViewData["CurrentTab"]!.ToString() == "delivery" ? "active":"")">
+                    <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "delivery" })">Danh sách đã giao hàng</a>
+                </li>
+                <li class="nav-item nav-link @(ViewData["CurrentTab"]!.ToString() == "nodelivery" ? "active":"")">
+                    <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "nodelivery" })">Danh sách chờ giao hàng</a>
             </ul>
 
             <!-- Tab panes -->
@@ -60,12 +80,27 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <span style="background-color: @(item.OrderAccept ? "green" : "orange"); color: white">
-                                                @(item.OrderAccept ? "Đã duyệt" : "Chưa duyệt")
-                                            </span>
+                                            @if (ViewData["CurrentTab"]!.ToString() != "accept" && ViewData["CurrentTab"]!.ToString() != "noaccept")
+                                            {
+                                                <span style="background-color: @(item.OrderDelivery == 1 ? "green" : "orange"); color: white">
+                                                    @(item.OrderDelivery == 1 ? "Đã giao hàng" : "Đang chờ đóng gói")
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span style="background-color: @(item.OrderAccept ? "green" : "orange"); color: white">
+                                                    @(item.OrderAccept ? "Đã duyệt" : "Chưa duyệt")
+                                                </span>
+                                            }
                                         </td>
                                         <td>
                                             @Html.ActionLink("Chi tiết", "OrderDetail", new { id = item.OrderId })
+                                            @if (!item.OrderAccept)
+                                            {
+                                                <text> | </text>
+                                                @Html.ActionLink("Hủy", "DeletedOrder", new { orderId = item.OrderId })
+                                            }
+
                                         </td>
                                     </tr>
                                 }

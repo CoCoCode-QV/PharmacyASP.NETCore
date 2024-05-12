@@ -1,6 +1,6 @@
 ﻿@using X.PagedList.Mvc.Core;
 @using X.PagedList;
-@model IEnumerable<Pharmacy.Data.Order>
+@model IEnumerable<Order>
 
 @{
     ViewData["Title"] = "Lịch sử mua hàng";
@@ -52,7 +52,7 @@
                             @temp.OrderDetailsQuantity
                         </td>
                         <td>
-                            @temp.Product.ProductName
+                            @temp.Cost.Product.ProductName
                         </td>
                         <td>
                             @(string.Format("{0:N0} VNĐ", @temp.OrderDetailsPrice))

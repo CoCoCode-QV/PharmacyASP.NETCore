@@ -1,0 +1,99 @@
+﻿@model ProductDiscount
+
+@{
+    ViewData["Title"] = "Cập nhật mã giảm giá cho sản phẩm";
+    Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
+}
+
+<h2>Cập nhật mã giảm giá cho sản phẩm</h2>
+
+<hr />
+<div class="edit-admin">
+    @using (Html.BeginForm("EditProductDiscount", "Discount", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.ProductDiscountId)
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.DiscountStartDate, htmlAttributes: new { @class = "col-form-label col-sm-2" })
+                <div class="col-sm-10">
+                    @Html.EditorFor(model => model.DiscountStartDate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DiscountStartDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.DiscountEndDate, htmlAttributes: new { @class = "col-form-label col-sm-2" })
+                <div class="col-sm-10">
+                    @Html.EditorFor(model => model.DiscountEndDate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DiscountEndDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-2">Sản phẩm</label>
+                <div class="col-sm-10">
+                    
+                    @Html.DropDownListFor(model => model.CostId, ViewBag.ProductCost as SelectList, "-- Chọn sản phẩm --", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CostId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-2">Mã giảm giá</label>
+                <div class="col-sm-10">
+                    @Html.DropDownListFor(model => model.DiscountId, ViewBag.DiscountName as SelectList, "-- Chọn Mã giảm giá --", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DiscountId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <p class="text-danger ">
+                        @TempData["error"]
+                    </p>
+                </div>
+            </div>
+            @*    <div class="form-group row">
+        @Html.LabelFor(model => model.DiscountStartDate, htmlAttributes: new { @class = "col-form-label col-sm-2" })
+        <div class="col-sm-10">
+        @{
+        string Startdate = Model.DiscountStartDate?.ToString("yyyy-MM-ddTHH:mm:ss");
+        <input type="datetime-local" name="DiscountStartDate" value="@Startdate" />
+        @Html.ValidationMessageFor(model => model.DiscountStartDate, "", new { @class = "text-danger" })
+        }
+        </div>
+        </div>
+        <div class="form-group row">
+        @Html.LabelFor(model => model.DiscountEndDate, htmlAttributes: new { @class = "col-form-label col-sm-2" })
+        <div class="col-sm-10">
+        @{
+        string Enddate = Model.DiscountEndDate?.ToString("yyyy-MM-ddTHH:mm:ss");
+        <input type="datetime-local" name="DiscountEndDate" value="@Enddate" />
+        @Html.ValidationMessageFor(model => model.DiscountEndDate, "", new { @class = "text-danger" })
+        }
+        </div>
+        </div> *@
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Lưu" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="back-pro">
+    <i class="fa fa-reply"></i>
+    @Html.ActionLink("Quay lại", "ProductDiscount")
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

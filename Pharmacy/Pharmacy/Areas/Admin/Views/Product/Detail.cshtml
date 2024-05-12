@@ -1,9 +1,10 @@
 ﻿@using System.Web;
-@model Pharmacy.Data.Product
+@model Product
 
 @{
     ViewData["Title"] = "Detail";
     Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
+  
 }
 
 <h2>Chi tiết sản phẩm</h2>
@@ -54,12 +55,12 @@
                 </div>
                 <div class="detail">
                     <div class="col-lg-7 mb-30">
-                        <div class="detail-pro d-flex mb-4">
+                        @* <div class="detail-pro d-flex mb-4">
                             <p class="mb-4">
                                 <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.ProductExpiryDate):</strong>
                                 @Html.DisplayFor(model => model.ProductExpiryDate)
                             </p>
-                        </div>
+                        </div> *@
                         <div class="detail-pro d-flex mb-4">
                             <p class="mb-4">
                                 <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.ProductPrescription):</strong>
@@ -76,22 +77,21 @@
                     <div class="col-lg-5 mb-30">
                         <div class="detail-pro d-flex mb-4">
                             <p class="mb-4">
-                                <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.ProductInventory):</strong>
-                                @Html.DisplayFor(model => model.ProductInventory)
+                                <strong class="text-dark mr-3">Danh mục:</strong>
+                                @ViewBag.categoryName
                             </p>
-                        </div>
+                        </div> 
+                      
+@* 
+                         
                         <div class="detail-pro d-flex mb-4">
                             <p class="mb-4">
-                                <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.DiscountId):</strong>
-                                @ViewBag.discountName
+                                <strong class="text-dark mr-3">Nhà cung cấp:</strong>
+                                @Html.DropDownListFor(, ViewBag.supplierName as SelectList, "--Nhà cung cấp --", new { @class = "form-control" })
+
+                                
                             </p>
-                        </div>
-                        <div class="detail-pro d-flex mb-4">
-                            <p class="mb-4">
-                                <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.SupplierId):</strong>
-                                @ViewBag.supplierName
-                            </p>
-                        </div>
+                        </div> *@
                     </div>
                 </div>
             </div>

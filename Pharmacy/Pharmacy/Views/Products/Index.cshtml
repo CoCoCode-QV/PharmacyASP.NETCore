@@ -64,24 +64,25 @@
                         </div>
                     </div>
                 </div>
-                  @foreach(var item in Model.Products)  
+                  @foreach(var item in Model.ProductCost)  
                     {
                     <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
                         <div class="product-item bg-light mb-4">
-                            <a asp-controller="Detail" asp-action="Index" asp-route-id="@item.ProductId">
+                            <a asp-controller="Detail" asp-action="Index" asp-route-id="@item.CostId">
                                 <div class="product-img position-relative overflow-hidden">
-                                    <img class="img-fluid w-100" src="@item.ProductImage" alt="@item.ProductName">
+                                    <img class="img-fluid w-100" src="@item.Product.ProductImage" alt="@item.Product.ProductName">
                                 </div>
                                 <div class="text-center py-4">
-                                    <span class="h6 text-decoration-none text-truncate">@item.ProductName</span>
+                                    <span class="h6 text-decoration-none text-truncate">@item.Product.ProductName</span>
                                     <div class="d-flex align-items-center justify-content-center mt-2">
                                         @{
-                                            double? discountPercent = Model.DiscountPercentMap.ContainsKey(item.ProductId) ? Model.DiscountPercentMap[item.ProductId] : 0;
-                                            string ItemformattedPrice = string.Format("{0:N0} VNĐ", item.ProductPrice);
+                                            double? discountPercent = Model.DiscountPercentMap.ContainsKey(item.CostId) ? Model.DiscountPercentMap[item.CostId] : 0;
+                                           
+                                            string ItemformattedPrice = string.Format("{0:N0} VNĐ", item.Product.ProductPrice);
                                             double? ItemcurrentPrice = 0;
                                             if (discountPercent != 0)
                                             {
-                                                ItemcurrentPrice = item.ProductPrice - (item.ProductPrice * discountPercent / 100);
+                                                ItemcurrentPrice = item.Product.ProductPrice - (item.Product.ProductPrice * discountPercent / 100);
                                                 string ItemformattedCurrentPrice = string.Format("{0:N0} VNĐ", ItemcurrentPrice);
 
                                                 <h5>@ItemformattedCurrentPrice</h5>
@@ -95,11 +96,20 @@
                                         }
 
                                     </div>
-                                    <form asp-action="AddToCart" asp-controller="Cart">
-                                        <input type="hidden" name="productId" value="@item.ProductId" />
-                                        <input type="hidden" name="Price" value='@(discountPercent == 0? @item.ProductPrice : ItemcurrentPrice)' />
-                                        <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
-                                    </form>
+                                    @{
+                                        if (item.Product.ProductPrescription == true)
+                                        {
+                                          <span class="text-danger">Sản phẩm này cần có toa thuốc từ bác sĩ vui lòng đến cửa hàng để mua</span>
+                                        }else{
+
+                                                     
+                                        <form asp-action="AddToCart" asp-controller="Cart">
+                                            <input type="hidden" name="CostId" value="@item.CostId" />
+                                            <input type="hidden" name="Price" value='@(discountPercent == 0? @item.Product.ProductPrice : ItemcurrentPrice)' />
+                                            <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
+                                        </form>
+                                        }
+                                    }
                                 </div>
                             </a>
                         </div>
@@ -113,7 +123,7 @@
 
                 @if (searchTerm != null)
                 {
-                    @Html.PagedListPager(Model.Products,
+                    @Html.PagedListPager(Model.ProductCost,
                     page => Url.Action("Index", new { page, search = searchTerm ,selectedCategories = Model.SelectedCategories, orderby = Model.orderby}),
                     new X.PagedList.Web.Common.PagedListRenderOptions
                     {
@@ -124,7 +134,7 @@
                 }
                 else
                 {
-                    @Html.PagedListPager(Model.Products,
+                    @Html.PagedListPager(Model.ProductCost,
                     page => Url.Action("Index", new { page ,selectedCategories = Model.SelectedCategories, orderby = Model.orderby}),
                     new X.PagedList.Web.Common.PagedListRenderOptions
                     {

@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Tin nhắn";
+    Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/Assets/css/ChatAdmin.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container app" style="width: 75%;">
+        <div class="row app-one">
+            <div class="col-sm-4 side">
+                <div class="side-one">
+                    <div class="sideBar">
+                        @* <div class="sideBar-body">
+
+                        <div class="col-sm-8 col-xs-8 sideBar-name">
+                        <span class="name-meta" id="adminNameMeta"></span>
+                        </div>
+
+                        </div> *@
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8 conversation">
+                <div class="heading">
+                    <div class="col-sm-8 col-xs-7 heading-name">
+                        <a class="heading-name-meta" id="adminHeadingNameMeta"></a>
+                    </div>
+                </div>
+                <div class="message" id="conversation">
+                    <ul class="chat-body">
+                        @*<li class="chat receive">
+                        <p> chào </p>
+                        </li>*@
+                    </ul>
+                </div>
+                <div class="reply">
+                    <div class="col-sm-9 col-xs-9 reply-main">
+                        <textarea class="form-control" rows="1" id="comment"></textarea>
+                    </div>
+                    <div class="col-sm-1 col-xs-1 reply-send">
+                        <i class="fa fa-send fa-2x" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>  
+    </div>
+</body>
+</html>
+
+
+<!-- Firebase App - Required for Firebase Database -->
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+<!-- Firebase Realtime Database -->
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database-compat.js"></script>
+
+<script src="~/Assets/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/Assets/js/ChatAdmin.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/signalr/5.0.11/signalr.min.js"></script>

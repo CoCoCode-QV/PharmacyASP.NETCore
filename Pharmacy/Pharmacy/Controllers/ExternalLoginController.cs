@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.VisualBasic;
 using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
-using Pharmacy.Data;
+
 using Pharmacy.Models;
 
 namespace Pharmacy.Controllers
@@ -69,7 +69,7 @@ namespace Pharmacy.Controllers
                     {
                         CustomerName = user.UserName,
                         CustomerEmail = user.Email,
-                        UserID = user.Id
+                        UserId = user.Id
                     };
                     await _customerModels.CreatCustomer(customer);
                     Cart cart = new Cart

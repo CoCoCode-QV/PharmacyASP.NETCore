@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Pharmacy.Data;
+
 using Pharmacy.Models;
 using System.Security.Claims;
 

@@ -25,7 +25,7 @@
             <div id="product-carousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner bg-light">
                     <div class="carousel-item active">
-                        <img class="w-100 h-100" src="@Model.Product.ProductImage" alt="Image">
+                        <img class="w-100 h-100" src="@Model.ProductCost.Product.ProductImage" alt="Image">
                     </div>
                 </div>
                 <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
@@ -39,29 +39,37 @@
 
         <div class="col-lg-7 h-auto mb-30">
             <div class="h-100 bg-light p-30">
-                <h2>@Model.Product.ProductName</h2>
+                <h2>@Model.ProductCost.Product.ProductName</h2>
                 @{
-                    string formattedCurrentPrice;
-                    string formattedPrice = string.Format("{0:N0} VNĐ", @Model.Product.ProductPrice);
-                    double? currentPrice = null;
-                    if (ViewBag.isDiscountActive)
+                   
+                    double? currentPrice = @Model.ProductCost.Product.ProductPrice;
+                    
+                    string formattedPrice = string.Format("{0:N0} VNĐ", currentPrice);
+
+
+                    double? discountPercent = Model.DiscountPercentMap.ContainsKey(Model.ProductCost.CostId) ? Model.DiscountPercentMap[Model.ProductCost.CostId] : 0;
+                    if(discountPercent != 0)
                     {
-                        currentPrice = @Model.Product.ProductPrice - (@Model.Product.ProductPrice * @Model.DiscountPercent / 100);
-                        formattedCurrentPrice = string.Format("{0:N0} VNĐ", currentPrice);
-                        <h3 class="font-weight-semi-bold text-dark">@formattedCurrentPrice</h3>
-                        <h4 class="text-muted ml-2"><del>@formattedPrice</del></h4>
+                        
+                        currentPrice = @Model.ProductCost.Product.ProductPrice - (@Model.ProductCost.Product.ProductPrice * discountPercent / 100);
+                        formattedPrice = string.Format("{0:N0} VNĐ", currentPrice);
+                        string formattProductPrice = string.Format("{0:N0} VNĐ", @Model.ProductCost.Product.ProductPrice);
+                        <h3 class="font-weight-semi-bold text-dark">@formattedPrice</h3>
+                        <h4 class="text-muted ml-2"><del>@formattProductPrice</del></h4>
                     }
                     else
                     {
-
+                        
                         <h3 class="font-weight-semi-bold text-dark">@formattedPrice</h3>
                         <h4 class="text-muted ml-2"><del>0%</del></h4>
                     }
+
+                    
                 }
                 <div class=" mb-3">
                     <strong class="text-dark mr-3">Thành phần:</strong>
                     <div class="text-black-50">
-                        @Model.Product.ProductIngredients                     
+                        @Model.ProductCost.Product.ProductIngredients
                     </div>
                 </div>
                 <div class="d-flex mb-3">
@@ -74,21 +82,21 @@
                 </div>
                 <div class="d-flex mb-4">
                     <strong class="text-dark mr-3">Thuốc có theo toa:</strong>
-                    <div class="text-black-50">@(Model.Product.ProductPrescription.HasValue && Model.Product.ProductPrescription.Value ? "Có" : "Không")</div>
+                    <div class="text-black-50">@(Model.ProductCost.Product.ProductPrescription.HasValue && Model.ProductCost.Product.ProductPrescription.Value ? "Có" : "Không")</div>
                 </div>  
                 <div class="d-flex mb-4">
                     <strong class="text-dark mr-3">Nước sản xuất:</strong>
                     <div class="text-black-50">@Model.AddressSupplier</div>
                 </div>
-                @if (Model.Product.ProductPrescription == true)
+                @if (Model.ProductCost.Product.ProductPrescription == true)
                 {
                     <span class="text-danger">Sản phẩm này cần có toa thuốc từ bác sĩ vui lòng đến cửa hàng để mua</span>
                 }
                 else
                 {
                     <form asp-action="AddToCart" asp-controller="Cart">
-                        <input type="hidden" name="productId" value="@Model.Product.ProductId" />
-                        <input type="hidden" name="Price" value='@(ViewBag.isDiscountActive? currentPrice : @Model.Product.ProductPrice)'/>
+                        <input type="hidden" name="CostId" value="@Model.ProductCost.CostId" />
+                        <input type="hidden" name="Price" value='@currentPrice' />
                         <div class="d-flex align-items-center mb-4 pt-2">
                             <div class="input-group quantity mr-3" style="width: 130px;">
                                 <div class="input-group-btn">
@@ -141,8 +149,8 @@
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="tab-pane-1">
                         <h4 class="mb-3">Mô tả sản phẩm</h4>
-                        <h5>@Model.Product.ProductName</h5>
-                        @Html.Raw(Model.Product.ProductDetail)
+                        <h5>@Model.ProductCost.Product.ProductName</h5>
+                        @Html.Raw(Model.ProductCost.Product.ProductDetail)
                     </div>
                 </div>
             </div>
@@ -158,23 +166,24 @@
     <div class="row px-xl-5">
         <div class="col">
             <div class="owl-carousel related-carousel">
-                @foreach(var item in Model.ListProduct)
+                @foreach(var item in Model.ListProductCost)
                 {
                     <div class="product-item bg-light">
-                        <a asp-controller="Detail" asp-action="Index" asp-route-id="@item.ProductId">
+                        <a asp-controller="Detail" asp-action="Index" asp-route-id="@item.CostId">
                             <div class="product-img position-relative overflow-hidden">
-                                <img class="img-fluid w-100" src="@item.ProductImage" alt="">
+                                <img class="img-fluid w-100" src="@item.Product.ProductImage" alt="@item.Product.ProductName">
+                             
                             </div>
                             <div class="text-center py-4">
-                                <span class="h6 text-decoration-none text-truncate" >@item.ProductName</span>
+                                <span class="h6 text-decoration-none text-truncate">@item.Product.ProductName</span>
                                 <div class="d-flex align-items-center justify-content-center mt-2">
                                     @{
-                                        double? discountPercent = Model.DiscountPercentMap.ContainsKey(item.ProductId) ? Model.DiscountPercentMap[item.ProductId] : 0;
-                                        string ItemformattedPrice = string.Format("{0:N0} VNĐ", item.ProductPrice);
+                                        double? discount = Model.DiscountPercentMap.ContainsKey(item.CostId) ? Model.DiscountPercentMap[item.CostId] : 0;
+                                        string ItemformattedPrice = string.Format("{0:N0} VNĐ", item.Product.ProductPrice);
                                         double? ItemcurrentPrice = 0;
-                                        if (discountPercent != 0)
+                                        if (discount != 0)
                                         {
-                                            ItemcurrentPrice = item.ProductPrice - (item.ProductPrice * discountPercent / 100);
+                                            ItemcurrentPrice = item.Product.ProductPrice - (item.Product.ProductPrice * discountPercent / 100);
                                             string ItemformattedCurrentPrice = string.Format("{0:N0} VNĐ", ItemcurrentPrice);
 
                                             <h5>@ItemformattedCurrentPrice</h5>
@@ -189,8 +198,9 @@
                                
                                 </div>
                                 <form asp-action="AddToCart" asp-controller="Cart">
-                                    <input type="hidden" name="productId" value="@item.ProductId" />
-                                    <input type="hidden" name="Price" value='@(discountPercent == 0? @item.ProductPrice : ItemcurrentPrice)' />
+                            
+                                    <input type="hidden" name="CostId" value="@item.CostId" />
+                                    <input type="hidden" name="Price" value='@(discount == 0? @item.Product.ProductPrice : ItemcurrentPrice)' />
                                     <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>    
                                 </form>
                         </div>

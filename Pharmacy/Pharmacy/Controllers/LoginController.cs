@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using Pharmacy.Data;
+
 using Pharmacy.Models;
 using Pharmacy.ViewsModels;
 using System.Text;
@@ -119,7 +119,7 @@ namespace Pharmacy.Controllers
                     {
                         CustomerName = Item.UserName,
                         CustomerEmail = Item.Email,
-                        UserID = user.Id
+                        UserId = user.Id
                     };
                     await _customerModels.CreatCustomer(customer);
                     Cart cart = new Cart

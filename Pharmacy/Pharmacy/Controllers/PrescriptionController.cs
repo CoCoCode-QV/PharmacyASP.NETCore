@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Pharmacy.Data;
+
 using Pharmacy.Models;
 using Pharmacy.ViewsModels;
 using X.PagedList;
@@ -40,12 +40,16 @@ namespace Pharmacy.Controllers
                     break;
             }
             var pageNumber = page ?? 1;
+            var listProductsCost = listProducts
+                         .SelectMany(product => _context.ProductCosts
+                         .Where(pc => pc.ProductId == product.ProductId && pc.CostActive).Include(pc =>pc.ProductDiscounts))
+                         .ToList();
+            var pagedList = listProductsCost.ToPagedList(pageNumber, ItemsPerPage);
 
-            var pagedList = listProducts.ToPagedList(pageNumber, ItemsPerPage);
             var viewModel = new ProductListViewModel
             {
-                Products = pagedList,
-                DiscountPercentMap = _discountModels.GetDiscountPercentMap(listProducts, _context.Discounts.ToList()),
+                ProductCost = pagedList,
+                DiscountPercentMap = _discountModels.GetDiscountPercentMap(pagedList, _context.Discounts.ToList()),
                 orderby = orderby
             };
             ViewBag.countCart = HttpContext.Session.GetInt32("counter");

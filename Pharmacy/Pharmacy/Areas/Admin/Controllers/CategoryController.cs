@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Pharmacy.Data;
+
 using Pharmacy.Models;
 using System.Security.Policy;
 using X.PagedList;
@@ -10,7 +10,7 @@ using X.PagedList;
 namespace Pharmacy.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Staff")]
     public class CategoryController : Controller
     {
 

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Amazon.S3.Model;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.CodeAnalysis.Options;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Pharmacy.Data;
+
 using Pharmacy.Models;
 using Pharmacy.ViewsModels;
 using Stripe;
@@ -18,15 +20,17 @@ namespace Pharmacy.Controllers
 		private readonly OrderModels _order;
 		private readonly ProductModels _product;
 		private readonly StripeSettings _stripeSettings;
+		private readonly QlpharmacyContext _context;
 
 
-		public PaymentController( CartModels cartModels, CustomerModels customer, OrderModels order, ProductModels product, StripeSettings stripesetting)
+		public PaymentController( CartModels cartModels, CustomerModels customer, OrderModels order, ProductModels product, StripeSettings stripesetting, QlpharmacyContext context)
 		{
 			_cart = cartModels;
 			_customer = customer;
 			_order = order;
 			_product = product;
 			_stripeSettings = stripesetting;
+			_context = context;
 
         }
 		[HttpPost]
@@ -55,7 +59,7 @@ namespace Pharmacy.Controllers
 		}
 
 		
-		public async Task<IActionResult> CreateOrderAsync(Pharmacy.Data.Customer customer)
+		public async Task<IActionResult> CreateOrderAsync(Customer customer)
 		{
 			// Kiểm tra xem có cartdetail nào cho người dùng này không
 			var cart = _cart.getCartByCustomerId(customer.CustomerId);
@@ -81,19 +85,23 @@ namespace Pharmacy.Controllers
 				// Di chuyển dữ liệu từ CartDetail sang OrderDetails
 				foreach (var cartDetail in cartDetails)
 				{
-					var orderDetail = new OrderDetail
+					var cost = _context.ProductCosts.Where(e => e.CostId == cartDetail.CostId).Include(e=>e.Product).FirstOrDefault();
+					var ProductDiscount =  _context.ProductDiscounts.Where(e => e.CostId == cartDetail.CostId && e.DiscountEndDate > DateTime.Now && e.DiscountStartDate < DateTime.Now).FirstOrDefault();
+
+                    var orderDetail = new OrderDetail
 					{
 						OrderId = newOrder.OrderId,
-						ProductId = cartDetail.ProductId,
+						CostId = cost.CostId!,
+						OrderDiscountId = ProductDiscount == null ? 0 : ProductDiscount.ProductDiscountId,
 						OrderDetailsQuantity = cartDetail.CartDetailQuantity,
 						OrderDetailsPrice = cartDetail.CartDetailPriceCurrent,
 						OrderDetailsTemporaryPrice = cartDetail.CartDetailTemporaryPrice
 					};
-					var itemproduct = _product.GetProduct(cartDetail.ProductId);
+					
 					var cartItem = new CartItemViewModels {
 					
-						ProductName = Convert.ToString(itemproduct.ProductName),
-						ProductImage = itemproduct.ProductImage,
+						ProductName = cost.Product.ProductName!,
+						ProductImage = cost.Product.ProductImage!,
 						CartDetailPriceCurrent = cartDetail.CartDetailPriceCurrent,
 						CartDetailQuantity = cartDetail.CartDetailQuantity,
 						CartDetailTemporaryPrice = cartDetail.CartDetailTemporaryPrice
@@ -123,7 +131,7 @@ namespace Pharmacy.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult createCheckoutSession(Pharmacy.Data.Customer customer , long? amount)
+		public IActionResult createCheckoutSession(Customer customer , long? amount)
 		{
 			var currency = "VND";
 			var host = HttpContext.Request.Host.Host; // Địa chỉ (host)

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
-using Pharmacy.Data;
 using Pharmacy.ViewsModels;
 using System.Text;
 
@@ -32,23 +31,32 @@ namespace Pharmacy.Models
 		{
             var allOrders = _context.Orders.OrderByDescending(o => o.OrderId).ToList();
             List<Order> ordersToShow;
-            if (tab == "accept")
+          
+            switch (tab)
             {
-                ordersToShow = allOrders.Where(o => o.OrderAccept).ToList();
-				return ordersToShow;
+                case "accept":
+                    ordersToShow = allOrders.Where(o => o.OrderAccept && o.OrderDelivery == 0).ToList();
+                    return ordersToShow;
+                
+                case "noaccept":
+                    ordersToShow = allOrders.Where(o => !o.OrderAccept).ToList();
+                    return ordersToShow;
+                case "delivery":
+                    ordersToShow = allOrders.Where(o => o.OrderDelivery == 1).ToList();
+                    return ordersToShow;
+                 
+                default:
+                    ordersToShow = allOrders.Where(o => o.OrderDelivery == 0 && o.OrderAccept).ToList();
+                    return ordersToShow;
             }
-            else
-            {
-                ordersToShow = allOrders.Where(o => !o.OrderAccept).ToList();
-				return ordersToShow;
-            }	
 
-			return allOrders;
+           
+
         }
 
 		public IEnumerable<OrderDetail> GetListOrderDetailByOrderId(int id)
 		{
-			return  _context.OrderDetails.Include(od => od.Order).Include(od => od.Product).Where(x => x.OrderId == id).ToList();
+			return  _context.OrderDetails.Include(od => od.Order).Include(od => od.Cost).ThenInclude(p => p.Product).Where(x => x.OrderId == id).ToList();
 		}
 
 		public async Task AcceptOrder(int id)
@@ -62,27 +70,45 @@ namespace Pharmacy.Models
 			}
         }
 
-		public IEnumerable<Order> GetListOrderByCustomerId(int id, string tab)
+        public async Task OrderDelivery(int id)
+        {
+            var item = _context.Orders.Find(id);
+
+            if (item != null)
+            {
+                item.OrderDelivery = 1;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public IEnumerable<Order> GetListOrderByCustomerId(int id, string tab)
 		{
 			var allOrders = _context.Orders.Where(o=>o.CustomerId == id).OrderByDescending(o => o.OrderId).ToList();
             List<Order> ordersToShow;
-            if (tab == "accept")
-            {
-                ordersToShow = allOrders.Where(o => o.OrderAccept).ToList();
-                return ordersToShow;
-            }
-            else
-            {
-                ordersToShow = allOrders.Where(o => !o.OrderAccept).ToList();
-                return ordersToShow;
-            }
 
-            return allOrders;
+
+            switch (tab)
+            {
+                case "accept":
+                    ordersToShow = allOrders.Where(o => o.OrderAccept && o.OrderDelivery == 0).ToList();
+                    return ordersToShow;
+                case "noaccept":
+                    ordersToShow = allOrders.Where(o => !o.OrderAccept).ToList();
+                    return ordersToShow;
+                case "delivery":
+                    ordersToShow = allOrders.Where(o => o.OrderDelivery == 1).ToList();
+                    return ordersToShow;
+
+                default:
+                    ordersToShow = allOrders.Where(o => o.OrderDelivery == 0 && o.OrderAccept).ToList();
+                    return ordersToShow;
+            }
+            
         }
 
         public async Task DeleteOrderAsync(int id)
         {
-            var order = _context.Orders.Include(o => o.OrderDetails).ThenInclude(od => od.Product).Include(o=>o.Customer).FirstOrDefault(o => o.OrderId == id);
+            var order = _context.Orders.Include(o => o.OrderDetails).ThenInclude(od => od.Cost).ThenInclude(od => od.Product).Include(o=>o.Customer).FirstOrDefault(o => o.OrderId == id);
 
             if (order != null)
             {
@@ -120,7 +146,7 @@ namespace Pharmacy.Models
             foreach (var item in orderDetails)
             {
                 htmlTable.Append("<tr>");
-                htmlTable.Append("<td style='text-align:left;padding: 10px;'>" + item.Product.ProductName + "</td>");
+                htmlTable.Append("<td style='text-align:left;padding: 10px;'>" + item.Cost.Product.ProductName + "</td>");
                 htmlTable.Append("<td style='text-align:center;padding: 10px;'>" + string.Format("{0:N0} VNĐ", item.OrderDetailsPrice) + "</td>");
                 htmlTable.Append("<td style='text-align:center;padding: 10px;'>" + item.OrderDetailsQuantity + "</td>");
                 htmlTable.Append("<td style='text-align:center;padding: 10px;'>" + string.Format("{0:N0} VNĐ", item.OrderDetailsTemporaryPrice) + "</td>");

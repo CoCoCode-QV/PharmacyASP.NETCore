@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Pharmacy.Data;
+
 using Pharmacy.Models;
 using Pharmacy.ViewsModels;
 
@@ -20,27 +20,26 @@ namespace Pharmacy.Controllers
 
         public IActionResult Index(int id)
         {
-            Product product = _products.GetProduct(id);
-            Discount discount = _context.Discounts.FirstOrDefault(p => p.DiscountId == product.DiscountId);
-            Supplier supplier = _context.Suppliers.FirstOrDefault(p => p.SupplierId == product.SupplierId);
-            Category category = _context.Categories.FirstOrDefault(p => p.CategoryId == product.CategoryId);
+            ProductCost? productcost = _context.ProductCosts.Where(s => s.CostId == id).Include(s =>s.Product).FirstOrDefault() ;
+          
+            Supplier? supplier = _context.ProductCosts
+                           .Where(pc => pc.ProductId == productcost.ProductId && pc.CostActive)
+                           .Select(pc => pc.Supplier)
+                           .SingleOrDefault();
+            Category? category = _context.Categories.FirstOrDefault(p => p.CategoryId == productcost.Product.CategoryId);
 
-            ViewBag.isDiscountActive = false;
-            if (discount != null && discount.DiscountEndDate > DateTime.Now)
-            {
-                ViewBag.isDiscountActive = true;
-            }
-            IEnumerable<Product> ListProduct = _context.Products.Where(s => s.ProductActive == true).OrderByDescending(s => s.ProductId).ToList();
+          
+            IEnumerable<ProductCost> listProductsCost = _context.ProductCosts.Where(s => s.CostActive).Include(pc =>pc.ProductDiscounts).Include(pc =>pc.Product).OrderByDescending(s => s.ProductId).ToList();
+
             ProductViewModels viewModel = new ProductViewModels
             {
-                Product = product,
-                ListProduct = ListProduct,
-                DiscountName = discount?.DiscountName,
-                DiscountPercent = discount.DiscountPercent,
+                ProductCost = productcost,
+                ListProductCost = listProductsCost,
+             
                 SupplierName = supplier?.SupplierName,
                 CategoryName = category?.CategoryName,
                 AddressSupplier = supplier?.SupplierAddress,
-                DiscountPercentMap = _discount.GetDiscountPercentMap(ListProduct, _context.Discounts.ToList())
+                DiscountPercentMap = _discount.GetDiscountPercentMap(listProductsCost, _context.Discounts.ToList())
             };
             ViewBag.countCart = HttpContext.Session.GetInt32("counter");
             return View(viewModel);

@@ -1,5 +1,9 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using Pharmacy.Data;
+﻿
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+
+
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Pharmacy.Models
 {
@@ -12,6 +16,7 @@ namespace Pharmacy.Models
         {
             _context = context;
         }
+
 
 
         public IEnumerable<Product> GetProducts(string search)
@@ -30,14 +35,15 @@ namespace Pharmacy.Models
 
         public IEnumerable<Product> GetProductsActive(string search)
         {
-            var ListProducts = _context.Products.Where(s=> s.ProductActive==true).OrderByDescending(s => s.ProductId ).ToList();
+            var ListProducts = _context.Products.Where(s=> s.ProductActive == true).OrderByDescending(s => s.ProductId ).ToList();
 
             if (search != null)
             {
-                List<Product> ProductFound =  _context.Products
-                                            .Where(item => item.ProductName.Contains(search))
-                                            .ToList();
-                return ProductFound;
+                var searchlistproduct = ListProducts.Where(item => item.ProductName.Contains(search) || item.ProductDetail.Contains(search)).ToList();
+                //var query = $"SELECT * FROM dbo.fulltextsearch('\"{search}\"')";
+                //var searchlistproduct = _context.Products.FromSqlRaw(query).ToList();
+
+                return searchlistproduct;
             }
 
             return ListProducts;
@@ -89,13 +95,13 @@ namespace Pharmacy.Models
                 updateitem.ProductPrice = product.ProductPrice;
                 updateitem.ProductDetail = product.ProductDetail;
                 updateitem.ProductImage = url;
-                updateitem.ProductInventory = product.ProductInventory;
-                updateitem.ProductExpiryDate    = product.ProductExpiryDate;
+                //updateitem.ProductInventory = product.ProductInventory;
+                //updateitem.ProductExpiryDate    = product.ProductExpiryDate;
                 updateitem.ProductPrescription = product.ProductPrescription;
                 updateitem.ProductActive = product.ProductActive;
                 updateitem.CategoryId = product.CategoryId;
-                updateitem.DiscountId   = product.DiscountId;
-                updateitem.SupplierId   = product.SupplierId;
+                //updateitem.DiscountId   = product.DiscountId;
+
                 await _context.SaveChangesAsync();
             }
             else
@@ -103,18 +109,19 @@ namespace Pharmacy.Models
                 updateitem.ProductName = product.ProductName;
                 updateitem.ProductPrice = product.ProductPrice;
                 updateitem.ProductDetail = product.ProductDetail;
-                updateitem.ProductInventory = product.ProductInventory;
-                updateitem.ProductExpiryDate = product.ProductExpiryDate;
+                //updateitem.ProductInventory = product.ProductInventory;
+                //updateitem.ProductExpiryDate = product.ProductExpiryDate;
                 updateitem.ProductPrescription = product.ProductPrescription;
                 updateitem.ProductActive = product.ProductActive;
                 updateitem.CategoryId = product.CategoryId;
-                updateitem.DiscountId = product.DiscountId;
-                updateitem.SupplierId = product.SupplierId;
+                //updateitem.DiscountId = product.DiscountId;
                 await _context.SaveChangesAsync();
             }
             
         }
 
-        
+
+      
+
     }
 }

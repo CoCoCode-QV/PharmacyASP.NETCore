@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Pharmacy.Data.OrderDetail>
+﻿@model IEnumerable<OrderDetail>
 
 @{
     ViewData["Title"] = "Chi tiết đơn hàng";
@@ -42,9 +42,9 @@
                     <td >
                         @item.OrderDetailsQuantity
                     </td>
-                    <td>
-                        @item.Product.ProductName
-                    </td>
+                     <td>
+                        @item.Cost!.Product.ProductName
+                    </td> 
                     <td>
                         @(string.Format("{0:N0} VNĐ",   @item.OrderDetailsPrice))
                     </td>
@@ -70,6 +70,10 @@
                 {
 
                     <td>  <a href="@Url.Action("AcceptOrder", "Order", new { OrderId = @ViewBag.OrderId })" class="btn btn-primary">Duyệt</a></td>
+                }
+                else if (firstOrder.OrderDelivery == 0 && ViewData["CurrentTab"]!.ToString() != "accept")
+                {
+                    <td>  <a href="@Url.Action("OrderDevlivery", "Order", new { OrderId = @ViewBag.OrderId })" class="btn btn-primary">Giao hàng thành công</a></td>
                 }
             }
 

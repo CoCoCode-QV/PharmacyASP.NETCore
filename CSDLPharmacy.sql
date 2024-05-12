@@ -57,21 +57,41 @@ create table Product(
 	ProductImage nvarchar(500),
 	ProductInventory float not null default 0,
 	CategoryID int not null,
-	SupplierID int not null,
 	DiscountID int not null,
 	foreign key (CategoryID) references dbo.Category(CategoryID),
-	foreign key (SupplierID) references dbo.Supplier(SupplierID),
 	foreign key (DiscountID) references dbo.Discount(DiscountID)
 )
+ALTER TABLE Product
+DROP COLUMN SupplierID;
+
+ALTER TABLE Product
+DROP CONSTRAINT FK__Product__Supplie__403A8C7D;
+
+SELECT 
+    fk.name AS ConstraintName
+FROM 
+    sys.foreign_keys fk
+WHERE 
+    fk.parent_object_id = OBJECT_ID('Product');
+
 
 alter table Product add ProductExpiryDate Date, ProductIngredients nvarchar(200), ProductPrescription bit, ProductActive Bit
+
+create table ProductCost(
+	CostID int IDENTITY(1,1) PRIMARY KEY,
+    ProductID int NOT NULL,
+    SupplierID int NOT NULL,
+    CostPrice float NOT NULL,
+    FOREIGN KEY (ProductID) REFERENCES Product(ProductID),
+    FOREIGN KEY (SupplierID) REFERENCES Supplier(SupplierID)
+);
 
 create table Cart(
 	CartID int identity primary key,
 	CartTotalPrice float default 0,
 	CustomerID int not null,
 	foreign key (CustomerID) references dbo.Customer(CustomerID)
-)
+);
 
 create table CartDetail(
 	CartDetailID int identity primary key,
@@ -104,8 +124,25 @@ create table OrderDetails(
 	Foreign key (ProductID) references dbo.Product(ProductID)
 )
 ALTER TABLE OrderDetails
+ADD CostProduct float  NOT NULL
+
+ALTER TABLE OrderDetails
+ADD DiscountPercent float default 0
+
+
+ALTER TABLE OrderDetails
 ADD OrderDetailsTemporaryPrice  float default 0;
 
+SELECT 
+    fk.name AS ConstraintName
+FROM 
+    sys.foreign_keys fk
+WHERE 
+    fk.parent_object_id = OBJECT_ID('ProductCost');
+
+SELECT CONSTRAINT_NAME
+FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+WHERE TABLE_NAME = 'ProductCost' AND CONSTRAINT_TYPE = 'PRIMARY KEY'
 
 --ACCOUNT
 INSERT INTO dbo.Account(userName,displayName,password,Type)
@@ -133,6 +170,13 @@ VALUES(
 	N'Nhà bè, TP.HCM'
 )
 
+INSERT INTO dbo.ProductCost(ProductID,SupplierID, CostPrice)
+VALUES(
+	N'40',
+	N'13',
+	9000
+)
+
 INSERT INTO dbo.Category(CategoryName)
 VALUES(
 	N'Dược phẩm'
@@ -152,3 +196,17 @@ select * from Discount
 select * from Category
 
 select * from Supplier
+
+select * from ProductCost
+
+
+
+Delete from OrderDetails
+Delete from Orders
+Delete from CartDetail
+Delete from Cart
+Delete from Supplier
+Delete from Discount
+Delete from Category
+Delete from Product
+

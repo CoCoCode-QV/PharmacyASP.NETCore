@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Pharmacy.Data.Discount>
+﻿@model IEnumerable<Discount>
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
 @{
@@ -34,12 +34,12 @@
         <th>
             <span>Phần trăm giảm</span>
         </th>
-        <th>
+      @*   <th>
             <span>Ngày bắt đầu </span>
         </th>
         <th>
             <span>Ngày kết thúc</span>
-        </th>
+        </th> *@
         <th></th>
     </tr>
 
@@ -52,12 +52,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.DiscountPercent) %
             </td>
-            <td>
+           @*  <td>
                 @Html.DisplayFor(modelItem => item.DiscountStartDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DiscountEndDate)
-            </td>
+            </td> *@
             <td>
                 @Html.ActionLink("Sửa", "Edit", new { id = item.DiscountId })|
                 <a onclick="confirmDelete('@item.DiscountId', '@item.DiscountName', '@Url.Action("Delete", "Discount")','mã giảm giá')">Xóa</a>

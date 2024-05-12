@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Pharmacy.Data;
+
 
 public partial class Order
 {
@@ -15,7 +15,9 @@ public partial class Order
 
     public int CustomerId { get; set; }
 
-    public bool OrderAccept {  get; set; }
+    public bool OrderAccept { get; set; }
+
+    public int OrderDelivery { get; set; }
 
     public virtual Customer Customer { get; set; } = null!;
 

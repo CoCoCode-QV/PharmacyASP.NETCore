@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Pharmacy.Data;
+
 
 public partial class OrderDetail
 {
@@ -11,13 +11,15 @@ public partial class OrderDetail
 
     public double? OrderDetailsPrice { get; set; }
 
+    public int OrderId { get; set; }
+
     public double? OrderDetailsTemporaryPrice { get; set; }
 
-	public int OrderId { get; set; }
+    public int? CostId { get; set; }
 
-    public int ProductId { get; set; }
+    public int? OrderDiscountId { get; set; }
+
+    public virtual ProductCost? Cost { get; set; }
 
     public virtual Order Order { get; set; } = null!;
-
-    public virtual Product Product { get; set; } = null!;
 }
