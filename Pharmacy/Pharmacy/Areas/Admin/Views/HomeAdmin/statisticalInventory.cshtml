@@ -1,0 +1,119 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IEnumerable<ProductCost>
+
+@{
+    ViewData["Title"] = "StatisticalInventory";
+    Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
+}
+
+<div class="main-container">
+    <h2 class="col">Thống kê hàng tồn </h2>
+    @using (Html.BeginForm("statisticalInventory", "HomeAdmin", FormMethod.Get))
+    {
+        <div class="row custom-search-form">
+            <div class="dropdown-type col-sm-3">
+                <select name="condition" class="form-control">
+                    <option value="productname">Tên sản phẩm</option>
+                    <option value="suppliername">Tên nhà cung cấp</option>
+
+                </select>
+            </div>
+            <div class="input-group  col-sm-10">
+                <input name="search" type="text" class="form-control" placeholder="Search...">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="col-12 pb-1">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="ml-2">
+            <form asp-action="statisticalInventory" asp-controller="HomeAdmin" class="btn-group ml-2 " method="get" id="order-form">
+                <select name="orderby" class="orderby" onchange="document.getElementById('order-form').submit();">
+                    <option value="reduce" @(ViewBag.orderby == "reduce" || ViewBag.orderby == null ? "selected" : "")>Sắp xếp theo hàng tồn: Cao tới thấp</option>
+                    <option value="increase" @(ViewBag.orderby == "increase" ? "selected" : "")>Sắp xếp theo hàng tồn: Thấp tới cao</option>
+                </select>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="col">
+    <div class="panel panel-default">
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+         
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="accept">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                              
+                                <th>
+                                    <span>Tên sản phẩm</span>
+                                </th>
+                                <th>
+                                    <span>Nhà cung cấp</span>
+                                </th>
+                                <th>
+                                    <span>Giá bán</span>
+                                </th>
+                                <th>
+                                    <span>Giá vốn</span>
+                                </th>
+                                <th>
+                                    <span>Tồn Kho</span>
+                                </th>
+
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Product.ProductName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Supplier.SupplierName)
+                                        </td>
+                                        <td>
+                                            <span> @string.Format("{0:N0} VNĐ", item.Product.ProductPrice * item.ProductInventory)</span>
+                                        </td>
+                                        <td>
+                                            <span> @string.Format("{0:N0} VNĐ", item.CostPrice * item.ProductInventory)</span>
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ProductInventory)
+                                        </td>
+
+                                       
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                    <div class="pagination-admin">
+                        @Html.PagedListPager((IPagedList)Model, page => Url.Action("statisticalInventory", new { page, search = Context.Request.Query["search"], condition = Context.Request.Query["condition"], orderby = Context.Request.Query["orderby"] }))
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+<script src="~/Scripts/notify/NotifyAdmin.js"></script>

@@ -102,6 +102,32 @@ namespace Pharmacy.Hubs
             }
         }
 
+        public async Task DeleteUserAndMessages(string userId)
+        {
+            try
+            {
+                var firebaseClient = new FirebaseClient("https://chat-pharmacy-17cee-default-rtdb.firebaseio.com/");
+
+                // Xóa người dùng từ cơ sở dữ liệu Firebase
+                await firebaseClient.Child("users").Child(userId).DeleteAsync();
+
+                // Quét cơ sở dữ liệu để tìm và xóa các tin nhắn mà người dùng đã gửi hoặc nhận
+                var messages = await firebaseClient.Child("messages").OnceAsync<MessageViewModels>();
+                foreach (var message in messages)
+                {
+                    if (message.Object.SenderId == userId || message.Object.ReceiverId == userId)
+                    {
+                        await firebaseClient.Child("messages").Child(message.Key).DeleteAsync();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi
+                Console.WriteLine($"Error deleting user and messages: {ex.Message}");
+            }
+        }
+
 
     }
 

@@ -7,7 +7,7 @@ using X.PagedList;
 namespace Pharmacy.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin, Staff")]
+    [Authorize(Roles = "Admin, Staff, SuperAdmin")]
     public class SupplierController : Controller
     {
         private readonly SupplierModels _supplierModels;

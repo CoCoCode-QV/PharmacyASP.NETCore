@@ -28,6 +28,7 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<Pharmacy.Models.CategoryModels>();
 builder.Services.AddScoped<Pharmacy.Models.SupplierModels>();
+builder.Services.AddScoped<Pharmacy.Models.UserModels>();
 builder.Services.AddScoped<Pharmacy.Models.DiscountModels>();
 builder.Services.AddScoped<Pharmacy.Models.ProductModels>();
 builder.Services.AddScoped<Pharmacy.Models.CustomerModels>();
@@ -66,6 +67,7 @@ builder.Services.AddAuthentication(options =>
     .AddCookie()
     .AddGoogle(googleOptions =>
     {
+      
         // Đọc thông tin Authentication:Google từ appsettings.json
         IConfigurationSection googleAuthNSection = builder.Configuration.GetSection("Authentication:Google");
         // Thiết lập ClientID và ClientSecret để truy cập API google
@@ -165,7 +167,7 @@ app.UseEndpoints(endpoints =>
 using(var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var roles = new[] { "Admin", "Staff", "Member" };
+    var roles = new[] { "Admin", "Staff", "Member", "SuperAdmin" };
 
     foreach(var role in roles)
     {
@@ -173,32 +175,32 @@ using(var scope = app.Services.CreateScope())
             await roleManager.CreateAsync(new IdentityRole(role));
     }
 }
-//using (var scope = app.Services.CreateScope())
-//{
-//    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-//    string email = "hovan12022002@gmail.com";
-//    string password = "Admin123";
+    string email = "vanho12022002@gmail.com";
+    string password = "Admin12345";
 
-//    if (await userManager.FindByEmailAsync(email) == null)
-//    {
-//        var user = new IdentityUser();
-//        user.UserName = email;
-//        user.Email = email;
-//        user.EmailConfirmed = true;
+    if (await userManager.FindByEmailAsync(email) == null)
+    {
+        var user = new IdentityUser();
+        user.UserName = email;
+        user.Email = email;
+        user.EmailConfirmed = true;
 
-//        await userManager.CreateAsync(user,password);
-//        await userManager.AddToRoleAsync(user, "Admin");
+        await userManager.CreateAsync(user, password);
+        await userManager.AddToRoleAsync(user, "SuperAdmin");
 
-//    }
-//}
+    }
+}
 //using (var scope = app.Services.CreateScope())
 //{
 //    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
 //    string email = "staff@gmail.com";
 //    string password = "Staff123";
-    
+
 //    if (await userManager.FindByEmailAsync(email) == null)
 //    {
 //        var user = new IdentityUser();

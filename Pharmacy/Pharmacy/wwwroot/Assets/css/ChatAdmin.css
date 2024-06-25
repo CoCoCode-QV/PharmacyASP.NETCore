@@ -604,3 +604,9 @@ ul li {
         width: 75%;
     }
 }
+.material-icons.delete-user {
+    color: black; /* Màu của biểu tượng xóa */
+    cursor: pointer; /* Con trỏ biến thành icon khi di chuột qua */
+    padding: 10px;
+}
+

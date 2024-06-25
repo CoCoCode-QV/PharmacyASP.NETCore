@@ -35,18 +35,31 @@ namespace Pharmacy.Models
 
         public IEnumerable<Product> GetProductsActive(string search)
         {
-            var ListProducts = _context.Products.Where(s=> s.ProductActive == true).OrderByDescending(s => s.ProductId ).ToList();
 
-            if (search != null)
+            var productsQuery = _context.Products
+                    .OrderByDescending(s => s.ProductId)
+                    .Where(s => s.ProductActive == true);
+
+            // Nếu có từ khóa tìm kiếm, áp dụng tìm kiếm với collation cụ thể
+            if (!string.IsNullOrEmpty(search))
             {
-                var searchlistproduct = ListProducts.Where(item => item.ProductName.Contains(search) || item.ProductDetail.Contains(search)).ToList();
-                //var query = $"SELECT * FROM dbo.fulltextsearch('\"{search}\"')";
-                //var searchlistproduct = _context.Products.FromSqlRaw(query).ToList();
-
-                return searchlistproduct;
+                productsQuery = productsQuery.Where(item =>
+                    EF.Functions.Collate(item.ProductName, "SQL_Latin1_General_CP1_CI_AI").Contains(search) ||
+                    EF.Functions.Collate(item.ProductDetail, "SQL_Latin1_General_CP1_CI_AI").Contains(search));
             }
 
-            return ListProducts;
+            return productsQuery.ToList();
+
+            //var ListProducts = _context.Products.Where(s=> s.ProductActive == true).OrderByDescending(s => s.ProductId ).ToList();
+
+            //if (search != null)
+            //{
+            //    var searchlistproduct = ListProducts.Where(item => item.ProductName!.ToUpper().Contains(search.ToUpper()) || item.ProductDetail!.ToUpper().Contains(search.ToUpper())).ToList();
+                        
+            //    return searchlistproduct;
+            //}
+
+            //return ListProducts;
         }
 
         public IEnumerable<Product> GetProductsPresciption()

@@ -17,15 +17,17 @@ namespace Pharmacy.Controllers
         private readonly CustomerModels _customer;
         private readonly CartModels _cart;
         private readonly OrderModels _order;
+        private readonly ProductCostModel _productCost;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CartController(QlpharmacyContext context, CustomerModels customerModels, CartModels cartModels,OrderModels order, IHttpContextAccessor httpContextAccessor)
+        public CartController(QlpharmacyContext context, CustomerModels customerModels, ProductCostModel productCost,CartModels cartModels,OrderModels order, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _customer = customerModels;
             _cart = cartModels;
             _httpContextAccessor = httpContextAccessor;
             _order = order;
+            _productCost = productCost;
         }
         public async Task<IActionResult> IndexAsync()
         {
@@ -125,10 +127,19 @@ namespace Pharmacy.Controllers
 			}
             if (existingCartDetail != null)
             {
-                // Nếu sản phẩm đã tồn tại trong giỏ hàng, cập nhật số lượng và tính lại giá tạm thời
-                existingCartDetail.CartDetailQuantity = quantity;
-                existingCartDetail.CartDetailTemporaryPrice = existingCartDetail.CartDetailQuantity * Price;
-                await _cart.UpdateCartDetailAsync(existingCartDetail);
+               bool ischeck = _productCost.CheckInventory(CostId, quantity);
+                if(ischeck)
+                {
+                    // Nếu sản phẩm đã tồn tại trong giỏ hàng, cập nhật số lượng và tính lại giá tạm thời
+                    existingCartDetail.CartDetailQuantity = quantity;
+                    existingCartDetail.CartDetailTemporaryPrice = existingCartDetail.CartDetailQuantity * Price;
+                    await _cart.UpdateCartDetailAsync(existingCartDetail);
+                }
+                else
+                {
+                    TempData["ErrorCheck"] = "Sản phẩm đã hết trong kho vui lòng không tăng thêm số lượng sản phẩm";
+                    return RedirectToAction("Index");
+                }
             }
             return RedirectToAction("Index");
         }
@@ -142,7 +153,7 @@ namespace Pharmacy.Controllers
         }
 
         public const int Items_Per_Page = 3;
-        public async Task<IActionResult> HistoryOrder(int? page, string tab = "accept")
+        public async Task<IActionResult> HistoryOrder(int? page, string tab = "noaccept")
         {
             ViewData["CurrentTab"] = tab;
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -194,8 +205,10 @@ namespace Pharmacy.Controllers
                 </body>
                 </html>";
                 sendMailService.SendMail(order.Customer.CustomerEmail, "VTPharmacy hủy đơn hàng", emailBody, "");
-                _context.OrderDetails.RemoveRange(order.OrderDetails);
-                _context.Orders.Remove(order);
+                order.OrderStatus = -1;
+
+                //_context.OrderDetails.RemoveRange(order.OrderDetails);
+                //_context.Orders.Remove(order);
                 _context.SaveChanges();
                 TempData["SuccessMessage"] = "Xóa đơn hàng thành công, bạn vui lòng kiểm tra mail để nhận lại tiền đã thanh toán";
                 return RedirectToAction("HistoryOrder", TempData["SuccessMessage"]);

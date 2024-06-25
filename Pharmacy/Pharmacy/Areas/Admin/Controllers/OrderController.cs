@@ -9,7 +9,7 @@ using X.PagedList;
 namespace Pharmacy.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin, Staff")]
+    [Authorize(Roles = "Admin, Staff, SuperAdmin")]
     public class OrderController : Controller
     {
         private readonly OrderModels _orderModels;
@@ -20,7 +20,7 @@ namespace Pharmacy.Areas.Admin.Controllers
         }
 
         public const int Items_Per_Page = 3;
-        public IActionResult Index(int? page, string tab = "accept")
+        public IActionResult Index(int? page, string tab = "noaccept")
         {
             ViewData["CurrentTab"] = tab;
             var ListOrder = _orderModels.GetListOrder(tab);
@@ -56,10 +56,9 @@ namespace Pharmacy.Areas.Admin.Controllers
             return RedirectToAction("Index", new { tab = "nodelivery" });
         }
 
-        public async Task<IActionResult> DeleteOrder(int id)
+        public async Task<IActionResult> DeleteOrder(int id, string reason)
         {
-            await _orderModels.DeleteOrderAsync(id);
-
+             await _orderModels.DeleteOrderAsync(id, reason);
             return RedirectToAction("Index", new { tab = "noaccept" });
         }
     }

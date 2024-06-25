@@ -29,8 +29,11 @@
                     </div>
                     <div class="detail-pro d-flex mb-4">
                         <p class="mb-4">
+                           
+
                             <strong class="text-dark mr-3">@Html.DisplayNameFor(model => model.ProductPrice):</strong>
-                            @Html.DisplayFor(model => model.ProductPrice)
+                            <span> @string.Format("{0:N0} VNĐ",  Model.ProductPrice)</span>
+
                         </p>
                     </div>
                     <div class="detail-pro d-flex mb-4">

@@ -70,6 +70,12 @@
                     }
                 </tbody>
             </table>
+            @if (TempData["ErrorCheck"] != null)
+                    {
+                    <span class="text-danger">
+                    @Html.Raw(TempData["ErrorCheck"])
+                </span>
+                    }
                     @if (TempData["PaymentSuccess"] !=  null)
                     {
                     <span class="text-success">

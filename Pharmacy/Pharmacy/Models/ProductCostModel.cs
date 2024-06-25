@@ -1,5 +1,6 @@
 ﻿using Amazon.Auth.AccessControlPolicy;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Pqc.Crypto.Falcon;
 
 
 namespace Pharmacy.Models
@@ -24,10 +25,10 @@ namespace Pharmacy.Models
                 switch (condition)
                 {
                     case "productname":
-                        ProductCostFound = _context.ProductCosts.Where(item => item.Product.ProductName.Contains(search)).ToList();
+                        ProductCostFound = ListProductsCost.Where(item => item.Product.ProductName!.Contains(search)).ToList();
                         break;
                     case "suppliername":
-                        ProductCostFound = _context.ProductCosts.Where(item => item.Supplier.SupplierName.Contains(search)).ToList();
+                        ProductCostFound = ListProductsCost.Where(item => item.Supplier.SupplierName!.Contains(search)).ToList();
                         break;
 
                 
@@ -64,7 +65,7 @@ namespace Pharmacy.Models
 
         public ProductCost GetProductCostById(int id)
         {
-            return _context.ProductCosts.Find(id);
+            return _context.ProductCosts.Find(id)!;
         }
 
         public async Task Edit(ProductCost item)
@@ -82,13 +83,90 @@ namespace Pharmacy.Models
                     }
                 }
 
-           
-                updateitem.CostPrice = item.CostPrice;
+   
+                updateitem!.CostPrice = item.CostPrice;
                 updateitem.SupplierId = item.SupplierId;
+                updateitem.ProductExpiryDate = item.ProductExpiryDate;
+                updateitem.ProductInventory = item.ProductInventory;
                 updateitem.ReceivingDate = item.ReceivingDate;
+                if(item.ProductInventory <= 0)
+                {
+
+                updateitem.CostActive = false;
+                }
+                else
+                {
+
                 updateitem.CostActive = item.CostActive;
+                }
                 await _context.SaveChangesAsync();
             }
+        }
+        public bool CheckInventory(int Costid, int quantity)
+        {
+            var item = _context.ProductCosts.Find(Costid);
+            if (item != null && item!.CostActive)
+            {
+                int newinventory = (int)(item.ProductInventory - quantity);
+
+                if (newinventory < 0) return false;
+
+                return true;
+            }
+            return false;
+        }
+        public async Task UpdateInventory(int Costid, int quantity)
+        {
+            var item = _context.ProductCosts.Find(Costid);
+            if (item!.CostActive)
+            {
+
+                int newinventory = (int)(item.ProductInventory - quantity);
+                if (newinventory <= 0)
+                {
+                    item.ProductInventory = 0;
+                    item.CostActive = false;
+                    await _context.SaveChangesAsync();
+
+                }
+                else
+                {
+                    item.ProductInventory = newinventory;
+                    await _context.SaveChangesAsync();
+                }
+               
+            }
+        }
+        public IEnumerable<ProductCost> productCostInventory(string content, string condition)
+        {
+            var ListProductsCost = _context.ProductCosts.Include(pc => pc.Product)
+            .Include(pc => pc.Supplier).Where(pc => pc.ProductInventory >= 0). OrderByDescending(s => s.ProductInventory).ToList();
+
+            if (content != null)
+            {
+                List<ProductCost> ProductCostFound = new List<ProductCost>();
+                switch (condition)
+                {
+                    case "productname":
+                        ProductCostFound = ListProductsCost.Where(item => item.Product.ProductName!.Contains(content)).ToList();
+                        break;
+                    case "suppliername":
+                        ProductCostFound = ListProductsCost.Where(item => item.Supplier.SupplierName!.Contains(content)).ToList();
+                        break;
+                }
+
+                return ProductCostFound;
+            }
+            return ListProductsCost;
+        }
+
+        public IEnumerable<ProductCost> productCostExpiry()
+        {
+            DateTime dateExpiry = DateTime.Now.Date.AddMonths(+1);
+            var ListProductsCost = _context.ProductCosts.Include(pc => pc.Product)
+            .Include(pc => pc.Supplier).Where(pc => pc.ProductInventory >= 0 && pc.ProductExpiryDate  <= dateExpiry).OrderByDescending(s => s.ProductInventory).ToList();
+
+            return ListProductsCost;
         }
     }
 }

@@ -327,4 +327,6 @@ public partial class QlpharmacyContext : IdentityDbContext<IdentityUser>
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+    public DbSet<AspNetUser>? AspNetUser { get; set; }
 }

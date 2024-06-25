@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <History>True|2024-06-05T12:05:15.7118357Z;True|2024-06-05T19:01:46.0444378+07:00;True|2024-06-04T22:25:37.0392642+07:00;True|2024-06-04T22:25:21.0474471+07:00;True|2024-06-02T22:23:21.5924194+07:00;True|2024-06-02T20:36:59.5876455+07:00;True|2024-06-02T13:18:46.6908801+07:00;True|2024-05-23T23:14:17.4888129+07:00;False|2024-05-23T23:13:45.4559882+07:00;True|2024-05-23T23:08:18.8858510+07:00;False|2024-05-23T23:07:37.4707914+07:00;</History>
+    <LastFailureDetails />
+    <_PublishTargetUrl>D:\Đồ án ngành\PharmacyASP.NETCore\Pharmacy\Pharmacy\bin\Release\net6.0\publish\</_PublishTargetUrl>
+  </PropertyGroup>
+</Project>

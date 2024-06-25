@@ -9,23 +9,29 @@ using NuGet.Versioning;
 
 using Pharmacy.Models;
 using Pharmacy.ViewsModels;
+using Stripe;
 using System.Globalization;
+using X.PagedList;
 
 namespace Pharmacy.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin, Staff")]
+    [Authorize(Roles = "Admin, Staff, SuperAdmin")]
     public class HomeAdminController : Controller
     {
         private readonly QlpharmacyContext _context;
+        private readonly ProductCostModel _ProductCostModels;
+        private readonly CustomerModels _customerModels;
 
-        public HomeAdminController(QlpharmacyContext context)
+        public HomeAdminController(QlpharmacyContext context, ProductCostModel productCostModels, CustomerModels customerModels)
         {
             _context = context;
+            _ProductCostModels = productCostModels;
+            _customerModels = customerModels;
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, SuperAdmin")]
         public IActionResult Index(string fromdate = null, string todate = null)
         {
 
@@ -35,7 +41,7 @@ namespace Pharmacy.Areas.Admin.Controllers
             if (string.IsNullOrEmpty(fromdate) || string.IsNullOrEmpty(todate))
             {
                 endDate = DateTime.Now.Date;
-                startDate = endDate.AddMonths(-1).AddDays(1 - endDate.Day);
+                startDate = endDate.AddMonths(-1);
                 ViewBag.fromdate = startDate;
                 ViewBag.todate = endDate;
             }
@@ -47,19 +53,7 @@ namespace Pharmacy.Areas.Admin.Controllers
                 ViewBag.fromdate = startDate;
                 ViewBag.todate = endDate;
             }
-            //var Revennue = from o in _context.Orders
-            //               join od in _context.OrderDetails
-            //               on o.OrderId equals od.OrderId
-            //               join p in _context.ProductCosts
-            //               on od.CostId equals p.CostId
-            //               where o.OrderStatus == 1 &&  o.OrderDelivery == 1 && o.OrderDate.Date >= startDate.Date && o.OrderDate.Date <= endDate.Date 
-            //               select new
-            //               {
-            //                   OrderDate = o.OrderDate,
-            //                   OrderDetailsTemporaryPrice = od.OrderDetailsTemporaryPrice,
-            //                   ProductName = p.Product.ProductName,
-            //                   DataQuantitySell = od.OrderDetailsQuantity
-            //               };
+          
             var Revennue = _context.Orders
                       .Join(_context.OrderDetails, o => o.OrderId, od => od.OrderId, (o, od) => new { Order = o, OrderDetail = od })
                       .Join(_context.ProductCosts, joinResult => joinResult.OrderDetail.CostId, p => p.CostId, (joinResult, p) => new
@@ -107,10 +101,70 @@ namespace Pharmacy.Areas.Admin.Controllers
            
         }
 
+        public const int Items_Per_Page = 10;
+        public IActionResult statisticalInventory(string search, string condition, int? page, string orderby)
+        {
+
+            var listProductsCost = _ProductCostModels.productCostInventory(search, condition);
+
+            var pageNumber = page ?? 1;
+            switch (orderby)
+            {
+                case "increase":
+                    listProductsCost = listProductsCost.OrderBy(p => p.ProductInventory).ToList();
+                    break;
+                case "reduce":
+                    listProductsCost = listProductsCost.OrderByDescending(p => p.ProductInventory).ToList();
+                    break;
+                default:
+                    listProductsCost = listProductsCost.OrderByDescending(s => s.ProductInventory).ToList();
+                    break;
+            }
+
+            var onePage = listProductsCost.ToPagedList(pageNumber, Items_Per_Page);
+            ViewBag.orderby = orderby;
+            return View(onePage);
+        
+        }
 
         public IActionResult ChatAdmin()
         {
             return View("ChatAdmin", "HomeAdmin");
+        }
+
+        public IActionResult statisticalHistoryCustomer(string search, string condition, int? page)
+        {
+            var listCustomer = _customerModels.FetchHistoryPurchaseCustomer(search, condition);
+
+            var pageNumber = page ?? 1;
+
+            var onePage = listCustomer.ToPagedList(pageNumber, Items_Per_Page);
+
+            return View(onePage);
+          
+        }
+        public IActionResult TopSaleCustomer(int customerId, int? page)
+        {
+            var listCustomer = _customerModels.topSaleCustomer(customerId);
+
+            var pageNumber = page ?? 1;
+
+            var onePage = listCustomer.ToPagedList(pageNumber, Items_Per_Page);
+
+            return View(onePage);
+
+        }
+
+        public IActionResult ProductCostExpiryDate(int? page)
+        {
+            var listProductsCost = _ProductCostModels.productCostExpiry();
+
+            var pageNumber = page ?? 1;
+
+            var onePage = listProductsCost.ToPagedList(pageNumber, Items_Per_Page);
+
+            return View(onePage);
+
         }
     }
 }

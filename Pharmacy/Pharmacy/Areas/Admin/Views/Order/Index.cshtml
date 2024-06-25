@@ -18,18 +18,20 @@
         <div class="panel-body">
             <!-- Nav tabs -->
             <ul class="nav nav-tabs">
-                <li class="@(ViewData["CurrentTab"]!.ToString() == "accept" ? "active":"")">
-                    <a href="@Url.Action("Index", new { tab = "accept" })">Danh sách đã duyệt</a>
-                </li>
                 <li class="@(ViewData["CurrentTab"]!.ToString() == "noaccept" ? "active":"")">
                     <a href="@Url.Action("Index", new { tab = "noaccept" })">Danh sách chưa duyệt</a>
-                </li>
-                <li class="@(ViewData["CurrentTab"]!.ToString() == "delivery" ? "active":"")">
-                    <a href="@Url.Action("Index", new { tab = "delivery" })">Danh sách đã giao hàng</a>
                 </li>
                 <li class="@(ViewData["CurrentTab"]!.ToString() == "nodelivery" ? "active":"")">
                     <a href="@Url.Action("Index", new { tab = "nodelivery" })">Danh sách chờ giao hàng</a>
                 </li>
+                <li class="@(ViewData["CurrentTab"]!.ToString() == "delivery" ? "active":"")">
+                    <a href="@Url.Action("Index", new { tab = "delivery" })">Danh sách đã giao hàng</a>
+                </li>
+                <li class="@(ViewData["CurrentTab"]!.ToString() == "cancel" ? "active":"")">
+                    <a href="@Url.Action("Index", new { tab = "cancel" })">Danh sách đơn hàng bị hủy</a>
+                </li>
+             
+              
             </ul>
 
             <!-- Tab panes -->
@@ -66,17 +68,32 @@
                                                 @Html.DisplayFor(modelItem => item.OrderDate)
                                             </td>
                                             <td>
-                                                <span style="background-color: @(item.OrderStatus == 1 ? "green" : "orange"); color: white">
-                                                    @(item.OrderStatus == 1 ? "Đã thanh toán" : "Chưa thanh toán")
-                                                </span>
+                                                @if (ViewData["CurrentTab"]!.ToString() == "cancel")
+                                                {
+                                                <span style="background-color: orange; color: white">
+                                                    Chưa thanh toán
+                                                </span> 
+                                                }
+                                                else
+                                                {
+                                            
+                                                    <span style="background-color: @(item.OrderStatus == 1 ? "green" : "orange"); color: white">
+                                                            @(item.OrderStatus == 1 ? "Đã thanh toán" : "Chưa thanh toán")
+                                                        </span>
+                                                }
                                             </td>
                                             <td>
-                                                
-                                                @if (ViewData["CurrentTab"]!.ToString() != "accept" && ViewData["CurrentTab"]!.ToString() != "noaccept")
+                                                @if (ViewData["CurrentTab"]!.ToString() != "cancel" && ViewData["CurrentTab"]!.ToString() != "noaccept")
                                                     {
                                                     <span style="background-color: @(item.OrderDelivery == 1 ? "green" : "orange"); color: white">
                                                     @(item.OrderDelivery == 1 ? "Đã giao hàng" : "Đang chờ đóng gói")
                                                 </span>
+                                                }
+                                                else if (ViewData["CurrentTab"]!.ToString() == "cancel")
+                                                {
+                                                    <span style="background-color: orange; color: white">
+                                                        Đã hủy
+                                                    </span>
                                                 }
                                                 else
                                                 {
@@ -87,10 +104,10 @@
                                         </td>
                                             <td>
                                             @Html.ActionLink("Chi tiết", "Detail", new { id = item.OrderId, tab = ViewData["CurrentTab"]!.ToString() })
-                                            @if (!item.OrderAccept)
+                                            @if (!item.OrderAccept && item.OrderStatus != -1)
                                             {  
                                                 <span>|</span>
-                                                <a onclick="confirmDelete('@item.OrderId', '@item.OrderId' , '@Url.Action("DeleteOrder", "Order")','đơn hàng')">Hủy</a>
+                                                <a onclick="confirmContentDelete('@item.OrderId', '@item.OrderId' , '@Url.Action("DeleteOrder", "Order")','đơn hàng')">Hủy</a>
                                             }
                                             </td>
                                         </tr>
@@ -99,7 +116,7 @@
                         </tbody>
                     </table>
                     <div class="pagination-admin">
-                        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index",new { page , tab = ViewData["CurrentTab"]    } ))
+                        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index",new { page , tab = ViewData["CurrentTab"]} ))
                     </div> 
                 </div>
             </div>

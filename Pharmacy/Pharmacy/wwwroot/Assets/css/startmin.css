@@ -657,3 +657,12 @@ table.dataTable thead .sorting:after {
     color: #fff; /* active text color */
     background-color: #a94442; /* active bg color */
 }
+.red-dot {
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    right: 0;
+}

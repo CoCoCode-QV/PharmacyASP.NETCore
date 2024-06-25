@@ -51,11 +51,10 @@ namespace Pharmacy.Controllers
             }
             var pageNumber = page ?? 1;
 
-            var listProductsCost = listProducts
+                var listProductsCost = listProducts
                                     .SelectMany(product => _context.ProductCosts
-                                    .Where(pc => pc.ProductId == product.ProductId && pc.CostActive).Include(pc => pc.ProductDiscounts)
+                                    .Where(pc => pc.ProductId == product.ProductId && pc.CostActive && pc.ProductInventory > 0 && product.ProductActive == true && pc.ProductExpiryDate > DateTime.Now).Include(pc => pc.ProductDiscounts)
                                     .Include(pc =>pc.Product))
-                                    
                                     .ToList();
             var pagedList = listProductsCost.ToPagedList(pageNumber, ItemsPerPage);
             var listCategory = _context.Categories.ToList();

@@ -8,7 +8,7 @@
 }
 
 <div class="main-container">
-    <h2 class="col">Quản lý giá nhập</h2>
+    <h2 class="col">Quản lý sản phẩm nhập</h2>
     @using (Html.BeginForm("Index", "ProductCost", FormMethod.Get))
     {
         <div class="row custom-search-form">
@@ -31,7 +31,7 @@
     }
 </div>
 <p>
-    Danh sách giá nhập
+    Danh sách sản phẩm nhập
 </p>
 @Html.ActionLink("Thêm mới", "Create", "ProductCost", null, new { @class = "btn btn-outline btn-success", style = "margin-bottom: 20px;" })
 <div class="col">
@@ -56,6 +56,13 @@
                                 </th>
                                 <th>
                                     <span>Giá nhập</span>
+                                </th>
+                                
+                                <th>
+                                    <span>Hạn sử dụng</span>
+                                </th>
+                                <th>
+                                    <span>Kho</span>
                                 </th>
                                 <th>
                                     <span>Ngày nhập</span>
@@ -82,7 +89,13 @@
                                             @Html.DisplayFor(modelItem => item.Supplier.SupplierName)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.CostPrice)
+                                            <span> @string.Format("{0:N0} VNĐ", item.CostPrice)</span>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ProductExpiryDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ProductInventory)
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.ReceivingDate)
@@ -97,7 +110,6 @@
                                             @Html.ActionLink("Sửa", "Edit", new { id = item.CostId })|
                                             <a onclick="confirmDelete('@item.CostId', '@item.Product.ProductName', '@Url.Action("Delete", "ProductCost")','Giá sản phẩm')">Xóa</a>
                                         </td>
-                                          
                                     </tr>
                                 }
                             }
@@ -110,7 +122,7 @@
                         </tbody>
                     </table>
                     <div class="pagination-admin">
-                        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page, tab = ViewData["CurrentTab"] }))
+                        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page, search = Context.Request.Query["search"], condition = Context.Request.Query["condition"] }))
                     </div>
                 </div>
             </div>

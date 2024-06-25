@@ -19,11 +19,12 @@ namespace Pharmacy.Controllers
 		private readonly CustomerModels _customer;
 		private readonly OrderModels _order;
 		private readonly ProductModels _product;
-		private readonly StripeSettings _stripeSettings;
+        private readonly ProductCostModel _productCost;
+        private readonly StripeSettings _stripeSettings;
 		private readonly QlpharmacyContext _context;
 
 
-		public PaymentController( CartModels cartModels, CustomerModels customer, OrderModels order, ProductModels product, StripeSettings stripesetting, QlpharmacyContext context)
+		public PaymentController( CartModels cartModels, CustomerModels customer, ProductCostModel productCost, OrderModels order, ProductModels product, StripeSettings stripesetting, QlpharmacyContext context)
 		{
 			_cart = cartModels;
 			_customer = customer;
@@ -31,7 +32,7 @@ namespace Pharmacy.Controllers
 			_product = product;
 			_stripeSettings = stripesetting;
 			_context = context;
-
+			_productCost = productCost;
         }
 		[HttpPost]
         public IActionResult Index(int CustomerId, long? amount)
@@ -54,6 +55,7 @@ namespace Pharmacy.Controllers
 				ViewBag.ErrorCustomer = "Vui lòng cập nhật thông tin khách hàng trước khi thanh toán!";
 				return View(customer);
 			}
+			
 			ViewBag.amount = amount;
 			return View(customer);
 		}
@@ -110,6 +112,7 @@ namespace Pharmacy.Controllers
 					listCartItem.Add(cartItem);
 
 					await _order.CreateOrderDetail(orderDetail);
+					await _productCost.UpdateInventory(cost.CostId, cartDetail.CartDetailQuantity);
 					await _cart.DeleteDetailAsync(cartDetail.CartDetailId);
 				}
 				SendMailService sendMailService = new SendMailService();

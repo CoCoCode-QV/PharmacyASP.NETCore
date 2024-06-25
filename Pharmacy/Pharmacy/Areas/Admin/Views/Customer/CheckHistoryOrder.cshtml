@@ -1,0 +1,65 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IEnumerable<Order>
+
+@{
+    ViewData["Title"] = "CheckHistoryOrder";
+    Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
+}
+
+<h2>Danh sách đơn hàng</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <span>ID</span>
+            </th>
+            <th>
+                <span>Ngày đặt</span>
+            </th>
+            <th>
+                <span>Thanh toán</span>
+            </th>
+            <th>
+                <span>Trạng thái</span>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderId)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderDate)
+            </td>
+           
+            <td>
+                    <span style="background-color: @(item.OrderStatus == 1 ? "green" : "orange"); color: white">
+                        @(item.OrderStatus == 1 ? "Đã thanh toán" : "Chưa thanh toán")
+                    </span>
+            </td>
+           
+            <td>
+                    <span style="background-color: @(item.OrderDelivery == 1 ? "green" : "orange"); color: white">
+                        @(item.OrderDelivery == 1 ? "Đã giao hàng" : "Đang chờ đóng gói")
+            </td>
+
+            <td>
+                    @Html.ActionLink("Chi tiết", "CheckHistorypurchase", new { id = item.OrderId, customerid = @ViewBag.CustomerId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<div>
+    <i class="fa fa-reply"></i>
+    @Html.ActionLink("Quay lại", "Index")
+</div>
+
+<div class="pagination-admin">
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("CheckHistoryOrder", new { page, id = @ViewBag.CustomerId }))
+</div>

@@ -64,7 +64,7 @@
             </td>
            
             <td>
-                @Html.ActionLink("Sửa", "EditProductDiscount", new { id = item.CostId })|
+                @Html.ActionLink("Sửa", "EditProductDiscount", new { id = item.ProductDiscountId })|
                 <a onclick="confirmDelete('@item.ProductDiscountId', '@item.Cost.Product.ProductName', '@Url.Action("DeleteProductDiscount", "Discount")','Mã giảm giá sản phẩm')">Xóa</a>
             </td>
         </tr>

@@ -35,12 +35,12 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-form-label col-sm-2">Sản phẩm</label>
+                <label class="col-form-label col-sm-2">Sản phẩm - nhà cung cấp</label>
                 <div class="col-sm-10">
                     
                     @Html.DropDownListFor(model => model.CostId, ViewBag.ProductCost as SelectList, "-- Chọn sản phẩm --", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.CostId, "", new { @class = "text-danger" })
-                </div>
+                </div>  
             </div>
             <div class="form-group row">
                 <label class="col-form-label col-sm-2">Mã giảm giá</label>

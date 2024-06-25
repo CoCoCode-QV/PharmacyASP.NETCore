@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 
 
@@ -13,12 +14,14 @@ public partial class ProductCost
 
     public double CostPrice { get; set; }
 
+    //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime? ReceivingDate { get; set; }
 
     public bool CostActive { get; set; }
 
     public double ProductInventory { get; set; }
 
+    //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime? ProductExpiryDate { get; set; }
 
     public virtual ICollection<CartDetail> CartDetails { get; set; } = new List<CartDetail>();

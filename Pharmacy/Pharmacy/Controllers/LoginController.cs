@@ -54,12 +54,17 @@ namespace Pharmacy.Controllers
                     if (user != null)
                     {
                         var isInRole = await _userManager.IsInRoleAsync(user, "Admin");
-                        if (isInRole)
+                        var isInRoleStaff = await _userManager.IsInRoleAsync(user, "Staff");
+                        var isInRoleSuperAdmin = await _userManager.IsInRoleAsync(user, "SuperAdmin");
+                        if (isInRole || isInRoleSuperAdmin)
                         {
                      
                             return RedirectToAction("Index", "HomeAdmin", new { Areas = "Admin" });
                         }
-
+                        if (isInRoleStaff)
+                        {
+                            return RedirectToAction("Index", "Product", new { Areas = "Admin" });
+                        }
                         return RedirectToAction("Index", "Home");
                     }
                 }

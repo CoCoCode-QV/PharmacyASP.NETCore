@@ -1,0 +1,83 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IEnumerable<ProductCost>
+
+@{
+    ViewData["Title"] = "Product Cost Expiry Date";
+    Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
+}
+
+<div class="main-container">
+    <h2 class="col">Sản phẩm gần hết hạn </h2>
+
+</div>
+
+
+<div class="col">
+    <div class="panel panel-default">
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="accept">
+                    <table class="table">
+                        <thead>
+                            <tr>
+
+                                <th>
+                                    <span>Tên sản phẩm</span>
+                                </th>
+                                <th>
+                                    <span>Nhà cung cấp</span>
+                                </th>
+                                <th>
+                                    <span>Ngày hết hạn</span>
+                                </th>
+                                <th>
+                                    <span>Tồn Kho</span>
+                                </th>
+
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Product.ProductName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Supplier.SupplierName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ProductExpiryDate)
+                                        </td>
+                                      
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ProductInventory)
+                                        </td>
+
+
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                    <div class="pagination-admin">
+                        @Html.PagedListPager((IPagedList)Model, page => Url.Action("ProductCostExpiryDate", new { page}))
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+<script src="~/Scripts/notify/NotifyAdmin.js"></script>

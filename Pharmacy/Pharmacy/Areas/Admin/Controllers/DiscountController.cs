@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Pharmacy.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin, Staff")]
+    [Authorize(Roles = "Admin, Staff, SuperAdmin")]
     public class DiscountController : Controller
     {
         private readonly DiscountModels _discountModels;
@@ -189,7 +189,7 @@ namespace Pharmacy.Areas.Admin.Controllers
 
         [HttpPost]
         public async Task<IActionResult> EditProductDiscount(ProductDiscount item)
-        {
+            {
             if (item.CostId == null || item.DiscountId == null)
             {
                 return View();
@@ -202,7 +202,7 @@ namespace Pharmacy.Areas.Admin.Controllers
                 if (startDate > endDate || startDate < currentDate || endDate < currentDate)
                 {
                     TempData["error"] = "Ngày bắt đầu khuyến mãi và kết thúc không hợp lệ";
-                    return View();
+                    return RedirectToAction("EditProductDiscount", new { id = item.ProductDiscountId });
                 }
                 await _discountModels.EditDiscount(item);
                 return RedirectToAction("ProductDiscount");

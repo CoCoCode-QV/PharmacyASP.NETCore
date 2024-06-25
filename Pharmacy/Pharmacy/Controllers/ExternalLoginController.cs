@@ -13,6 +13,7 @@ using Microsoft.VisualBasic;
 using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 using Pharmacy.Models;
+using Stripe;
 
 namespace Pharmacy.Controllers
 {
@@ -47,6 +48,8 @@ namespace Pharmacy.Controllers
             var userEmail = emailClaim?.Value;
             var userNameClaim = claimsPrincipal.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname");
             var userName = userNameClaim?.Value;
+
+          
             if (userEmail == null)
             {
                 // Xử lý lỗi

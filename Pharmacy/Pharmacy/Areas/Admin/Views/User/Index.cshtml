@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Pharmacy.ViewsModels.UserViewModels>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
+}
+
+
+<div class="main-container">
+    <h2 class="col">Quản lý tài khoản</h2>
+</div>
+
+@Html.ActionLink("Thêm mới", "Create", "User", null, new { @class = "btn btn-outline btn-success", style = "margin-bottom: 20px;" })
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                <span>Tên đăng nhập</span>
+            </th>
+            <th>
+                <span>Email</span>
+            </th>
+            <th>
+                <span>Vai trò</span>
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+
+            <td>
+                   @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Role)
+            </td>
+                <td>
+@*                     @Html.ActionLink("Xóa", "Delete", new { UserId = item.UserId, role =item.Role })
+ *@
+                    <a onclick="confirmDelete('@item.UserId', '@item.UserId', '@Url.Action("Delete", "User")','tài khoản')">Xóa</a>
+                </td>
+
+        </tr>
+}
+    </tbody>
+</table>
+<script src="~/Scripts/notify/NotifyAdmin.js"></script>

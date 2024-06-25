@@ -7,14 +7,16 @@ using X.PagedList;
 namespace Pharmacy.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin, Staff")]
+    [Authorize(Roles = "Admin, Staff, SuperAdmin")]
     public class CustomerController : Controller
     {
         private readonly CustomerModels _customerModels;
+        private OrderModels _orderModels;
 
-        public CustomerController(CustomerModels customerModels)
+        public CustomerController(CustomerModels customerModels, OrderModels orderModels)
         {
             _customerModels = customerModels;
+            _orderModels = orderModels;
         }
 
         public const int Items_Per_Page = 10;
@@ -28,8 +30,7 @@ namespace Pharmacy.Areas.Admin.Controllers
 
             return View(onePageSupplier);
         }
-
-        public IActionResult CheckHistorypurchase(int id, int? page)
+        public IActionResult CheckHistoryOrder(int id, int? page)
         {
 
             var HistoryPurchase = _customerModels.historyPurchase(id);
@@ -37,6 +38,18 @@ namespace Pharmacy.Areas.Admin.Controllers
             var onePageSupplier = HistoryPurchase.ToPagedList(pageNumber, Items_Per_Page);
             ViewBag.CustomerId = id;
             return View(onePageSupplier);
+        }
+        public IActionResult CheckHistorypurchase(int id, int customerid)
+        {
+            if (id == 0)
+            {
+                return View();
+            }
+            var lisrOrderDetail = _orderModels.GetListOrderDetailByOrderId(id);
+            var cartTotalPrice = lisrOrderDetail.Sum(item => item.OrderDetailsTemporaryPrice);
+            ViewBag.customerid = customerid;
+            ViewBag.CartTotalPrice = cartTotalPrice;
+            return View(lisrOrderDetail);
         }
     }
 }

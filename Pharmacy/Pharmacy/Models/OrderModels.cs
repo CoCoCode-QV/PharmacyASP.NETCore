@@ -34,19 +34,18 @@ namespace Pharmacy.Models
           
             switch (tab)
             {
-                case "accept":
-                    ordersToShow = allOrders.Where(o => o.OrderAccept && o.OrderDelivery == 0).ToList();
+                case "cancel":
+                    ordersToShow = allOrders.Where(o => o.OrderStatus == -1).ToList();
                     return ordersToShow;
-                
                 case "noaccept":
-                    ordersToShow = allOrders.Where(o => !o.OrderAccept).ToList();
+                    ordersToShow = allOrders.Where(o => !o.OrderAccept && o.OrderStatus != -1).ToList();
                     return ordersToShow;
                 case "delivery":
-                    ordersToShow = allOrders.Where(o => o.OrderDelivery == 1).ToList();
+                    ordersToShow = allOrders.Where(o => o.OrderDelivery == 1 && o.OrderStatus != -1).ToList();
                     return ordersToShow;
                  
                 default:
-                    ordersToShow = allOrders.Where(o => o.OrderDelivery == 0 && o.OrderAccept).ToList();
+                    ordersToShow = allOrders.Where(o => o.OrderDelivery == 0 && o.OrderAccept && o.OrderStatus != -1).ToList();
                     return ordersToShow;
             }
 
@@ -62,11 +61,10 @@ namespace Pharmacy.Models
 		public async Task AcceptOrder(int id)
 		{
 			var item =	_context.Orders.Find(id);
-
 			if(item != null)
 			{
 				item.OrderAccept = true;
-				await _context.SaveChangesAsync();
+				await _context.SaveChangesAsync();  
 			}
         }
 
@@ -86,27 +84,26 @@ namespace Pharmacy.Models
 			var allOrders = _context.Orders.Where(o=>o.CustomerId == id).OrderByDescending(o => o.OrderId).ToList();
             List<Order> ordersToShow;
 
-
             switch (tab)
             {
-                case "accept":
-                    ordersToShow = allOrders.Where(o => o.OrderAccept && o.OrderDelivery == 0).ToList();
+                case "cancel":
+                    ordersToShow = allOrders.Where(o => o.OrderStatus == -1).ToList();
                     return ordersToShow;
                 case "noaccept":
-                    ordersToShow = allOrders.Where(o => !o.OrderAccept).ToList();
+                    ordersToShow = allOrders.Where(o => !o.OrderAccept && o.OrderStatus != -1).ToList();
                     return ordersToShow;
                 case "delivery":
-                    ordersToShow = allOrders.Where(o => o.OrderDelivery == 1).ToList();
+                    ordersToShow = allOrders.Where(o => o.OrderDelivery == 1 && o.OrderStatus != -1).ToList();
                     return ordersToShow;
 
                 default:
-                    ordersToShow = allOrders.Where(o => o.OrderDelivery == 0 && o.OrderAccept).ToList();
+                    ordersToShow = allOrders.Where(o => o.OrderDelivery == 0 && o.OrderAccept && o.OrderStatus != -1).ToList();
                     return ordersToShow;
             }
-            
+
         }
 
-        public async Task DeleteOrderAsync(int id)
+        public async Task DeleteOrderAsync(int id, string reason)
         {
             var order = _context.Orders.Include(o => o.OrderDetails).ThenInclude(od => od.Cost).ThenInclude(od => od.Product).Include(o=>o.Customer).FirstOrDefault(o => o.OrderId == id);
 
@@ -119,6 +116,7 @@ namespace Pharmacy.Models
                 <head></head>
                 <body>
 					    <p>Xin lỗi đơn hàng của bạn đã bị hủy:</p>
+                        <p>Với lý do: {reason}</p>
 					    {GenerateOrderDetailTable(orderDetailsList)}
                         
                         <em>Chúng tôi sẽ hoàn tiền lại cho quý khách sau mail này, nếu quý khách chưa nhận được tiền vui lòng liên hệ lại cho chúng tôi</em>
@@ -127,10 +125,12 @@ namespace Pharmacy.Models
                 </html>";
                 sendMailService.SendMail(order.Customer.CustomerEmail, "VTPharmacy hủy đơn hàng", emailBody, "");
 
-                // Xóa các chi tiết đơn hàng 
-                _context.OrderDetails.RemoveRange(order.OrderDetails);
-                // Sau đó xóa đơn hàng chính
-                _context.Orders.Remove(order);
+                order.OrderStatus = -1;
+                
+                //// Xóa các chi tiết đơn hàng 
+                //_context.OrderDetails.RemoveRange(order.OrderDetails);
+                //// Sau đó xóa đơn hàng chính
+                //_context.Orders.Remove(order);
 
                 // Lưu thay đổi vào cơ sở dữ liệu
                 await _context.SaveChangesAsync();

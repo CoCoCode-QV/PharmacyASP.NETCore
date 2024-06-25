@@ -76,7 +76,7 @@ namespace Pharmacy.Models
 
         public ProductDiscount GetDiscountProduct(int id)
         {
-            return _context.ProductDiscounts.Where(p => p.CostId == id).SingleOrDefault()!;
+            return _context.ProductDiscounts.Where(p => p.ProductDiscountId == id).SingleOrDefault()!;
         }
 
         public async Task EditDiscount(Discount discount)

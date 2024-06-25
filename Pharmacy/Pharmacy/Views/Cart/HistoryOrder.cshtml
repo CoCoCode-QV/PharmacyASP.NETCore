@@ -28,9 +28,7 @@
         <div class="bg-light p-30">
            
             <ul class="nav nav-tabs mb-4">
-                <li class="nav-item nav-link @(ViewData["CurrentTab"]!.ToString() == "accept" ? "active":"")">
-                    <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "accept" })">Danh sách đã duyệt</a>
-                </li>
+
                 <li class="nav-item nav-link @(ViewData["CurrentTab"]!.ToString() == "noaccept" ? "active":"")">
                     <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "noaccept" })">Danh sách chưa duyệt</a>
                 </li>
@@ -38,7 +36,11 @@
                     <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "delivery" })">Danh sách đã giao hàng</a>
                 </li>
                 <li class="nav-item nav-link @(ViewData["CurrentTab"]!.ToString() == "nodelivery" ? "active":"")">
-                    <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "nodelivery" })">Danh sách chờ giao hàng</a>
+                    <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "nodelivery" })">Danh sách đang chờ giao hàng</a>
+                </li>
+                <li class="nav-item nav-link @(ViewData["CurrentTab"]!.ToString() == "cancel" ? "active":"")">
+                    <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "cancel" })">Danh sách đơn hàng đã hủy</a>
+                </li>
             </ul>
 
             <!-- Tab panes -->
@@ -74,16 +76,30 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.OrderDate)
                                         </td>
-                                        <td>
-                                            <span style="background-color: @(item.OrderStatus == 1 ? "green" : "orange"); color: white">
-                                                @(item.OrderStatus == 1 ? "Đã thanh toán" : "Chưa thanh toán")
-                                            </span>
+                                        <td> @if (ViewData["CurrentTab"]!.ToString() == "cancel")
+                                            {
+                                                <span style="background-color: orange; color: white">
+                                                    Chưa thanh toán
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                
+                                                <span style="background-color: @(item.OrderStatus == 1 ? "green" : "orange"); color: white">
+                                                    @(item.OrderStatus == 1 ? "Đã thanh toán" : "Chưa thanh toán")
+                                                </span>
+                                            }
                                         </td>
                                         <td>
-                                            @if (ViewData["CurrentTab"]!.ToString() != "accept" && ViewData["CurrentTab"]!.ToString() != "noaccept")
+                                            @if (ViewData["CurrentTab"]!.ToString() != "cancel" && ViewData["CurrentTab"]!.ToString() != "noaccept")
                                             {
                                                 <span style="background-color: @(item.OrderDelivery == 1 ? "green" : "orange"); color: white">
                                                     @(item.OrderDelivery == 1 ? "Đã giao hàng" : "Đang chờ đóng gói")
+                                                </span>
+                                            }else if (ViewData["CurrentTab"]!.ToString() == "cancel")
+                                            {
+                                                <span style="background-color: orange; color: white">
+                                                    Đã hủy
                                                 </span>
                                             }
                                             else
@@ -95,7 +111,7 @@
                                         </td>
                                         <td>
                                             @Html.ActionLink("Chi tiết", "OrderDetail", new { id = item.OrderId })
-                                            @if (!item.OrderAccept)
+                                            @if (!item.OrderAccept && item.OrderStatus != -1 )
                                             {
                                                 <text> | </text>
                                                 @Html.ActionLink("Hủy", "DeletedOrder", new { orderId = item.OrderId })

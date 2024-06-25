@@ -45,16 +45,31 @@ namespace Pharmacy.Controllers
             var listProducts = _ProductModels.GetProductsActive(search);
             var listProductsCost = listProducts
                         .SelectMany(product => _qlpharmacyContext.ProductCosts
-                        .Where(pc => pc.ProductId == product.ProductId && pc.CostActive).Include(pc =>pc.ProductDiscounts).Include(pc =>pc.Product))
+                        .Where(pc => pc.ProductId == product.ProductId && pc.CostActive && pc.ProductInventory > 0 && product.ProductActive == true && pc.ProductExpiryDate > DateTime.Now).Include(pc =>pc.ProductDiscounts).Include(pc =>pc.Product))
                         .ToList();
+            // Tính toán phần trăm chiết khấu cho mỗi sản phẩm
+            var discountPercentMap = _discountModels.GetDiscountPercentMap(listProductsCost, _qlpharmacyContext.Discounts.ToList());
 
+            // Sắp xếp danh sách sản phẩm dựa trên phần trăm chiết khấu từ cao đến thấp
+            listProductsCost = listProductsCost
+                .OrderByDescending(pc => discountPercentMap.ContainsKey(pc.CostId) ? discountPercentMap[pc.CostId] : 0)
+                .ThenByDescending(pc => pc.Product.ProductName) // Sắp xếp phụ theo tên sản phẩm nếu cần
+                .Take(Items_Per_Page)
+                .ToList();
             listProductsCost = listProductsCost.Take(Items_Per_Page).ToList();
-            ProductViewModels viewModel = null;
-             viewModel = new ProductViewModels
+            ProductViewModels viewModel = new ProductViewModels
             {
                 ListProductCost = listProductsCost,
-                DiscountPercentMap = _discountModels.GetDiscountPercentMap(listProductsCost, _qlpharmacyContext.Discounts.ToList())
+                DiscountPercentMap = discountPercentMap
             };
+
+            //listProductsCost = listProductsCost.Take(Items_Per_Page).ToList();
+            //ProductViewModels viewModel = null;
+            // viewModel = new ProductViewModels
+            //{
+            //    ListProductCost = listProductsCost,
+            //    DiscountPercentMap = _discountModels.GetDiscountPercentMap(listProductsCost, _qlpharmacyContext.Discounts.ToList())
+            //};
 
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             _httpContextAccessor.HttpContext.Session.SetInt32("counter", 0);

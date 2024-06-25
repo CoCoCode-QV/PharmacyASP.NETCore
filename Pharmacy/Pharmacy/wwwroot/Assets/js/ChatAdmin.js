@@ -43,7 +43,7 @@ var clickedUserId;
 var selectedUserId;
 // Hàm để kiểm tra và thêm div chứa tên người dùng mới vào sideBar
 function displayNewUser(userId, userName) {
-    // Kiểm tra xem userId đã được tạo div hay chưa
+    //Kiểm tra xem userId đã được tạo div hay chưa
     if (!createdUserIds.includes(userId)) {
         // Tạo một div mới cho người dùng
         var sideBarBody = document.createElement('div');
@@ -69,6 +69,22 @@ function displayNewUser(userId, userName) {
         // Thêm .sideBar-body vào .sideBar
         var sideBar = document.querySelector('.sideBar');
         sideBar.appendChild(sideBarBody);
+
+        var deleteIcon = document.createElement('i');
+        deleteIcon.className = 'material-icons delete-user';
+        deleteIcon.textContent = 'delete';
+
+        deleteIcon.addEventListener('click', function (event) {
+            event.stopPropagation(); // Ngăn chặn sự kiện bị lan truyền đến các phần tử cha
+
+            // Gọi hàm xóa người dùng và tin nhắn của họ
+
+            var confirmDelete = confirm("Bạn có chắc chắn muốn xóa người dùng và toàn bộ tin nhắn của họ?");
+            if (confirmDelete) {
+                deleteUserAndMessages(userId);
+            }
+        });
+        sideBarBody.appendChild(deleteIcon);
 
         // Thêm userId vào mảng để đánh dấu là đã tạo div cho userId này
         createdUserIds.push(userId);
@@ -172,4 +188,31 @@ function listenForNewMessages(user) {
             chatbox.scrollTo(0, chatbox.scrollHeight);
         }
     });
+}
+
+
+function deleteUserAndMessages(userId) {
+    if (selectedUserId === userId) {
+        // Nếu có, xóa toàn bộ nội dung của cuộc trò chuyện khỏi phần conversation
+        document.querySelector('.chat-body').innerHTML = '';
+
+        document.getElementById("adminHeadingNameMeta").textContent = '';
+
+        // Dừng lắng nghe tin nhắn từ người dùng
+        database.ref('messages').off('child_added');
+
+        // Xóa biến selectedUserId để không theo dõi cuộc trò chuyện nữa
+        selectedUserId = null;
+    }
+    // Gửi yêu cầu xóa người dùng và tin nhắn của họ đến máy chủ
+    connection.invoke("DeleteUserAndMessages", userId)
+        .catch(function (err) {
+            return console.error(err.toString());
+        });
+
+    // Xóa div chứa tên người dùng và biểu tượng xóa khỏi sidebar
+    var sideBarBodyToDelete = document.querySelector(`.sideBar-body[data-userid='${userId}']`);
+    if (sideBarBodyToDelete) {
+        sideBarBodyToDelete.remove();
+    }
 }

@@ -1,10 +1,11 @@
 ﻿@using X.PagedList.Mvc.Core;
 @using X.PagedList;
-@model IEnumerable<Order>
+@model IEnumerable<OrderDetail>
 
 @{
     ViewData["Title"] = "Lịch sử mua hàng";
     Layout = "~/Areas/Admin/Views/_Layout_Admin.cshtml";
+   
 }
 
 <h2>Lịch sử mua hàng</h2>
@@ -36,17 +37,16 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
-            {
-                @foreach (var temp in item.OrderDetails)
+          
+                @foreach (var temp in Model)
                 {
 
                     <tr>
-                        <td>
-                            @item.OrderId
+                        <td>@temp.OrderId
                         </td>
+                  
                         <td>
-                            @item.OrderDate
+                        @temp.Order.OrderDate
                         </td>
                         <td>
                             @temp.OrderDetailsQuantity
@@ -65,15 +65,20 @@
                     </tr>
 
                 }
-            }
+            
 
         </tbody>
+        <tr>
+            <td style='text-align:left;padding: 10px;' colspan='3'></td>
+            <td style='text-align:left;padding: 10px;'>Tổng cộng:</td>
+            <td style='text-align:left;padding: 10px;'> @string.Format("{0:N0} VNĐ", @ViewBag.CartTotalPrice)</td>
+
+            <td></td>
+        </tr>
     </table>
-    <div class="pagination-admin">
-        @Html.PagedListPager((IPagedList)Model, page => Url.Action("CheckHistorypurchase",new { page , id = @ViewBag.CustomerId}))
-    </div>
+    
 </div>
 <div>
     <i class="fa fa-reply"></i>
-    @Html.ActionLink("Quay lại", "Index")
+    @Html.ActionLink("Quay lại", "CheckHistoryOrder", new { id = @ViewBag.customerid })
 </div>
