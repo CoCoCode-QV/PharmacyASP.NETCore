@@ -25,6 +25,43 @@
             </form>
         </div>
     </div>
+    <br></br>
+    <div class="row">
+        <div class="card">
+            <div class="card-header">
+            </div>
+            <div class="card-body" style=" max-height: 300px;overflow-y: auto;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Ngày</th>
+                            <th scope="col">Doanh thu</th>
+                            <th scope="col">Giá vốn</th>
+                            <th scope="col">Lợi nhuận</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 1;
+
+                            @foreach (var item in Model.Result)
+                            {
+                                <tr>
+                                    <th>@(i++) </th>
+                                    <th>@(item.LabelsDate.ToShortDateString())</th>
+                                    <td> @(string.Format("{0:N0} VNĐ", @item.DataRevenue))</td>
+                                    <td> @(string.Format("{0:N0} VNĐ", @item.ImportPriceRevenue))</td>
+                                    <td> @(string.Format("{0:N0} VNĐ", @item.DataRevenue - item.ImportPriceRevenue))</td>
+                                </tr>
+                            }
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-9">
             <div class="card">
@@ -36,7 +73,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-3">
+        @* <div class="col-sm-3">
             <div class="card">
                 <div class="card-header">
                 </div>
@@ -47,6 +84,7 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Ngày</th>
                                 <th scope="col">Doanh thu</th>
+                                <th scope="col">Gía nhập</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -59,6 +97,7 @@
                                         <th>@(i++) </th>
                                         <th>@(item.LabelsDate.ToShortDateString())</th>
                                         <td> @(string.Format("{0:N0} VNĐ",@item.DataRevenue))</td>
+                                        <td> @(string.Format("{0:N0} VNĐ", @item.ImportPriceRevenue))</td>
                                     </tr>
                                 }
 
@@ -67,7 +106,7 @@
                     </table>
                 </div>
             </div>
-        </div>
+        </div> *@
     </div>
 </div>
 <div class="container mt-3">

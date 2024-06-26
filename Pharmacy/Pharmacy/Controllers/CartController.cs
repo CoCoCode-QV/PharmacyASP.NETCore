@@ -210,10 +210,10 @@ namespace Pharmacy.Controllers
                 //_context.OrderDetails.RemoveRange(order.OrderDetails);
                 //_context.Orders.Remove(order);
                 _context.SaveChanges();
-                TempData["SuccessMessage"] = "Xóa đơn hàng thành công, bạn vui lòng kiểm tra mail để nhận lại tiền đã thanh toán";
+                TempData["SuccessMessage"] = "Huỷ đơn hàng thành công, bạn vui lòng kiểm tra mail để nhận lại tiền đã thanh toán";
                 return RedirectToAction("HistoryOrder", TempData["SuccessMessage"]);
             }
-            TempData["ErrorMessage"] = "Xóa đơn hàng thất bại, không tìm thấy đơn hàng";
+            TempData["ErrorMessage"] = "Hủy đơn hàng thất bại, không tìm thấy đơn hàng";
             return RedirectToAction("HistoryOrder", TempData["ErrorMessage"]);
         }
         public string GenerateOrderDetailTable(List<OrderDetail> orderDetails)

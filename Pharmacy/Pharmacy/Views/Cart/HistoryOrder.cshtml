@@ -32,12 +32,13 @@
                 <li class="nav-item nav-link @(ViewData["CurrentTab"]!.ToString() == "noaccept" ? "active":"")">
                     <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "noaccept" })">Danh sách chưa duyệt</a>
                 </li>
-                <li class="nav-item nav-link @(ViewData["CurrentTab"]!.ToString() == "delivery" ? "active":"")">
-                    <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "delivery" })">Danh sách đã giao hàng</a>
-                </li>
                 <li class="nav-item nav-link @(ViewData["CurrentTab"]!.ToString() == "nodelivery" ? "active":"")">
                     <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "nodelivery" })">Danh sách đang chờ giao hàng</a>
                 </li>
+                <li class="nav-item nav-link @(ViewData["CurrentTab"]!.ToString() == "delivery" ? "active":"")">
+                    <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "delivery" })">Danh sách đã giao hàng</a>
+                </li>
+               
                 <li class="nav-item nav-link @(ViewData["CurrentTab"]!.ToString() == "cancel" ? "active":"")">
                     <a class="text-dark" href="@Url.Action("HistoryOrder", new { tab = "cancel" })">Danh sách đơn hàng đã hủy</a>
                 </li>

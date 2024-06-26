@@ -140,10 +140,6 @@
                     <li>
                         @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                         {
-
-                         
-
-                           
                                 <li class="">
                                     <a href="#"><i class="fa fa-sitemap fa-fw"></i> Thống kê <span class="fa arrow"></span></a>
                                     <ul class="nav nav-second-level collapse in" aria-expanded="true" style="">
@@ -159,10 +155,10 @@
                                             <a href="#">Thống kê sản phẩm <span class="fa arrow"></span></a>
                                             <ul class="nav nav-third-level collapse">
                                                 <li>
-                                                    <a href="@Url.Action("statisticalInventory", "HomeAdmin")"><i class="fa fa-bar-char-to fa-fw"></i>hàng tồn kho</a>
+                                                    <a href="@Url.Action("statisticalInventory", "HomeAdmin")"><i class="fa fa-bar-char-to fa-fw"></i>Hàng tồn kho</a>
                                                 </li>
                                                     <li>
-                                                        <a href="@Url.Action("ProductCostExpiryDate", "HomeAdmin")"><i class="fa fa-bar-char-to fa-fw"></i>hàng sắp hết hạn</a>
+                                                        <a href="@Url.Action("ProductCostExpiryDate", "HomeAdmin")"><i class="fa fa-bar-char-to fa-fw"></i>Hàng sắp hết hạn</a>
                                                     </li>
                                            
                                             </ul>

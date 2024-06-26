@@ -34,7 +34,7 @@ namespace Pharmacy.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Supplier supplier)
+        public  IActionResult Create(Supplier supplier)
         {
             if (supplier.SupplierName == null || supplier.SupplierAddress == null || supplier.SupplierEmail == null || supplier.SupplierPhone == null)
             {
@@ -43,7 +43,7 @@ namespace Pharmacy.Areas.Admin.Controllers
             }
             else
             {
-                _supplierModels.CreatSupplier(supplier);
+                 _supplierModels.CreatSupplier(supplier);
                 return RedirectToAction("Index");
             }
         }

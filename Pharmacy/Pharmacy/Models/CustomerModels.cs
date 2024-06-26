@@ -53,6 +53,7 @@ namespace Pharmacy.Models
         public IEnumerable<Customer> getListCustomer(string search, string condition)
         {
             var listCustomer = _context.Customers.OrderByDescending(o => o.CustomerId).ToList();
+            
             if (search != null)
             {
                 List<Customer> CustomerFound = new List<Customer>();
@@ -68,7 +69,7 @@ namespace Pharmacy.Models
                     case "phone":
                         CustomerFound = listCustomer.Where(item => item.CustomerPhone.Contains(search)).ToList();
                         break;
-
+                    
                 }
                 return CustomerFound;
             }
@@ -82,7 +83,7 @@ namespace Pharmacy.Models
           
         }
 
-        public IEnumerable<UserHistoryViewModels> FetchHistoryPurchaseCustomer(string search, string condition)
+        public IEnumerable<UserHistoryViewModels> FetchHistoryPurchaseCustomer(string search, string condition, string orderby)
         {
           
             var userHistories = _context.Customers
@@ -100,7 +101,20 @@ namespace Pharmacy.Models
              })
              .OrderByDescending(c => c.QuantityOrder)
              .ToList();
+            switch (orderby)
+            {
+                case "quantity":
+                    userHistories = userHistories.OrderByDescending(c => c.QuantityOrder).ToList();
+                    break;
+                case "money":
+                    userHistories = userHistories.OrderByDescending(c=> c.TotalPrice).ToList();
+                    break;
+                default:
+                    userHistories = userHistories.OrderByDescending(c => c.QuantityOrder).ToList();
+                   
+                    break;
 
+            }
             if (search != null)
             {
                 List<UserHistoryViewModels> CustomerFound = new List<UserHistoryViewModels>();
@@ -115,6 +129,7 @@ namespace Pharmacy.Models
 
 
                 }
+
                 return CustomerFound;
             }
             return userHistories;   

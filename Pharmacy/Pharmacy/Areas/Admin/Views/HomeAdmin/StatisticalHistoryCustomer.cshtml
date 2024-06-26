@@ -30,7 +30,18 @@
     }
 </div>
 
-
+<div class="col-12 pb-1">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="ml-2">
+            <form asp-action="statisticalHistoryCustomer" asp-controller="HomeAdmin" class="btn-group ml-2 " method="get" id="order-form">
+                <select name="orderby" class="orderby" onchange="document.getElementById('order-form').submit();">
+                    <option value="quantity" @(ViewBag.orderby == "quantity" || ViewBag.orderby == null ? "selected" : "")>Sắp xếp theo hàng tồn: Theo số lượng đơn hàng</option>
+                    <option value="money" @(ViewBag.orderby == "money" ? "selected" : "")>Sắp xếp theo hàng tồn: Theo số tiền</option>
+                </select>
+            </form>
+        </div>
+    </div>
+</div>
 
 <table class="table">
     <thead>
@@ -79,5 +90,5 @@
     </tbody>
 </table>
 <div class="pagination-admin">
-    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page, search = Context.Request.Query["search"], condition = Context.Request.Query["condition"] }))
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page, search = Context.Request.Query["search"], condition = Context.Request.Query["condition"], orderby = Context.Request.Query["orderby"] }))
 </div>

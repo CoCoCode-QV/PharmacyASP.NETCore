@@ -68,6 +68,7 @@ namespace Pharmacy.Areas.Admin.Controllers
                           OrderDate = joinResult.Order.OrderDate,
                           OrderDetailsTemporaryPrice = joinResult.OrderDetail.OrderDetailsTemporaryPrice,
                           ProductName = joinResult.ProductCost.Product.ProductName,
+                          ImportPrice = joinResult.OrderDetail.OrderDetailsQuantity * joinResult.ProductCost.CostPrice,
                           DataQuantitySell = joinResult.OrderDetail.OrderDetailsQuantity
                       })
                       .ToList();
@@ -80,13 +81,14 @@ namespace Pharmacy.Areas.Admin.Controllers
                                                     ProductName = X.Key,
                                                     DataQuantitySell = X.Sum(o => o.DataQuantitySell)
                                                 }).OrderByDescending(X => X.DataQuantitySell)
-                                                .ToList();
+                                                .Take(10).ToList();
 
             var result = Revennue.GroupBy(x => x.OrderDate.Date)
                       .Select(x => new ChartRevenueViewModels
                       {
                           LabelsDate = x.Key,
-                          DataRevenue = x.Sum(y => y.OrderDetailsTemporaryPrice)
+                          DataRevenue = x.Sum(y => y.OrderDetailsTemporaryPrice),
+                          ImportPriceRevenue = x.Sum(y => y.ImportPrice)
                       })
                       .ToList();
 
@@ -132,14 +134,14 @@ namespace Pharmacy.Areas.Admin.Controllers
             return View("ChatAdmin", "HomeAdmin");
         }
 
-        public IActionResult statisticalHistoryCustomer(string search, string condition, int? page)
+        public IActionResult statisticalHistoryCustomer(string search, string condition,string orderby, int? page)
         {
-            var listCustomer = _customerModels.FetchHistoryPurchaseCustomer(search, condition);
+            var listCustomer = _customerModels.FetchHistoryPurchaseCustomer(search, condition, orderby);
 
             var pageNumber = page ?? 1;
-
+        
             var onePage = listCustomer.ToPagedList(pageNumber, Items_Per_Page);
-
+            ViewBag.orderby = orderby;
             return View(onePage);
           
         }
