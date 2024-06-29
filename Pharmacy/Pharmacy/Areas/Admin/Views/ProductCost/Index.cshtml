@@ -34,6 +34,18 @@
     Danh sách sản phẩm nhập
 </p>
 @Html.ActionLink("Thêm mới", "Create", "ProductCost", null, new { @class = "btn btn-outline btn-success", style = "margin-bottom: 20px;" })
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
 <div class="col">
     <div class="panel panel-default">
         <!-- /.panel-heading -->

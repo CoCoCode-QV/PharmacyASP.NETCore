@@ -36,7 +36,7 @@ namespace Pharmacy.Models
             await _context.SaveChangesAsync();
         }
 
-        public Category GetCategory(int id)
+        public Category GetCategoryid(int id)
         {
             return _context.Categories.Find(id);
         }

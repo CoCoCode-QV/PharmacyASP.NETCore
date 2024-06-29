@@ -62,7 +62,32 @@ namespace Pharmacy.Areas.Admin.Controllers
 
         public async Task<IActionResult>  Delete(int id)
         {
-            await  _discountModels.DeleteDiscountAsync(id);
+            Discount discount = _discountModels.GetDiscount(id);
+            if(discount != null)
+            {
+               List<OrderDetail> orderDetails =  _context.OrderDetails.ToList();
+                List<ProductDiscount> productDiscounts = _context.ProductDiscounts.ToList();
+                foreach (var item in orderDetails)
+                {
+                    if (item.OrderDiscountId == discount.DiscountId )
+                    {
+                        TempData["Error"] = "Mã giảm giá đã có trong đơn hàng không thể xóa";
+                        return RedirectToAction("Index");
+                    }
+                }
+                foreach (var item in productDiscounts)
+                {
+                    if (item.DiscountId == discount.DiscountId)
+                    {
+                        TempData["Error"] = "Mã giảm giá đã có trên sản phẩm không thể xóa";
+                        return RedirectToAction("Index");
+                    }
+                }
+                TempData["Success"] = "Mã giảm giá đã được xóa thành công";
+                await  _discountModels.DeleteDiscountAsync(id);
+                return RedirectToAction("Index");
+            }
+            TempData["Error"] = "Không tìm mã giảm giá phù hợp";
             return RedirectToAction("Index");
         }
 
@@ -164,6 +189,8 @@ namespace Pharmacy.Areas.Admin.Controllers
                     TempData["error"] = "Ngày bắt đầu khuyến mãi và kết thúc không hợp lệ";
                     return View();
                 }
+
+                TempData["Success"] = "Thêm mã giảm giá trên sản phẩm thành công";
                 await _discountModels.CreatProductDiscountAsync(item);
                 return RedirectToAction("ProductDiscount");
             }
@@ -171,7 +198,7 @@ namespace Pharmacy.Areas.Admin.Controllers
 
         public async Task<IActionResult> DeleteProductDiscount(int id)
         {
-            
+            TempData["Success"] = "Xóa mã giảm giá trên sản phẩm thành công";
             await _discountModels.DeleteDiscountProductAsync(id);
             return RedirectToAction("ProductDiscount");
         }
@@ -204,6 +231,7 @@ namespace Pharmacy.Areas.Admin.Controllers
                     TempData["error"] = "Ngày bắt đầu khuyến mãi và kết thúc không hợp lệ";
                     return RedirectToAction("EditProductDiscount", new { id = item.ProductDiscountId });
                 }
+                TempData["Success"] = "Sửa mã giảm giá trên sản phẩm thành công";
                 await _discountModels.EditDiscount(item);
                 return RedirectToAction("ProductDiscount");
             }

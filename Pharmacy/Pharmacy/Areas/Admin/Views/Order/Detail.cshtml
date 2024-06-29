@@ -66,12 +66,12 @@
           
            @if (firstOrder != null)
             {
-                if (!firstOrder.OrderAccept)
+                if (!firstOrder.OrderAccept && firstOrder.OrderStatus != -1)
                 {
 
                     <td>  <a href="@Url.Action("AcceptOrder", "Order", new { OrderId = @ViewBag.OrderId })" class="btn btn-primary">Duyệt</a></td>
                 }
-                else if (firstOrder.OrderDelivery == 0 && ViewData["CurrentTab"]!.ToString() != "accept")
+                else if (firstOrder.OrderDelivery == 0 && ViewData["CurrentTab"]!.ToString() != "accept" && firstOrder.OrderStatus != -1)
                 {
                     <td>  <a href="@Url.Action("OrderDevlivery", "Order", new { OrderId = @ViewBag.OrderId })" class="btn btn-primary">Giao hàng thành công</a></td>
                 }

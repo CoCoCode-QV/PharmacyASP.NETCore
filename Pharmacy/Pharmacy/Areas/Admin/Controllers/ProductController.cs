@@ -100,7 +100,7 @@ namespace Pharmacy.Areas.Admin.Controllers
 
                         };
                         await _ProductModels.CreatProduct(item);
-
+                        TempData["Success"] = "Thêm sản phẩm thành công";
                         // Redirect to the Index action after successful product creation
                         return RedirectToAction("Index");
                     }
@@ -270,6 +270,7 @@ namespace Pharmacy.Areas.Admin.Controllers
                     }
                     else
                     {
+                        TempData["Success"] = "Sửa sản phẩm thành công";
                         await _ProductModels.EditProductAsync(product, null);
                         return RedirectToAction("Index");
                     }
@@ -335,9 +336,13 @@ namespace Pharmacy.Areas.Admin.Controllers
                     }
                     _context.Products.Remove(data);
                     await _context.SaveChangesAsync();
+                    TempData["Success"] = "Xóa sản phẩm thành công";
 
+                    return RedirectToAction("Index");
                 }
             }
+            TempData["Error"] = "Không tìm thấy sản phẩm để xóa";
+
             return RedirectToAction("Index");
         }
 

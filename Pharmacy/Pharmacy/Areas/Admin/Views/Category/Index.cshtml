@@ -26,7 +26,18 @@
 
 
  @Html.ActionLink("Thêm mới", "Create", "Category", null, new { @class = "btn btn-outline btn-success" , style ="margin-bottom: 20px;"})
-
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
 <table class="table">
     <tr>
         <th style="width: 5%; text-align: center;"><span>STT</span></th>

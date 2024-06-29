@@ -22,6 +22,18 @@
 </div>
 
 @Html.ActionLink("Thêm mới", "CreateProductDiscount", "Discount", null, new { @class = "btn btn-outline btn-success", style = "margin-bottom: 20px;" })
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
 <table class="table">
     <thead>
         <tr>

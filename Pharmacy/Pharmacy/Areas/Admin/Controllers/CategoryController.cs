@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 using Pharmacy.Models;
+using Stripe;
 using System.Security.Policy;
 using X.PagedList;
 
@@ -16,10 +17,12 @@ namespace Pharmacy.Areas.Admin.Controllers
 
       
         private readonly CategoryModels _categoryModels;
+        private readonly QlpharmacyContext _context;
 
-        public CategoryController( CategoryModels categoryModels)
+        public CategoryController( CategoryModels categoryModels, QlpharmacyContext context)
         {
             _categoryModels = categoryModels;
+            _context = context;
            
         }
 
@@ -53,21 +56,53 @@ namespace Pharmacy.Areas.Admin.Controllers
             }
             else
             {
-               await _categoryModels.CreatCategory(category);
+                List<Category> categories = _context.Categories.ToList();
+                foreach (var item in categories)
+                {
+                    if(item.CategoryName.ToUpper() == category.CategoryName.ToUpper())
+                    {
+                        TempData["error"] = "Tên danh mục đã tồn tại";
+                        return View();
+                    }
+                    
+                }
+                TempData["Success"] = "Thêm danh mục thành công";
+                await _categoryModels.CreatCategory(category);
                 return RedirectToAction("Index");
             }
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            await _categoryModels.DeleteCategory(id);
+            Category category = _categoryModels.GetCategoryid(id);
+            if(category != null)
+            {
+   
+                   
+                    List<Product> products = _context.Products.ToList();
+                    foreach (var item in products)
+                    {
+                        if (item.CategoryId == category.CategoryId)
+                        {
+                            TempData["Error"] = "Danh mục đã có trong sản phẩm không thể xóa";
+                            return RedirectToAction("Index");
+                        }
+                    }
+          
+                    TempData["Success"] = "Danh mục đã được xóa thành công";
+                    await _categoryModels.DeleteCategory(id);
+                    return RedirectToAction("Index");
+                        
+            }
+              TempData["Error"] = "Không tìm danh mục giá phù hợp";
+       
             return  RedirectToAction("Index");
         }
 
         public IActionResult Edit(int id)
         {
             
-            return View(_categoryModels.GetCategory(id));
+            return View(_categoryModels.GetCategoryid(id));
         }
 
         [HttpPost]

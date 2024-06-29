@@ -79,6 +79,8 @@ namespace Pharmacy.Areas.Admin.Controllers
                 TempData["error"] = "Gía bán không hợp lệ";
                 return RedirectToAction("Create");
             }
+
+            TempData["Success"] = "Thêm nhà sản phẩm thành công";
             await _ProductCostModels.CreateProductCost(item);
             return RedirectToAction("Index");
         }
@@ -101,6 +103,7 @@ namespace Pharmacy.Areas.Admin.Controllers
                     TempData["ErrorMessage"] = "Sản phẩm này đã được bán nên bạn không thể xóa sản phẩm để tránh bị mất mát dữ liệu.";
                     return RedirectToAction("Index");
                 }
+                TempData["Success"] = "Xóa sản phẩm thành công";
 
                 await _ProductCostModels.DeleteProductCost(id);
                 return RedirectToAction("Index");
@@ -158,6 +161,7 @@ namespace Pharmacy.Areas.Admin.Controllers
                         return RedirectToAction("Edit", new { id = item.CostId });
                     }     
                 }
+                TempData["Success"] = "Sửa sản phẩm thành công";
 
                 await _ProductCostModels.Edit(item);
                 return RedirectToAction("Index");

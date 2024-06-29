@@ -7,6 +7,12 @@
 
 <h2>Thêm mới danh mục</h2>
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
 <div class="edit-admin">
     @using (Html.BeginForm("Create", "Category", FormMethod.Post))
     {

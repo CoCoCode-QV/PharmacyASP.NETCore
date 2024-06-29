@@ -11,9 +11,11 @@ namespace Pharmacy.Areas.Admin.Controllers
     public class SupplierController : Controller
     {
         private readonly SupplierModels _supplierModels;
-        public SupplierController(SupplierModels supplierModels)
+        private readonly QlpharmacyContext _context;
+        public SupplierController(SupplierModels supplierModels, QlpharmacyContext context)
         {
             this._supplierModels = supplierModels;
+            _context = context;
         }
 
         public const int Items_Per_Page = 10;
@@ -38,19 +40,37 @@ namespace Pharmacy.Areas.Admin.Controllers
         {
             if (supplier.SupplierName == null || supplier.SupplierAddress == null || supplier.SupplierEmail == null || supplier.SupplierPhone == null)
             {
-               
+                TempData["error"] = "Vui lòng điền đầy đủ thông tin.";
                 return View();
             }
             else
             {
                  _supplierModels.CreatSupplier(supplier);
+                TempData["Success"] = "Thêm nhà cung cấp thành công.";
+
                 return RedirectToAction("Index");
             }
         }
 
-        public IActionResult Delete(int id)
+        public  IActionResult Delete(int id)
         {
-            _supplierModels.DeleteSupplier(id);
+            Supplier supplier = _supplierModels.GetSupplier(id);
+            if(supplier != null)
+            {
+                List<ProductCost> productCosts = _context.ProductCosts.ToList();
+                foreach (var item in productCosts)
+                {
+                    if(item.SupplierId == supplier.SupplierId)
+                    {
+                        TempData["Error"] = "Nhà cung cấp đã có trong dữ liệu của giá nhập sản phẩm không thể xóa.";
+                        return RedirectToAction("Index");
+                    }
+                }
+                _supplierModels.DeleteSupplier(id);
+                TempData["Success"] = "Xóa nhà cung cấp thành công.";
+                return RedirectToAction("Index");
+            }
+            TempData["Error"] = "Không tìm thấy nhà cung cấp.";
             return RedirectToAction("Index");
         }
 
@@ -64,11 +84,14 @@ namespace Pharmacy.Areas.Admin.Controllers
         {
             if (supplier.SupplierName == null || supplier.SupplierAddress == null || supplier.SupplierEmail == null || supplier.SupplierPhone == null)
             {
+                TempData["Error"] = "Vui lòng điền đầy đủ thông tin.";
+
                 return View();
             }
             else
             {
                 _supplierModels.EditSupplierAsync(supplier);
+                TempData["Success"] = "Sửa nhà cung cấp thành công.";
                 return RedirectToAction("Index");
             }
         }
